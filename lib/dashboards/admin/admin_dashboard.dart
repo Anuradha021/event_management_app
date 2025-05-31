@@ -7,38 +7,47 @@ class AdminDashboard extends StatefulWidget {
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();
 }
+
 class _AdminDashboardState extends State<AdminDashboard> {
-  
   String selectedFilter = 'all';
+  String searchQuery = '';
 
-  Stream<QuerySnapshot> getEventStream() {
-    final collection = FirebaseFirestore.instance.collection('events');
-
-    if (selectedFilter == 'all') {
-      return collection.orderBy('createdAt', descending: true).snapshots();
-    } else {
-      return collection
-          .where('status', isEqualTo: selectedFilter)
-          .orderBy('createdAt', descending: true)
-          .snapshots();
+ Stream<QuerySnapshot> getEventStream() {
+    try {
+      final collection = FirebaseFirestore.instance.collection('events');
+      
+      if (selectedFilter == 'all') {
+        return collection
+            .orderBy('createdAt', descending: true)
+            .snapshots(includeMetadataChanges: true);
+      } else {
+        return collection
+            .where('status', isEqualTo: selectedFilter)
+            .orderBy('createdAt', descending: true)
+            .snapshots(includeMetadataChanges: true);
+      }
+    } catch (e) {
+      debugPrint('Error in getEventStream: $e');
+      return const Stream<QuerySnapshot>.empty();
     }
   }
- 
-  Widget _buildFilterButton(String label, String filterValue) {
+
+  Widget _buildFilterChip(String label, String filterValue) {
     final isSelected = selectedFilter == filterValue;
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? Colors.blue : Colors.grey[300],
-        foregroundColor: isSelected ? Colors.white : Colors.black,
-      ),
-      onPressed: () {
+    return ChoiceChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (_) {
         setState(() {
           selectedFilter = filterValue;
         });
       },
-      child: Text(label),
+      selectedColor: Colors.blue,
+      labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
+      backgroundColor: Colors.grey.shade200,
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,40 +75,61 @@ class _AdminDashboardState extends State<AdminDashboard> {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            // Search bar
             TextField(
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.search),
-                hintText: 'Search by event title or applicant name',
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-            ),
+  onChanged: (value) {
+    setState(() {
+      searchQuery = value.toLowerCase();
+    });
+  },
+  decoration: InputDecoration(
+    prefixIcon: const Icon(Icons.search),
+    hintText: 'Search by event title or applicant name',
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+  ),
+),
+
             const SizedBox(height: 15),
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildFilterChip('All', true),
-                _buildFilterChip('Pending', false),
-                _buildFilterChip('Approved', false),
-                _buildFilterChip('Rejected', false),
+                _buildFilterChip('All', 'all'),
+                _buildFilterChip('Pending', 'pending'),
+                _buildFilterChip('Approved', 'approved'),
+                _buildFilterChip('Rejected', 'rejected'),
               ],
             ),
             const SizedBox(height: 15),
 
+           
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance.collection('events').orderBy('createdAt', descending: true).snapshots(),
+                stream: getEventStream(), 
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   }
+                  if (snapshot.hasError) {
+        debugPrint('Stream error: ${snapshot.error}');
+        return Center(child: Text('Error: ${snapshot.error}'));
+      }
+       if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+        return Center(
+          child: Text('No ${selectedFilter == 'all' ? '' : selectedFilter} events available'),
+        );
+      }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return const Center(child: Text('No events available.'));
                   }
 
-                  final docs = snapshot.data!.docs;
+                  final docs = snapshot.data!.docs.where((doc) {
+  final data = doc.data() as Map<String, dynamic>;
+  final title = data['title']?.toString().toLowerCase() ?? '';
+  final author = data['author']?.toString().toLowerCase() ?? '';
+  return title.contains(searchQuery) || author.contains(searchQuery);
+}).toList();
+
 
                   return ListView.builder(
                     itemCount: docs.length,
@@ -114,14 +144,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildFilterChip(String label, bool isSelected) {
-    return Chip(
-      label: Text(label),
-      backgroundColor: isSelected ? Colors.blue : Colors.grey.shade200,
-      labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
     );
   }
 
@@ -143,7 +165,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title and Status
+            
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -172,7 +194,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             const SizedBox(height: 10),
             Text(event['description'] ?? '', style: const TextStyle(color: Colors.black87)),
             const SizedBox(height: 10),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -181,7 +202,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ],
             ),
             const SizedBox(height: 10),
-
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
