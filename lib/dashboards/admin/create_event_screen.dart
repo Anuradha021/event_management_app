@@ -49,7 +49,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         const SnackBar(content: Text('Event created successfully')),
       );
 
-      Navigator.pop(context); // Go back to dashboard
+      Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to create event: $e')),
@@ -98,10 +98,11 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               const SizedBox(height: 10),
               ListTile(
                 title: Text(
-                  _selectedDate == null
-                      ? 'Pick Event Date'
-                      : 'Date: ${_selectedDate!.toLocal()}'.split(' ')[0],
-                ),
+  _selectedDate == null
+      ? 'Pick Event Date'
+      : 'Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}',
+),
+
                 trailing: const Icon(Icons.calendar_today),
                 onTap: _pickDate,
               ),

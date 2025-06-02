@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AdminSetupScreen extends StatefulWidget {
   @override
@@ -9,26 +10,27 @@ class AdminSetupScreen extends StatefulWidget {
 
 class _AdminSetupScreenState extends State<AdminSetupScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'admin21@event.com');
-  final _passwordController = TextEditingController(text: 'Admin@1234');
+ final _emailController = TextEditingController(text: dotenv.env['ADMIN_EMAIL']);
+final _passwordController = TextEditingController(text: dotenv.env['ADMIN_PASSWORD']);
+
   bool _isCreating = false;
 
   Future<void> _createAdmin() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _isCreating = true);
       try {
-        // Create auth user
+        
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
 
-        // Set custom claim
+       
         await FirebaseAuth.instance.currentUser!
             .getIdTokenResult(true); // Refresh token
 
-        // Create user document
+       
         await FirebaseFirestore.instance
             .collection('users')
             .doc(userCredential.user!.uid)

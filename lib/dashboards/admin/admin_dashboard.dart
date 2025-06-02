@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin/create_event_screen.dart';
+import 'package:event_management_app1/dashboards/admin/event_deatils_screen.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -42,7 +43,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
           selectedFilter = filterValue;
         });
       },
-      selectedColor: Colors.blue,
+      selectedColor: const Color.fromARGB(255, 88, 98, 107),
       labelStyle: TextStyle(color: isSelected ? Colors.white : Colors.black),
       backgroundColor: Colors.grey.shade200,
     );
@@ -113,17 +114,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
         debugPrint('Stream error: ${snapshot.error}');
         return Center(child: Text('Error: ${snapshot.error}'));
       }
+
        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-        return Center(
-          child: Text('No ${selectedFilter == 'all' ? '' : selectedFilter} events available'),
-        );
-      }
-
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                     return const Center(child: Text('No events available.'));
-                  }
+           }
 
-                  final docs = snapshot.data!.docs.where((doc) {
+   final docs = snapshot.data!.docs.where((doc) {
   final data = doc.data() as Map<String, dynamic>;
   final title = data['title']?.toString().toLowerCase() ?? '';
   final author = data['author']?.toString().toLowerCase() ?? '';
@@ -131,13 +127,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
 }).toList();
 
 
-                  return ListView.builder(
-                    itemCount: docs.length,
-                    itemBuilder: (context, index) {
-                      final event = docs[index].data() as Map<String, dynamic>;
-                      return _buildEventCard(event);
-                    },
-                  );
+  return ListView.builder(
+  itemCount: docs.length,
+  itemBuilder: (context, index) {
+    final event = docs[index].data() as Map<String, dynamic>;
+    final eventId = docs[index].id;
+    return _buildEventCard(event, eventId);
+  },
+);
+
                 },
               ),
             ),
@@ -147,7 +145,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     );
   }
 
-  Widget _buildEventCard(Map<String, dynamic> event) {
+  Widget _buildEventCard(Map<String, dynamic> event,String eventId) {
     Color statusColor = Colors.grey;
     if (event['status'] == 'approved') {
       statusColor = Colors.green;
@@ -178,7 +176,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: statusColor.withOpacity(0.2),
+                    color: statusColor.withAlpha((0.2 * 255).round()),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   child: Text(
@@ -189,8 +187,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ],
             ),
             const SizedBox(height: 5),
-            if (event['author'] != null)
-              Text("by ${event['author']}"),
+            
             const SizedBox(height: 10),
             Text(event['description'] ?? '', style: const TextStyle(color: Colors.black87)),
             const SizedBox(height: 10),
@@ -206,9 +203,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
               alignment: Alignment.centerRight,
               child: ElevatedButton(
                 onPressed: () {
-                  // TODO: Navigate to review details
-                },
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+       builder: (context) => EventDetailScreen(event: {...event, 'id': eventId}),
+      ),
+    );
+  },
                 child: const Text('Review Details'),
+                
               ),
             ),
           ],
