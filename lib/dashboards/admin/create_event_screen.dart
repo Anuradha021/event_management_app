@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CreateEventScreen extends StatefulWidget {
-  const CreateEventScreen({super.key});
+  final Map<String, dynamic>? requestData;
+  
+  const CreateEventScreen({super.key, this.requestData});
 
   @override
   State<CreateEventScreen> createState() => _CreateEventScreenState();
@@ -12,6 +14,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  final TextEditingController _organizerEmailController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
   DateTime? _selectedDate;
   String? _selectedCategory;
 
@@ -24,6 +28,18 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
   ];
 
   bool _isSubmitting = false;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.requestData != null) {
+      _titleController.text = widget.requestData!['eventTitle'] ?? '';
+      _descController.text = widget.requestData!['eventDescription'] ?? '';
+      _organizerEmailController.text = widget.requestData!['organizerEmail'] ?? '';
+      _locationController.text = widget.requestData!['location'] ?? '';
+      _selectedDate = widget.requestData!['eventDate']?.toDate();
+    }
+  }
 
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate() || _selectedDate == null || _selectedCategory == null) {
@@ -40,6 +56,8 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
         'title': _titleController.text,
         'description': _descController.text,
         'date': _selectedDate,
+        'location': _locationController.text,
+        'organizerEmail': _organizerEmailController.text,
         'category': _selectedCategory,
         'status': 'pending',
         'createdAt': Timestamp.now(),
@@ -63,7 +81,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     final now = DateTime.now();
     final pickedDate = await showDatePicker(
       context: context,
-      initialDate: now,
+      initialDate: _selectedDate ?? now,
       firstDate: now,
       lastDate: DateTime(now.year + 2),
     );
@@ -96,13 +114,25 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 validator: (value) => value!.isEmpty ? 'Description is required' : null,
               ),
               const SizedBox(height: 10),
+              TextFormField(
+                controller: _organizerEmailController,
+                decoration: const InputDecoration(labelText: 'Organizer Email'),
+                validator: (value) => value!.isEmpty ? 'Email is required' : null,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _locationController,
+                decoration: const InputDecoration(labelText: 'Location'),
+                validator: (value) => value!.isEmpty ? 'Location is required' : null,
+              ),
+              const SizedBox(height: 10),
               ListTile(
                 title: Text(
-  _selectedDate == null
-      ? 'Pick Event Date'
-      : 'Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}',
-),
-
+                  _selectedDate == null
+                      ? 'Pick Event Date'
+                      : 'Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}',
+                ),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: _pickDate,
               ),
@@ -120,7 +150,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
                 onPressed: _isSubmitting ? null : _submitForm,
                 child: _isSubmitting
                     ? const CircularProgressIndicator()
-                    : const Text('Submit Event'),
+                    : const Text('Create Event'),
               ),
             ],
           ),

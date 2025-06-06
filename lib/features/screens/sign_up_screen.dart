@@ -1,3 +1,5 @@
+import 'package:event_management_app1/features/screens/bottom_nav_bar.dart';
+import 'package:event_management_app1/features/screens/home.dart';
 import 'package:event_management_app1/features/screens/login_screen.dart';
 import 'package:event_management_app1/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -32,7 +34,7 @@ class _SignUpPageState extends State<SignUpPage> {
       
       Navigator.pushAndRemoveUntil(
         context,
-        MaterialPageRoute(builder: (context) => LoginPage()),
+        MaterialPageRoute(builder: (context) => BottomNav()),
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {

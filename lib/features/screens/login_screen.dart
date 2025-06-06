@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
           (route) => false,
         );
       } else {
-        // Navigate to regular Home screen
+       
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const Home()),
@@ -129,26 +129,20 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 20),
-              Row(
+                   Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Don't have an account?"),
-                  const SizedBox(width: 5),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushAndRemoveUntil(
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SignUpPage()),
-                        (route) => false,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpPage(),
+                        ),
                       );
                     },
-                    child: const Text(
-                      "Sign Up",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    child: const Text("Sign Up"),
                   ),
                 ],
               ),
