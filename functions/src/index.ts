@@ -1,4 +1,9 @@
-import { onCall, CallableRequest, CallableResponse, HttpsError } from "firebase-functions/v2/https";
+import {
+  onCall,
+  CallableRequest,
+  HttpsError,
+  onRequest,
+} from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 
 admin.initializeApp();
@@ -8,7 +13,10 @@ const db = admin.firestore();
 const checkAdmin = async (uid: string) => {
   const user = await admin.auth().getUser(uid);
   if (!user.customClaims?.admin) {
-    throw new HttpsError("permission-denied", "Only admin can perform this action");
+    throw new HttpsError(
+      "permission-denied",
+      "Only admin can perform this action",
+    );
   }
 };
 
@@ -18,7 +26,9 @@ interface UpdateStatusData {
 }
 
 export const updateEventRequestStatus = onCall(
-  async (request: CallableRequest<UpdateStatusData>, response?: CallableResponse<{ success: boolean; message: string }>) => {
+  async (
+    request: CallableRequest<UpdateStatusData>,
+  ): Promise<{ success: boolean; message: string }> => {
     const context = request.auth;
     const data = request.data;
 
@@ -26,7 +36,7 @@ export const updateEventRequestStatus = onCall(
       throw new HttpsError("unauthenticated", "User not authenticated");
     }
 
-    const { docId, status } = data;
+    const {docId, status} = data;
     if (!docId || !status) {
       throw new HttpsError("invalid-argument", "docId and status are required");
     }
@@ -38,8 +48,8 @@ export const updateEventRequestStatus = onCall(
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    return { success: true, message: `Status updated to ${status}` };
-  }
+    return {success: true, message: `Status updated to ${status}`};
+  },
 );
 
 interface AssignData {
@@ -49,7 +59,9 @@ interface AssignData {
 }
 
 export const assignOrganizerAndApprove = onCall(
-  async (request: CallableRequest<AssignData>, response?: CallableResponse<{ success: boolean; message: string }>) => {
+  async (
+    request: CallableRequest<AssignData>,
+  ): Promise<{ success: boolean; message: string }> => {
     const context = request.auth;
     const data = request.data;
 
@@ -57,7 +69,7 @@ export const assignOrganizerAndApprove = onCall(
       throw new HttpsError("unauthenticated", "User not authenticated");
     }
 
-    const { docId, organizerUid, organizerEmail } = data;
+    const {docId, organizerUid, organizerEmail} = data;
     if (!docId || !organizerUid || !organizerEmail) {
       throw new HttpsError("invalid-argument", "Missing required fields");
     }
@@ -71,12 +83,12 @@ export const assignOrganizerAndApprove = onCall(
       updatedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
 
-    return { success: true, message: "Organizer assigned and request approved" };
-  }
+    return {
+      success: true,
+      message: "Organizer assigned and request approved",
+    };
+  },
 );
-
-// HTTP function (v2 can also be used, but your existing code is fine)
-import { onRequest } from "firebase-functions/v2/https";
 
 export const createDefaultAdmin = onRequest(async (req, res) => {
   const email = "admin@unite.com";
@@ -84,7 +96,7 @@ export const createDefaultAdmin = onRequest(async (req, res) => {
 
   try {
     const existing = await admin.auth().getUserByEmail(email);
-    await admin.auth().setCustomUserClaims(existing.uid, { admin: true });
+    await admin.auth().setCustomUserClaims(existing.uid, {admin: true});
     return res.status(200).send("Admin already existed. Claims updated.");
   } catch (error) {
     try {
@@ -93,7 +105,7 @@ export const createDefaultAdmin = onRequest(async (req, res) => {
         password,
         displayName: "Default Admin",
       });
-      await admin.auth().setCustomUserClaims(newUser.uid, { admin: true });
+      await admin.auth().setCustomUserClaims(newUser.uid, {admin: true});
       return res.status(200).send("Admin created and claims assigned.");
     } catch (e) {
       return res.status(500).send(`Failed to create admin: ${e}`);

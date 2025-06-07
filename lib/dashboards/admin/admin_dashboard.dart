@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin/create_event_screen.dart';
+import 'package:event_management_app1/dashboards/utils/event_request_utils.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -45,55 +46,16 @@ class _AdminDashboardState extends State<AdminDashboard> {
       ),
     );
   }
-  Future<void> _updateRequestStatus(String docId, String status) async {
-  try {
-    await FirebaseFirestore.instance
-        .collection('event_requests')
-        .doc(docId)
-        .update({'status': status});
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Request $status successfully')),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to update status: $e')),
-    );
-  }
+ Future<void> _updateRequestStatus(String docId, String status) async {
+  await updateRequestStatus(context, docId, status);
 }
 
 
-  Future<void> _assignOrganizerAndApprove(String docId) async {
-    final docRef = FirebaseFirestore.instance.collection('event_requests').doc(docId);
-    final snapshot = await docRef.get();
-    final data = snapshot.data();
- print('Document data: $data'); 
-    if (data == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Request data not found')),
-      );
-      return;
-    }
 
-    final organizerUid = data['uid'] ?? data['organizerUid'];
-final organizerEmail = data['email'] ?? data['organizerEmail'];
+ Future<void> _assignOrganizerAndApprove(String docId) async {
+  await assignOrganizerAndApprove(context, docId);
+}
 
-    if (organizerUid == null || organizerEmail == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Missing organizer info in request')),
-      );
-      return;
-    }
-
-    await docRef.update({
-      'status': 'approved',
-      'assignedOrganizerUid': organizerUid,
-      'assignedOrganizerEmail': organizerEmail,
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Organizer assigned & request approved')),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

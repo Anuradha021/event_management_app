@@ -21,8 +21,6 @@ class _ContactFormState extends State<ContactForm> {
 
   DateTime? _selectedDate;
 
-
-
 Future<void> _submitRequest() async {
   if (_formKey.currentState!.validate() && _selectedDate != null) {
     try {
@@ -40,7 +38,7 @@ Future<void> _submitRequest() async {
         'eventDescription': _eventDescController.text,
         'organizerName': _organizerNameController.text,
         'organizerEmail': _organizerEmailController.text,
-        'organizerUid': user.uid, // ✅ Add UID here
+        'organizerUid': user.uid, 
         'location': _locationController.text,
         'contactNumber': _contactNumberController.text,
         'eventDate': _selectedDate,
