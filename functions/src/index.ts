@@ -9,7 +9,6 @@ import * as admin from "firebase-admin";
 admin.initializeApp();
 const db = admin.firestore();
 
-// Utility to check if the user is admin
 const checkAdmin = async (uid: string) => {
   const user = await admin.auth().getUser(uid);
   if (!user.customClaims?.admin) {
@@ -106,7 +105,7 @@ export const createDefaultAdmin = onRequest(async (req, res) => {
         displayName: "Default Admin",
       });
       await admin.auth().setCustomUserClaims(newUser.uid, {admin: true});
-      return res.status(200).send("Admin created and claims assigned.");
+      return res.status(200).send("Admin created");
     } catch (e) {
       return res.status(500).send(`Failed to create admin: ${e}`);
     }

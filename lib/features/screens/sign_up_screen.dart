@@ -1,4 +1,4 @@
-import 'package:event_management_app1/features/screens/bottom_nav_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/screens/home.dart';
 import 'package:event_management_app1/features/screens/login_screen.dart';
 import 'package:event_management_app1/widgets/form_container_widget.dart';
@@ -17,36 +17,42 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   
-  bool isSigningUp = false;
+  bool _isSigningUp = false;
 
   Future<void> _signUp() async {
-    setState(() {
-      isSigningUp = true;
+  setState(() {
+    _isSigningUp = true;
+  });
+
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
+    );
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .set({
+      'email': _emailController.text.trim(),
+      'role': 'user', 
     });
 
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text,
-        password: _passwordController.text,
-      );
-      
-      // You can add additional user data saving logic here if needed
-      
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => BottomNav()),
-        (route) => false,
-      );
-    } on FirebaseAuthException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.message ?? "An error occurred")),
-      );
-    } finally {
-      setState(() {
-        isSigningUp = false;//disables the login button while the process is ongoing 
-      });
-    }
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const Home()),
+    );
+  } on FirebaseAuthException catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(e.message ?? "Signup failed")),
+    );
+  } finally {
+    setState(() {
+      _isSigningUp = false;
+    });
   }
+}
 
   @override
   void dispose() {
@@ -110,7 +116,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(
-                      child: isSigningUp 
+                      child: _isSigningUp 
                           ? CircularProgressIndicator(color: Colors.white)
                           : Text(
                               "Sign Up",

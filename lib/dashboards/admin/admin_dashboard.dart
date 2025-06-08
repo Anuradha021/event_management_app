@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin/create_event_screen.dart';
+import 'package:event_management_app1/dashboards/admin/event_deatils_screen.dart';
 import 'package:event_management_app1/dashboards/utils/event_request_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -49,14 +50,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
  Future<void> _updateRequestStatus(String docId, String status) async {
   await updateRequestStatus(context, docId, status);
 }
-
-
-
  Future<void> _assignOrganizerAndApprove(String docId) async {
   await assignOrganizerAndApprove(context, docId);
 }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,11 +108,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
   if (snapshot.connectionState == ConnectionState.waiting) {
     return const Center(child: CircularProgressIndicator());
   }
-
   if (snapshot.hasError) {
     return Center(child: Text('Error: ${snapshot.error}'));
   }
-
   final docs = snapshot.data!.docs.where((doc) {
     final data = doc.data() as Map<String, dynamic>;
     final title = (data['eventTitle'] ?? '').toString().toLowerCase();
@@ -127,13 +121,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
   if (docs.isEmpty) {
     return const Center(child: Text('No event requests found.'));
   }
-
   return ListView.builder(
     itemCount: docs.length,
     itemBuilder: (context, index) {
       final doc = docs[index];
       final data = doc.data() as Map<String, dynamic>;
-
       return Card(
         margin: const EdgeInsets.symmetric(vertical: 8),
         child: ListTile(
@@ -148,6 +140,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
               } else if (value == 'create_event') {
                 _navigateToCreateEvent(data);
               }
+              else if (value == 'details') {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EventDetailsScreen(eventData: data),
+      ),
+    );
+  }
             },
             itemBuilder: (context) => [
               const PopupMenuItem(
@@ -162,6 +162,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 value: 'create_event',
                 child: Text('Create Event'),
               ),
+              PopupMenuItem(
+                 value: 'details',
+                 child: Text('Event Details'),
+                   ),
             ],
           ),
         ),
@@ -169,7 +173,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     },
   );
 }
-
               ),
             ),
           ],

@@ -24,7 +24,7 @@ class _BottomNavState extends State<BottomNav> {
     home = Home();
     contactForm = ContactForm(); 
     profile = ProfileScreen();
-    pages = [home, contactForm, profile]; // ✅ Set the order
+    pages = [home, contactForm, profile]; 
     super.initState();
   }
 
@@ -43,7 +43,7 @@ class _BottomNavState extends State<BottomNav> {
         },
         items: const [
           Icon(Icons.home_outlined, color: Colors.white, size: 30),
-          Icon(Icons.contact_mail_outlined, color: Colors.white, size: 30), // ✅ Contact icon
+          Icon(Icons.contact_mail_outlined, color: Colors.white, size: 30), 
           Icon(Icons.person_outline, color: Colors.white, size: 30),
         ],
       ),

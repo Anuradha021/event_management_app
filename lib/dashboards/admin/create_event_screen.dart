@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CreateEventScreen extends StatefulWidget {
@@ -41,42 +42,53 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     }
   }
 
-  Future<void> _submitForm() async {
-    if (!_formKey.currentState!.validate() || _selectedDate == null || _selectedCategory == null) {
+ Future<void> _submitForm() async {
+  if (!_formKey.currentState!.validate() || _selectedDate == null || _selectedCategory == null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Please fill in all fields')),
+    );
+    return;
+  }
+
+  setState(() => _isSubmitting = true);
+
+  try {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill in all fields')),
+        const SnackBar(content: Text('You must be logged in to create an event')),
       );
+      setState(() => _isSubmitting = false);
       return;
     }
 
-    setState(() => _isSubmitting = true);
+    await FirebaseFirestore.instance.collection('event_requests').add({
+      'eventTitle': _titleController.text,
+      'eventDescription': _descController.text,
+      'date': _selectedDate,
+      'location': _locationController.text,
+      'organizerEmail': _organizerEmailController.text,
+      'organizerUid': user.uid,
+      'category': _selectedCategory,
+      'status': 'pending',
+      'createdAt': Timestamp.now(),
+    });
 
-    try {
-      await FirebaseFirestore.instance.collection('events').add({
-        'title': _titleController.text,
-        'description': _descController.text,
-        'date': _selectedDate,
-        'location': _locationController.text,
-        'organizerEmail': _organizerEmailController.text,
-        'category': _selectedCategory,
-        'status': 'pending',
-        'createdAt': Timestamp.now(),
-      });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Event created successfully')),
+    );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Event created successfully')),
-      );
-
-      Navigator.pop(context);
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create event: $e')),
-      );
-    } finally {
-      setState(() => _isSubmitting = false);
-    }
+    Navigator.pop(context, true);
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Failed to create event: $e')),
+    );
+  } finally {
+    setState(() => _isSubmitting = false);
   }
+}
 
+  
   Future<void> _pickDate() async {
     final now = DateTime.now();
     final pickedDate = await showDatePicker(

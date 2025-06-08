@@ -17,7 +17,6 @@ class _ContactFormState extends State<ContactForm> {
   final TextEditingController _organizerNameController = TextEditingController();
   final TextEditingController _organizerEmailController = TextEditingController();
   final TextEditingController _locationController = TextEditingController();
-  final TextEditingController _contactNumberController = TextEditingController();
 
   DateTime? _selectedDate;
 
@@ -40,7 +39,6 @@ Future<void> _submitRequest() async {
         'organizerEmail': _organizerEmailController.text,
         'organizerUid': user.uid, 
         'location': _locationController.text,
-        'contactNumber': _contactNumberController.text,
         'eventDate': _selectedDate,
         'status': 'pending',
         'createdAt': Timestamp.now(),
@@ -56,7 +54,6 @@ Future<void> _submitRequest() async {
       _organizerNameController.clear();
       _organizerEmailController.clear();
       _locationController.clear();
-      _contactNumberController.clear();
       setState(() {
         _selectedDate = null;
       });
@@ -124,13 +121,8 @@ Future<void> _submitRequest() async {
                   validator: (value) => value!.isEmpty ? 'Required' : null,
                 ),
                 const SizedBox(height: 12),
-                TextFormField(
-                  controller: _contactNumberController,
-                  decoration: const InputDecoration(labelText: "Contact Number"),
-                  keyboardType: TextInputType.phone,
-                  validator: (value) => value!.isEmpty ? 'Required' : null,
-                ),
-                const SizedBox(height: 12),
+                
+        
                 TextFormField(
                   controller: _locationController,
                   decoration: const InputDecoration(labelText: "Event Location"),
@@ -143,7 +135,7 @@ Future<void> _submitRequest() async {
                       child: Text(
                         _selectedDate == null
                             ? 'No date selected'
-                            : 'Event Date: ${_selectedDate!.toLocal()}'.split(' ')[0],
+                             : ' Event Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}',
                       ),
                     ),
                     ElevatedButton(

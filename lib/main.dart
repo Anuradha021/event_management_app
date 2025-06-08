@@ -1,4 +1,3 @@
-
 import 'package:event_management_app1/features/screens/admin_setup.dart';
 import 'package:event_management_app1/features/screens/login_screen.dart';
 import 'package:event_management_app1/features/screens/sign_up_screen.dart';
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: AppInitializer(), // 👈 Use AppInitializer here
+      home: AppInitializer(), 
       routes: {
         '/admin-setup': (context) => AdminSetupScreen(),
         '/welcome': (context) => WelcomeScreen(),

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin/admin_dashboard.dart';
-import 'package:event_management_app1/features/screens/home.dart';
+import 'package:event_management_app1/features/screens/bottom_nav_bar.dart';
 import 'package:event_management_app1/features/screens/sign_up_screen.dart';
 import 'package:event_management_app1/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +29,6 @@ class _LoginPageState extends State<LoginPage> {
       password: _passwordController.text.trim(),
     );
 
-    // Get user's Firestore document
     final userDoc = await FirebaseFirestore.instance
         .collection('users')
         .doc(userCredential.user!.uid)
@@ -39,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       final role = userDoc.data()!['role'];
 
       if (role == 'admin') {
-        // Navigate to Admin Dashboard
+      
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const AdminDashboard()),
@@ -49,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
        
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => const Home()),
+          MaterialPageRoute(builder: (context) => const BottomNav()),
           (route) => false,
         );
       }
