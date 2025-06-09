@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin/create_event_screen.dart';
 import 'package:event_management_app1/dashboards/admin/event_deatils_screen.dart';
+import 'package:event_management_app1/dashboards/admin/filter_chips.dart';
 import 'package:event_management_app1/dashboards/utils/event_request_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -26,7 +27,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             .snapshots();
       }
     } catch (e) {
-      debugPrint('Error in getEventRequestsStream: $e');
       return const Stream<QuerySnapshot>.empty();
     }
   }
@@ -70,46 +70,21 @@ class _AdminDashboardState extends State<AdminDashboard> {
               onChanged: _updateSearchQuery,
             ),
             const SizedBox(height: 15),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  FilterChip(
-                    label: const Text('Pending'),
-                    selected: selectedFilter == 'pending',
-                    onSelected: (_) => _updateFilter('pending'),
-                  ),
-                  const SizedBox(width: 8),
-                  FilterChip(
-                    label: const Text('Approved'),
-                    selected: selectedFilter == 'approved',
-                    onSelected: (_) => _updateFilter('approved'),
-                  ),
-                  const SizedBox(width: 8),
-                  FilterChip(
-                    label: const Text('Rejected'),
-                    selected: selectedFilter == 'rejected',
-                    onSelected: (_) => _updateFilter('rejected'),
-                  ),
-                  const SizedBox(width: 8),
-                  FilterChip(
-                    label: const Text('All'),
-                    selected: selectedFilter == 'all',
-                    onSelected: (_) => _updateFilter('all'),
-                  ),
-                ],
-              ),
-            ),
+            FilterChips(
+            selectedFilter: selectedFilter,
+            onFilterSelected: _updateFilter,
+),
+
             const SizedBox(height: 15),
             Expanded(
               child: StreamBuilder<QuerySnapshot>(
                 stream: getEventRequestsStream(),
                 builder: (context, snapshot) {
-  if (snapshot.connectionState == ConnectionState.waiting) {
-    return const Center(child: CircularProgressIndicator());
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                   return const Center(child: CircularProgressIndicator());
   }
-  if (snapshot.hasError) {
-    return Center(child: Text('Error: ${snapshot.error}'));
+                  if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
   }
   final docs = snapshot.data!.docs.where((doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -141,32 +116,55 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 _navigateToCreateEvent(data);
               }
               else if (value == 'details') {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EventDetailsScreen(eventData: data),
+              Navigator.push(
+              context,
+              MaterialPageRoute(
+              builder: (context) => EventDetailsScreen(eventData: data),
       ),
     );
   }
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 'approve',
-                child: Text('Approve & Assign Organizer'),
-              ),
-              const PopupMenuItem(
-                value: 'reject',
-                child: Text('Reject'),
-              ),
-              const PopupMenuItem(
-                value: 'create_event',
-                child: Text('Create Event'),
-              ),
-              PopupMenuItem(
-                 value: 'details',
-                 child: Text('Event Details'),
-                   ),
-            ],
+},
+  itemBuilder: (context) {
+  final status = data['status'] ?? 'pending';
+
+  List<PopupMenuEntry<String>> items = [];
+
+  if (status == 'pending') {
+    items.add(const PopupMenuItem(
+      value: 'approve',
+      child: Text('Approve & Assign Organizer'),
+    ));
+    items.add(const PopupMenuItem(
+      value: 'reject',
+      child: Text('Reject'),
+    ));
+  } else if (status == 'approved') {
+
+    items.add(const PopupMenuItem(
+      value: 'reject',
+      child: Text('Reject'),
+    ));
+  } else if (status == 'rejected') {
+   
+    items.add(const PopupMenuItem(
+      value: 'approve',
+      child: Text('Approve & Assign Organizer'),
+    ));
+  }
+  
+
+  items.add(const PopupMenuItem(
+    value: 'create_event',
+    child: Text('Create Event'),
+  ));
+  items.add(const PopupMenuItem(
+    value: 'details',
+    child: Text('Event Details'),
+  ));
+
+  return items;
+},
+
           ),
         ),
       );
