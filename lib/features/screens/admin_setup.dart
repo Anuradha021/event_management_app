@@ -40,6 +40,12 @@
             'createdAt': FieldValue.serverTimestamp(),
             'name': 'System Admin',
           });
+//           final snapshot = await FirebaseFirestore.instance
+//     .collection('users')
+//     .doc(userCredential.user!.uid)
+//     .get();
+
+// print('Role stored after setup: ${snapshot['role']}');
 
           Navigator.of(context).pushReplacementNamed('/login');
         } catch (e) {

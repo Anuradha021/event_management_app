@@ -1,18 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/dashboards/utils/event_request_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
-class EventDetailsScreen extends StatefulWidget {
+class EventDetailsScreen extends StatelessWidget {
   final Map<String, dynamic> eventData;
+  final String docId;
 
-  const EventDetailsScreen({Key? key, required this.eventData}) : super(key: key);
-
-  @override
-  State<EventDetailsScreen> createState() => _EventDetailsScreenState();
-}
-
-class _EventDetailsScreenState extends State<EventDetailsScreen> {
+  const EventDetailsScreen({Key? key, required this.eventData, required this.docId}) : super(key: key);
 
   String _formatDate(dynamic timestamp) {
     if (timestamp is Timestamp) {
@@ -22,9 +17,11 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       return 'N/A';
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    final data = widget.eventData;
+    final data = eventData;
+    final status = data['status'] ?? 'pending';
 
     return Scaffold(
       appBar: AppBar(
@@ -45,10 +42,30 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
             const SizedBox(height: 10),
             Text('Location: ${data['location'] ?? 'N/A'}'),
             const SizedBox(height: 10),
-            Text('Status: ${data['status'] ?? 'N/A'}'),
+            Text('Status: $status'),
             const SizedBox(height: 10),
-            Text('Description:'),
+            const Text('Description:'),
             Text(data['eventDescription'] ?? 'No Description'),
+            const SizedBox(height: 20),
+
+            if (status == 'pending' || status == 'rejected') ...[
+              ElevatedButton(
+                onPressed: () {
+                  assignOrganizerAndApprove(context, docId);
+                },
+                child: const Text('Approve & Assign Organizer'),
+              ),
+              const SizedBox(height: 10),
+            ],
+            if (status == 'pending' || status == 'approved') ...[
+              ElevatedButton(
+                onPressed: () {
+                  updateRequestStatus(context, docId, 'rejected');
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Reject'),
+              ),
+            ],
           ],
         ),
       ),

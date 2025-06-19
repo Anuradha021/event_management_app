@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/features/screens/bottom_nav_bar.dart';
 import 'package:event_management_app1/features/screens/home.dart';
 import 'package:event_management_app1/features/screens/login_screen.dart';
 import 'package:event_management_app1/widgets/form_container_widget.dart';
@@ -35,13 +36,14 @@ class _SignUpPageState extends State<SignUpPage> {
         .collection('users')
         .doc(userCredential.user!.uid)
         .set({
+      'name': _usernameController.text.trim(),   
       'email': _emailController.text.trim(),
       'role': 'user', 
     });
 
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const Home()),
+      MaterialPageRoute(builder: (context) => const BottomNav()),
     );
   } on FirebaseAuthException catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -141,7 +143,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => LoginPage()),
-                            (route) => false);//remove all previous routes
+                            (route) => false);
                       },
                       child: Text(
                         "Login",
