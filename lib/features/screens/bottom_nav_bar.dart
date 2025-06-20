@@ -1,4 +1,4 @@
-import 'package:event_management_app1/features/screens/contact_form.dart';
+import 'package:event_management_app1/features/screens/entry_point_screen.dart';
 import 'package:event_management_app1/features/screens/home.dart';
 import 'package:event_management_app1/features/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   late List<Widget> pages;
   late Home home;
-  late ContactForm contactForm;
+  late EntryPointScreen contactForm;
   late ProfileScreen profile;
 
   int currentTabIndex = 0;
@@ -22,7 +22,7 @@ class _BottomNavState extends State<BottomNav> {
   @override
   void initState() {
     home = Home();
-    contactForm = ContactForm(); 
+    contactForm = EntryPointScreen();
     profile = ProfileScreen();
     pages = [home, contactForm, profile]; 
     super.initState();

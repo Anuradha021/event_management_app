@@ -48,20 +48,22 @@ Future<void> assignOrganizerAndApprove(BuildContext context, String docId) async
   }
 
   final organizerEmail = data['organizerEmail'];
-  if (organizerEmail == null) {
+  final organizerUid = data['organizerUid'];
+
+  if (organizerEmail == null || organizerUid == null) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Organizer email is missing')),
+      const SnackBar(content: Text('Organizer email or UID is missing')),
     );
     return;
   }
 
-  // Update event_requests collection
+  // 1. Update event_requests collection
   await docRef.update({
     'status': 'approved',
     'assignedOrganizerEmail': organizerEmail,
   });
 
-  // Update user role in users collection
+  // 2. Promote user to organizer
   final userSnapshot = await FirebaseFirestore.instance
       .collection('users')
       .where('email', isEqualTo: organizerEmail)
@@ -73,14 +75,34 @@ Future<void> assignOrganizerAndApprove(BuildContext context, String docId) async
     await FirebaseFirestore.instance.collection('users').doc(userDocId).update({
       'isOrganizer': true,
       'assignedEventId': docId,
+      'popupShown': false, // Optional: reset popup flag
     });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Organizer assigned & dashboard updated')),
-    );
   } else {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('User with email $organizerEmail not found')),
     );
+    return;
   }
+
+  // 3. Add to events collection
+  await FirebaseFirestore.instance.collection('events').add({
+    'eventTitle': data['eventTitle'],
+    'eventDescription': data['eventDescription'],
+    'organizerName': data['organizerName'],
+    'organizerEmail': organizerEmail,
+    'organizerUid': organizerUid,
+    'assignedOrganizerUid': organizerUid,
+    'location': data['location'],
+    'eventDate': data['eventDate'],
+    'status': 'approved',
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+
+  // 4. Show success
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Event approved and organizer assigned')),
+  );
+
+  // Optional: Navigate back or refresh
+  Navigator.of(context).pop();
 }
