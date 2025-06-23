@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/admin/create_event_screen.dart';
-import 'package:event_management_app1/dashboards/admin/event_deatils_screen.dart';
 import 'package:event_management_app1/dashboards/admin/filter_chips.dart';
-import 'package:event_management_app1/dashboards/admin/user_list_screen.dart';
-import 'package:event_management_app1/dashboards/utils/event_request_utils.dart';
+
+import 'package:event_management_app1/dashboards/admin/widgets/appbar_actions.dart';
+import 'package:event_management_app1/dashboards/admin/widgets/event_request_list.dart';
+import 'package:event_management_app1/services/user_permission.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -16,7 +16,26 @@ class AdminDashboard extends StatefulWidget {
 class _AdminDashboardState extends State<AdminDashboard> {
   String selectedFilter = 'pending';
   String searchQuery = '';
+  bool _isSystemAdmin = false;
+  bool _isRegularAdmin = false;
+  bool _isLoading = true;
 
+  @override
+ @override
+void initState() {
+  super.initState();
+  _loadUserPermissions();
+}
+
+Future<void> _loadUserPermissions() async {
+  final result = await UserPermissionService.checkPermissions();
+
+  setState(() {
+    _isSystemAdmin = result['isSystemAdmin'] ?? false;
+    _isRegularAdmin = result['isRegularAdmin'] ?? false;
+    _isLoading = false;
+  });
+}
   Stream<QuerySnapshot> getEventRequestsStream() {
     try {
       final collection = FirebaseFirestore.instance.collection('event_requests');
@@ -43,48 +62,35 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (!_isSystemAdmin && !_isRegularAdmin) {
+      return const Scaffold(
+        body: Center(
+          child: Text(
+            ' Access Denied. You need admin privileges to access this page.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
-  title: const Text('Event Requests'),
-  actions: [
-   Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-      child: ElevatedButton.icon(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white, 
-          foregroundColor: Colors.black,  
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          elevation: 3,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const CreateEventScreen()),
-          );
-        },
-        icon: const Icon(Icons.add),
-        label: const Text(
-          'Create Event',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-      ),
-    ),
-    IconButton(
-      icon: const Icon(Icons.manage_accounts),
-      tooltip: 'Manage Users',
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const UserListScreen()),
-        );
-      },
-    ),
-  ],
-),
+        title: Text(_isSystemAdmin ? 'System Admin Dashboard' : 'Admin Dashboard'),
+       actions: [
+  Padding(
+    padding: const EdgeInsets.only(right: 12),
+    child: AdminAppBarActions(isSystemAdmin: _isSystemAdmin),
+  ),
+],
 
+      ),
       body: Padding(
         padding: const EdgeInsets.all(15),
         child: Column(
@@ -104,54 +110,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ),
             const SizedBox(height: 15),
             Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: getEventRequestsStream(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
+  child: EventRequestList(
+    selectedFilter: selectedFilter,
+    searchQuery: searchQuery,
+  ),
+),
 
-                  final docs = snapshot.data!.docs.where((doc) {
-                    final data = doc.data() as Map<String, dynamic>;
-                    final title = (data['eventTitle'] ?? '').toString().toLowerCase();
-                    final organizerEmail =
-                        (data['organizerEmail'] ?? '').toString().toLowerCase();
-                    return title.contains(searchQuery) || organizerEmail.contains(searchQuery);
-                  }).toList();
-
-                  if (docs.isEmpty) {
-                    return const Center(child: Text('No event requests found.'));
-                  }
-
-                  return ListView.builder(
-                    itemCount: docs.length,
-                    itemBuilder: (context, index) {
-                      final doc = docs[index];
-                      final data = doc.data() as Map<String, dynamic>;
-                      return Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        child: ListTile(
-                          title: Text(data['eventTitle'] ?? 'No title'),
-                          subtitle: Text('Organizer: ${data['organizerEmail'] ?? 'N/A'}'),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EventDetailsScreen(eventData: data, docId: doc.id),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
           ],
         ),
       ),
