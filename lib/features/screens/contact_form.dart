@@ -127,7 +127,7 @@ class _ContactFormState extends State<ContactForm> {
                             child: Text(
                               _selectedDate == null
                                   ? 'No date selected'
-                                  : 'Event Date: \${_selectedDate!.toLocal().toString().split(' ')[0]}',
+                                  : "Event Date: ${_selectedDate!.toLocal().toString().split(' ')[0]}",
                             ),
                           ),
                           ElevatedButton(

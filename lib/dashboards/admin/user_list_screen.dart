@@ -85,7 +85,6 @@ class _UserListScreenState extends State<UserListScreen> {
             itemBuilder: (context, index) {
               final user = users[index];
               final userData = user.data() as Map<String, dynamic>;
-
               final userId = user.id;
               final userName = userData['name'] ?? 'Unnamed';
               final userEmail = userData['email'] ?? 'No Email';

@@ -1,4 +1,3 @@
-// lib/widgets/admin/event_request_list.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin/event_deatils_screen.dart';
 import 'package:flutter/material.dart';

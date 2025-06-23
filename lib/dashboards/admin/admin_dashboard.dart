@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin/filter_chips.dart';
-
 import 'package:event_management_app1/dashboards/admin/widgets/appbar_actions.dart';
 import 'package:event_management_app1/dashboards/admin/widgets/event_request_list.dart';
+import 'package:event_management_app1/dashboards/admin/widgets/search_box.dart';
 import 'package:event_management_app1/services/user_permission.dart';
 import 'package:flutter/material.dart';
 
@@ -95,14 +95,8 @@ Future<void> _loadUserPermissions() async {
         padding: const EdgeInsets.all(15),
         child: Column(
           children: [
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search requests...',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              onChanged: _updateSearchQuery,
-            ),
+            SearchBox(onChanged: _updateSearchQuery),
+
             const SizedBox(height: 15),
             FilterChips(
               selectedFilter: selectedFilter,
