@@ -26,7 +26,7 @@ class EventRequestList extends StatelessWidget {
       return const Stream<QuerySnapshot>.empty();
     }
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
