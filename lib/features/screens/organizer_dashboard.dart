@@ -1,15 +1,30 @@
 import 'package:event_management_app1/features/screens/assigned_event_list_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:event_management_app1/features/screens/contact_form.dart';
 
 
 class OrganizerDashboardScreen extends StatelessWidget {
   const OrganizerDashboardScreen({super.key});
+   void _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    if (!context.mounted) return;
+    Navigator.pushReplacementNamed(context, '/login');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Organizer Dashboard")),
+      appBar: AppBar(
+        title: const Text("Organizer Dashboard"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: () => _logout(context), 
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -39,7 +54,9 @@ class OrganizerDashboardScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const AssignedEventListScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const AssignedEventListScreen(),
+                  ),
                 );
               },
             ),

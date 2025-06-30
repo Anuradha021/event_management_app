@@ -65,7 +65,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     await FirebaseFirestore.instance.collection('event_requests').add({
       'eventTitle': _titleController.text,
       'eventDescription': _descController.text,
-      'date': _selectedDate,
+      'eventDate': _selectedDate,
       'location': _locationController.text,
       'organizerEmail': _organizerEmailController.text,
       'organizerUid': user.uid,

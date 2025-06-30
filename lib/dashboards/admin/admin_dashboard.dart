@@ -4,6 +4,7 @@ import 'package:event_management_app1/dashboards/admin/widgets/appbar_actions.da
 import 'package:event_management_app1/dashboards/admin/widgets/event_request_list.dart';
 import 'package:event_management_app1/dashboards/admin/widgets/search_box.dart';
 import 'package:event_management_app1/services/user_permission.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -20,11 +21,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
   bool _isRegularAdmin = false;
   bool _isLoading = true;
 
-  @override
  @override
 void initState() {
   super.initState();
   _loadUserPermissions();
+}
+void _logout() async {
+  await FirebaseAuth.instance.signOut();
+  if (!mounted) return;
+  Navigator.pushReplacementNamed(context, '/login'); 
 }
 
 Future<void> _loadUserPermissions() async {
@@ -72,7 +77,7 @@ Future<void> _loadUserPermissions() async {
       return const Scaffold(
         body: Center(
           child: Text(
-            ' Access Denied. You need admin privileges to access this page.',
+            ' Access Denied. ',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 16),
           ),
@@ -86,7 +91,8 @@ Future<void> _loadUserPermissions() async {
        actions: [
   Padding(
     padding: const EdgeInsets.only(right: 12),
-    child: AdminAppBarActions(isSystemAdmin: _isSystemAdmin),
+    child: AdminAppBarActions(isSystemAdmin: _isSystemAdmin, onLogout: _logout,),
+    
   ),
 ],
 
