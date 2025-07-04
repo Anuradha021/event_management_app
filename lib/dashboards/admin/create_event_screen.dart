@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CreateEventScreen extends StatefulWidget {
   final Map<String, dynamic>? requestData;
-  
+
   const CreateEventScreen({super.key, this.requestData});
 
   @override
@@ -39,56 +39,77 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       _organizerEmailController.text = widget.requestData!['organizerEmail'] ?? '';
       _locationController.text = widget.requestData!['location'] ?? '';
       _selectedDate = widget.requestData!['eventDate']?.toDate();
+      _selectedCategory = widget.requestData!['category'];
     }
   }
 
- Future<void> _submitForm() async {
-  if (!_formKey.currentState!.validate() || _selectedDate == null || _selectedCategory == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Please fill in all fields')),
-    );
-    return;
+  // ✅ NEW: Check if organizer email exists in Firestore users collection
+  Future<bool> _checkIfUserExists(String email) async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    return snapshot.docs.isNotEmpty;
   }
 
-  setState(() => _isSubmitting = true);
-
-  try {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
+  Future<void> _submitForm() async {
+    if (!_formKey.currentState!.validate() || _selectedDate == null || _selectedCategory == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You must be logged in to create an event')),
+        const SnackBar(content: Text('Please fill in all fields')),
       );
-      setState(() => _isSubmitting = false);
       return;
     }
 
-    await FirebaseFirestore.instance.collection('event_requests').add({
-      'eventTitle': _titleController.text,
-      'eventDescription': _descController.text,
-      'eventDate': _selectedDate,
-      'location': _locationController.text,
-      'organizerEmail': _organizerEmailController.text,
-      'organizerUid': user.uid,
-      'category': _selectedCategory,
-      'status': 'pending',
-      'createdAt': Timestamp.now(),
-    });
+    setState(() => _isSubmitting = true);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Event created successfully')),
-    );
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('You must be logged in to create an event')),
+        );
+        setState(() => _isSubmitting = false);
+        return;
+      }
 
-    Navigator.pop(context, true);
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Failed to create event: $e')),
-    );
-  } finally {
-    setState(() => _isSubmitting = false);
+      final organizerEmail = _organizerEmailController.text.trim();
+
+      // ✅ Check if organizer email exists
+      final userExists = await _checkIfUserExists(organizerEmail);
+      if (!userExists) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('No user found with this email. Please ensure the organizer has registered.')),
+        );
+        setState(() => _isSubmitting = false);
+        return;
+      }
+
+      await FirebaseFirestore.instance.collection('event_requests').add({
+        'eventTitle': _titleController.text,
+        'eventDescription': _descController.text,
+        'eventDate': _selectedDate,
+        'location': _locationController.text,
+        'organizerEmail': organizerEmail,
+        'organizerUid': user.uid,
+        'category': _selectedCategory,
+        'status': 'pending',
+        'createdAt': Timestamp.now(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Event created successfully')),
+      );
+
+      Navigator.pop(context, true);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to create event: $e')),
+      );
+    } finally {
+      setState(() => _isSubmitting = false);
+    }
   }
-}
 
-  
   Future<void> _pickDate() async {
     final now = DateTime.now();
     final pickedDate = await showDatePicker(
@@ -129,7 +150,16 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               TextFormField(
                 controller: _organizerEmailController,
                 decoration: const InputDecoration(labelText: 'Organizer Email'),
-                validator: (value) => value!.isEmpty ? 'Email is required' : null,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email is required';
+                  }
+                  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                  if (!emailRegex.hasMatch(value.trim())) {
+                    return 'Enter a valid email address';
+                  }
+                  return null;
+                },
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 10),
@@ -151,6 +181,7 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
               const SizedBox(height: 10),
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: 'Category'),
+                value: _selectedCategory,
                 items: categories
                     .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
                     .toList(),
