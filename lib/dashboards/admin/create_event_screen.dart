@@ -43,7 +43,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
     }
   }
 
-  // ✅ NEW: Check if organizer email exists in Firestore users collection
   Future<bool> _checkIfUserExists(String email) async {
     final snapshot = await FirebaseFirestore.instance
         .collection('users')
@@ -74,7 +73,6 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
 
       final organizerEmail = _organizerEmailController.text.trim();
 
-      // ✅ Check if organizer email exists
       final userExists = await _checkIfUserExists(organizerEmail);
       if (!userExists) {
         ScaffoldMessenger.of(context).showSnackBar(

@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/screens/assigned_event_list_screen.dart';
 import 'package:event_management_app1/features/screens/contact_form.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/SessionListScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/SubEventListScreen.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -76,6 +79,7 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 16),
+
             ElevatedButton.icon(
               icon: const Icon(Icons.add),
               label: const Text("Create New Event Request"),
@@ -88,7 +92,9 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
                 );
               },
             ),
+
             const SizedBox(height: 10),
+
             ElevatedButton.icon(
               icon: const Icon(Icons.list),
               label: const Text("View My Assigned Events"),
@@ -101,6 +107,9 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
                 );
               },
             ),
+
+            
+
           ],
         ),
       ),
