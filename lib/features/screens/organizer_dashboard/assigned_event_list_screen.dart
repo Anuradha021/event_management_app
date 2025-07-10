@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/SubEventListScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/EventDetailScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +17,7 @@ class AssignedEventListScreen extends StatelessWidget {
 
     return snapshot.docs.map((doc) {
       final data = doc.data();
-      data['docId'] = doc.id; // Store event document ID
+      data['docId'] = doc.id;
       return data;
     }).toList();
   }
@@ -50,33 +50,20 @@ class AssignedEventListScreen extends StatelessWidget {
             itemCount: events.length,
             itemBuilder: (context, index) {
               final event = events[index];
-              final eventId = event['docId'];
-
               return Card(
                 margin: const EdgeInsets.all(8),
                 child: ListTile(
-                  title: Text(event['eventTitle'] ?? 'No Title'),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Date: ${_formatDate(event['eventDate'])}"),
-                      const SizedBox(height: 4),
-                      Text(event['eventDescription'] ?? 'No Description'),
-                    ],
-                  ),
-                  isThreeLine: true,
-                  trailing: TextButton.icon(
-                    icon: const Icon(Icons.arrow_forward),
-                    label: const Text('View Sub-Events'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => SubEventListScreen(eventId: eventId),
-                        ),
-                      );
-                    },
-                  ),
+                  title: Text(event['eventTitle'] ?? 'No Title', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  subtitle: Text("Date: ${_formatDate(event['eventDate'])}"),
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EventDetailScreen(eventId: event['docId']),
+                      ),
+                    );
+                  },
                 ),
               );
             },

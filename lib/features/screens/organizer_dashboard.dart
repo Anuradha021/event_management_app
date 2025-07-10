@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/screens/assigned_event_list_screen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/assigned_event_list_screen.dart';
 import 'package:event_management_app1/features/screens/contact_form.dart';
 import 'package:event_management_app1/features/screens/organizer_dashboard/SessionListScreen.dart';
 import 'package:event_management_app1/features/screens/organizer_dashboard/SubEventListScreen.dart';

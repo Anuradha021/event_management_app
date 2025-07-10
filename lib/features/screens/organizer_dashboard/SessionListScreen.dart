@@ -8,29 +8,22 @@ class SessionListScreen extends StatelessWidget {
 
   const SessionListScreen({super.key, required this.eventId, required this.subEventId});
 
- Future<List<Map<String, dynamic>>> _fetchSessions() async {
-  final snapshot = await FirebaseFirestore.instance
-      .collection('events')
-      .doc(eventId)
-      .collection('subEvents')
-      .doc(subEventId)
-      .collection('sessions')
-      .orderBy('createdAt', descending: true)
-      .get();
+  Future<List<Map<String, dynamic>>> _fetchSessions() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('events')
+        .doc(eventId)
+        .collection('subEvents')
+        .doc(subEventId)
+        .collection('sessions')
+        .orderBy('createdAt', descending: true)
+        .get();
 
-  // Debug: Print every document
-  for (var doc in snapshot.docs) {
-    print('Session Doc ID: ${doc.id}');
-    print('Session Data: ${doc.data()}');
+    return snapshot.docs.map((doc) {
+      final data = doc.data();
+      data['docId'] = doc.id;   
+      return data;
+    }).toList();
   }
-
-  return snapshot.docs.map((doc) {
-    final data = doc.data();
-    data['docId'] = doc.id;
-    return data;
-  }).toList();
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +81,7 @@ class SessionListScreen extends StatelessWidget {
                                 ],
                               ),
                               onTap: () {
-                                // Show Session details in a popup (Optional: create a full screen detail later)
+                              
                                 showDialog(
                                   context: context,
                                   builder: (_) => AlertDialog(

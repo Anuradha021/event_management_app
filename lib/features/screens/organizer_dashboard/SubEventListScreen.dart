@@ -37,18 +37,7 @@ class SubEventListScreen extends StatelessWidget {
 
           return Column(
             children: [
-              TextButton.icon(
-                icon: const Icon(Icons.add),
-                label: const Text('Create Sub-Event'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => SubEventCreateScreen(eventId: eventId),
-                    ),
-                  );
-                },
-              ),
+              
               Expanded(
                 child: subEvents.isEmpty
                     ? const Center(child: Text('No Sub-Events Found'))

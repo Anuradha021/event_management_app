@@ -1,15 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/widgets/CustomTextField.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/widgets/CustomTimePicker.dart';
 import 'package:flutter/material.dart';
 
 class SessionCreateScreen extends StatefulWidget {
   final String eventId;
   final String subEventId;
 
-  const SessionCreateScreen({
-    super.key,
-    required this.eventId,
-    required this.subEventId,
-  });
+  const SessionCreateScreen({super.key, required this.eventId, required this.subEventId});
 
   @override
   State<SessionCreateScreen> createState() => _SessionCreateScreenState();
@@ -17,37 +15,28 @@ class SessionCreateScreen extends StatefulWidget {
 
 class _SessionCreateScreenState extends State<SessionCreateScreen> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _speakerController = TextEditingController();
-  final TextEditingController _descController = TextEditingController();
+  final _titleController = TextEditingController();
+  final _speakerController = TextEditingController();
+  final _descController = TextEditingController();
 
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
   bool _isSubmitting = false;
 
   Future<void> _pickTime(bool isStart) async {
-    final picked = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
+    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
     if (picked != null) {
-      setState(() {
-        if (isStart) {
-          _startTime = picked;
-        } else {
-          _endTime = picked;
-        }
-      });
+      setState(() => isStart ? _startTime = picked : _endTime = picked);
     }
   }
 
+  void _showMessage(String msg) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
   Future<void> _submitSession() async {
-    if (!_formKey.currentState!.validate() ||
-        _startTime == null ||
-        _endTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields')),
-      );
+    if (!_formKey.currentState!.validate() || _startTime == null || _endTime == null) {
+      _showMessage('Please fill all fields');
       return;
     }
 
@@ -69,14 +58,10 @@ class _SessionCreateScreenState extends State<SessionCreateScreen> {
         'createdAt': Timestamp.now(),
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Session Created Successfully')),
-      );
+      _showMessage('Session Created Successfully');
       Navigator.pop(context, true);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
+      _showMessage('Error: $e');
     } finally {
       setState(() => _isSubmitting = false);
     }
@@ -92,48 +77,20 @@ class _SessionCreateScreenState extends State<SessionCreateScreen> {
           key: _formKey,
           child: ListView(
             children: [
-              TextFormField(
-                controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Session Title'),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Required' : null,
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _speakerController,
-                decoration: const InputDecoration(labelText: 'Speaker Name'),
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Required' : null,
-              ),
-              const SizedBox(height: 10),
-              ListTile(
-                title: Text(_startTime == null
-                    ? 'Pick Start Time'
-                    : 'Start Time: ${_startTime!.format(context)}'),
-                trailing: const Icon(Icons.access_time),
-                onTap: () => _pickTime(true),
-              ),
-              ListTile(
-                title: Text(_endTime == null
-                    ? 'Pick End Time'
-                    : 'End Time: ${_endTime!.format(context)}'),
-                trailing: const Icon(Icons.access_time),
-                onTap: () => _pickTime(false),
-              ),
-              const SizedBox(height: 10),
-              TextFormField(
-                controller: _descController,
-                decoration: const InputDecoration(labelText: 'Description'),
-                maxLines: 3,
-                validator: (value) =>
-                    value == null || value.isEmpty ? 'Required' : null,
-              ),
+              CustomTextField(controller: _titleController, label: 'Session Title'),
+              CustomTextField(controller: _speakerController, label: 'Speaker Name'),
+              CustomTimePicker(label: 'Start Time', time: _startTime, onTap: () => _pickTime(true)),
+              CustomTimePicker(label: 'End Time', time: _endTime, onTap: () => _pickTime(false)),
+              CustomTextField(controller: _descController, label: 'Description', maxLines: 3),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _isSubmitting ? null : _submitSession,
-                child: _isSubmitting
-                    ? const CircularProgressIndicator()
-                    : const Text('Create Session'),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _isSubmitting ? null : _submitSession,
+                  child: _isSubmitting
+                      ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                      : const Text('Create Session'),
+                ),
               ),
             ],
           ),
