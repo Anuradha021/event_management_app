@@ -1,29 +1,34 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/ZoneDetailsScreens.dart';
 import 'package:flutter/material.dart';
-import 'TrackDetailScreen.dart';
 
-class TrackListScreen extends StatelessWidget {
+
+class ZoneListScreen extends StatelessWidget {
   final String eventId;
   final String subEventId;
+  final String trackId;
 
-  const TrackListScreen({
+  const ZoneListScreen({
     super.key,
     required this.eventId,
     required this.subEventId,
+    required this.trackId,
   });
 
-  Future<List<Map<String, dynamic>>> _fetchTracks() async {
+  Future<List<Map<String, dynamic>>> _fetchZones() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('events')
         .doc(eventId)
         .collection('subEvents')
         .doc(subEventId)
         .collection('tracks')
+        .doc(trackId)
+        .collection('zones')
         .get();
 
     return snapshot.docs.map((doc) {
       final data = doc.data();
-      data['trackId'] = doc.id; // Save Track ID
+      data['zoneId'] = doc.id;
       return data;
     }).toList();
   }
@@ -31,42 +36,42 @@ class TrackListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tracks')),
+      appBar: AppBar(title: const Text('Zones')),
       body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _fetchTracks(),
+        future: _fetchZones(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final tracks = snapshot.data ?? [];
+          final zones = snapshot.data ?? [];
 
           return Column(
             children: [
-              const SizedBox(height: 10),
               Expanded(
-                child: tracks.isEmpty
-                    ? const Center(child: Text('No Tracks Found'))
+                child: zones.isEmpty
+                    ? const Center(child: Text('No Zones Found'))
                     : ListView.builder(
-                        itemCount: tracks.length,
+                        itemCount: zones.length,
                         itemBuilder: (context, index) {
-                          final track = tracks[index];
-                          final String trackId = track['trackId'] ?? '';
+                          final zone = zones[index];
+                          final String zoneId = zone['zoneId'] ?? '';
 
                           return Card(
                             margin: const EdgeInsets.all(8),
                             child: ListTile(
-                              title: Text(track['trackTitle'] ?? 'No Title'),
-                              subtitle: Text(track['trackDescription'] ?? 'No Description'),
+                              title: Text(zone['zoneTitle'] ?? 'No Title'),
+                              subtitle: Text(zone['zoneDescription'] ?? 'No Description'),
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) => TrackDetailScreen(
+                                    builder: (_) => ZoneDetailScreen(
                                       eventId: eventId,
                                       subEventId: subEventId,
                                       trackId: trackId,
-                                      trackData: track,
+                                      zoneId: zoneId,
+                                      zoneData: zone,
                                     ),
                                   ),
                                 );
