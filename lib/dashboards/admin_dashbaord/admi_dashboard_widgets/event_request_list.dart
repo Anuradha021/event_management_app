@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/admin/event_deatils_screen.dart';
+import 'package:event_management_app1/dashboards/admin_dashbaord/event_deatils_screen.dart';
 import 'package:flutter/material.dart';
 class EventRequestList extends StatelessWidget {
   final String selectedFilter;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:event_management_app1/dashboards/admin/create_event_screen.dart';
-import 'package:event_management_app1/dashboards/admin/user_list_screen.dart';
+import 'package:event_management_app1/dashboards/admin_dashbaord/create_event_screen.dart';
+import 'package:event_management_app1/dashboards/admin_dashbaord/user_list_screen.dart';
 
 class AdminAppBarActions extends StatelessWidget {
   final bool isSystemAdmin;

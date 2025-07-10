@@ -1,4 +1,4 @@
-import 'package:event_management_app1/dashboards/admin/create_event_screen.dart';
+import 'package:event_management_app1/dashboards/admin_dashbaord/create_event_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
