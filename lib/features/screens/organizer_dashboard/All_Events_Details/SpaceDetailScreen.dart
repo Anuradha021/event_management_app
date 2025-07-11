@@ -1,5 +1,8 @@
-import 'package:event_management_app1/features/screens/organizer_dashboard/CreateSessionScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/SessionListScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/features/common/GenericFormScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/CreateSessionScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/SessionListScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/StallListScreen.dart';
 import 'package:flutter/material.dart';
 
 class SpaceDetailScreen extends StatelessWidget {
@@ -76,6 +79,53 @@ class SpaceDetailScreen extends StatelessWidget {
                 );
               },
             ),
+            const SizedBox(height: 12),
+            ElevatedButton.icon(
+  icon: const Icon(Icons.add_business),
+  label: const Text('Create Stall'),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => GenericCreateForm(
+          title: 'Create Stall',
+          collectionRef: FirebaseFirestore.instance
+              .collection('events')
+              .doc(eventId)
+              .collection('subEvents')
+              .doc(subEventId)
+              .collection('tracks')
+              .doc(trackId)
+              .collection('zones')
+              .doc(zoneId)
+              .collection('spaces')
+              .doc(spaceId)
+              .collection('stalls'),
+        ),
+      ),
+    );
+  },
+),
+const SizedBox(height: 10),
+ElevatedButton.icon(
+  icon: const Icon(Icons.store),
+  label: const Text('View Stalls'),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => StallListScreen(
+          eventId: eventId,
+          subEventId: subEventId,
+          trackId: trackId,
+          zoneId: zoneId,
+          spaceId: spaceId,
+        ),
+      ),
+    );
+  },
+),
+
           ],
         ),
       ),

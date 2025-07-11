@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/CreateSubEventScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/SubEventListScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/CreateSubEventScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/SubEventListScreen.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailScreen extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/common/GenericFormScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/ZoneListScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/ZoneListScreen.dart';
 import 'package:flutter/material.dart';
 
 class TrackDetailScreen extends StatelessWidget {
