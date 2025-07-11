@@ -30,12 +30,12 @@ class SpaceDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              spaceData['spaceTitle'] ?? 'No Title',
+              spaceData['title'] ?? 'No Title',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
-              spaceData['spaceDescription'] ?? 'No Description',
+              spaceData['description'] ?? 'No Description',
               style: const TextStyle(fontSize: 16),
             ),
             const SizedBox(height: 30),

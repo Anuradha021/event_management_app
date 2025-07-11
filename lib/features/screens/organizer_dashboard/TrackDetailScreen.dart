@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/features/common/GenericFormScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/ZoneListScreen.dart';
 import 'package:flutter/material.dart';
-import 'CreateZoneScreen.dart';
-import 'ZoneListScreen.dart';
 
 class TrackDetailScreen extends StatelessWidget {
   final String eventId;
@@ -18,6 +19,15 @@ class TrackDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final collectionRef = FirebaseFirestore.instance
+        .collection('events')
+        .doc(eventId)
+        .collection('subEvents')
+        .doc(subEventId)
+        .collection('tracks')
+        .doc(trackId)
+        .collection('zones');
+
     return Scaffold(
       appBar: AppBar(title: const Text('Track Details')),
       body: Padding(
@@ -25,9 +35,9 @@ class TrackDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Title: ${trackData['trackTitle'] ?? 'N/A'}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("Title: ${trackData['title'] ?? 'N/A'}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text("Description: ${trackData['trackDescription'] ?? 'N/A'}"),
+            Text("Description: ${trackData['description'] ?? 'N/A'}"),
             const SizedBox(height: 24),
 
             ElevatedButton.icon(
@@ -37,10 +47,9 @@ class TrackDetailScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => CreateZoneScreen(
-                      eventId: eventId,
-                      subEventId: subEventId,
-                      trackId: trackId,
+                    builder: (_) => GenericCreateForm(
+                      title: 'Create Zone',
+                      collectionRef: collectionRef,
                     ),
                   ),
                 );

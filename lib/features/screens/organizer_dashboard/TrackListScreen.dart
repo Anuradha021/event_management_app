@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/common/GenericListScreen.dart'; // ✅ NEW: Create this file
+import 'package:event_management_app1/features/common/GenericFormScreen.dart';
+import 'package:event_management_app1/features/common/GenericListScreen.dart';// ✅ NEW: Import this
 import 'package:event_management_app1/features/screens/organizer_dashboard/TrackDetailScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/CreateTrackScreen.dart'; // ✅ Your existing create screen
 import 'package:flutter/material.dart';
 
 class TrackListScreen extends StatelessWidget {
@@ -26,10 +26,10 @@ class TrackListScreen extends StatelessWidget {
     return GenericListScreen(
       title: 'Tracks',
       collectionRef: collectionRef,
-      displayFields: ['trackTitle', 'trackDescription'],
-      createScreenBuilder: (ctx) => CreateTrackScreen(
-        eventId: eventId,
-        subEventId: subEventId,
+      displayFields: ['title', 'description'],  
+      createScreenBuilder: (ctx) => GenericCreateForm(   
+        title: 'Create Track',
+        collectionRef: collectionRef,
       ),
       onItemTap: (data, docId) {
         Navigator.push(

@@ -1,6 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/features/common/GenericFormScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/TrackListScreen.dart';
 import 'package:flutter/material.dart';
-import 'TrackListScreen.dart';  // To be created
-import 'CreateTrackScreen.dart';  // To be created
 
 class SubEventDetailScreen extends StatelessWidget {
   final String eventId;
@@ -15,6 +16,13 @@ class SubEventDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final subEventId = subEventData['docId'];
+
+    final collectionRef = FirebaseFirestore.instance
+        .collection('events')
+        .doc(eventId)
+        .collection('subEvents')
+        .doc(subEventId)
+        .collection('tracks');
 
     return Scaffold(
       appBar: AppBar(title: Text(subEventData['subEventTitle'] ?? 'Sub-Event Details')),
@@ -35,16 +43,14 @@ class SubEventDetailScreen extends StatelessWidget {
               label: const Text('Create Track'),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => CreateTrackScreen(
-                    eventId: eventId,
-                    subEventId: subEventId,
+                  builder: (_) => GenericCreateForm(
+                    title: 'Create Track',
+                    collectionRef: collectionRef,
                   ),
                 ));
               },
             ),
-
             const SizedBox(height: 10),
-
             ElevatedButton.icon(
               icon: const Icon(Icons.list),
               label: const Text('View Tracks'),

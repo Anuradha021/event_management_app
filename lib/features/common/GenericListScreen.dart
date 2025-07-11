@@ -37,14 +37,7 @@ class GenericListScreen extends StatelessWidget {
 
           return Column(
             children: [
-              if (createScreenBuilder != null)
-                TextButton.icon(
-                  icon: const Icon(Icons.add),
-                  label: Text('Create $title'),
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: createScreenBuilder!));
-                  },
-                ),
+              
               Expanded(
                 child: items.isEmpty
                     ? const Center(child: Text('No items found'))
