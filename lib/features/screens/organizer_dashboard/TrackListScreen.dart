@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/features/common/GenericListScreen.dart'; // ✅ NEW: Create this file
+import 'package:event_management_app1/features/screens/organizer_dashboard/TrackDetailScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/CreateTrackScreen.dart'; // ✅ Your existing create screen
 import 'package:flutter/material.dart';
-import 'TrackDetailScreen.dart';
 
 class TrackListScreen extends StatelessWidget {
   final String eventId;
@@ -12,74 +14,36 @@ class TrackListScreen extends StatelessWidget {
     required this.subEventId,
   });
 
-  Future<List<Map<String, dynamic>>> _fetchTracks() async {
-    final snapshot = await FirebaseFirestore.instance
+  @override
+  Widget build(BuildContext context) {
+    final collectionRef = FirebaseFirestore.instance
         .collection('events')
         .doc(eventId)
         .collection('subEvents')
         .doc(subEventId)
-        .collection('tracks')
-        .get();
+        .collection('tracks');
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      data['trackId'] = doc.id; // Save Track ID
-      return data;
-    }).toList();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Tracks')),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _fetchTracks(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          final tracks = snapshot.data ?? [];
-
-          return Column(
-            children: [
-              const SizedBox(height: 10),
-              Expanded(
-                child: tracks.isEmpty
-                    ? const Center(child: Text('No Tracks Found'))
-                    : ListView.builder(
-                        itemCount: tracks.length,
-                        itemBuilder: (context, index) {
-                          final track = tracks[index];
-                          final String trackId = track['trackId'] ?? '';
-
-                          return Card(
-                            margin: const EdgeInsets.all(8),
-                            child: ListTile(
-                              title: Text(track['trackTitle'] ?? 'No Title'),
-                              subtitle: Text(track['trackDescription'] ?? 'No Description'),
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => TrackDetailScreen(
-                                      eventId: eventId,
-                                      subEventId: subEventId,
-                                      trackId: trackId,
-                                      trackData: track,
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                      ),
-              ),
-            ],
-          );
-        },
+    return GenericListScreen(
+      title: 'Tracks',
+      collectionRef: collectionRef,
+      displayFields: ['trackTitle', 'trackDescription'],
+      createScreenBuilder: (ctx) => CreateTrackScreen(
+        eventId: eventId,
+        subEventId: subEventId,
       ),
+      onItemTap: (data, docId) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TrackDetailScreen(
+              eventId: eventId,
+              subEventId: subEventId,
+              trackId: docId,
+              trackData: data,
+            ),
+          ),
+        );
+      },
     );
   }
 }
