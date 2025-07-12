@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/CreateSubEventScreen.dart';
 import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/SubEventListScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/CreateTickitScreen.dart';
+import 'package:event_management_app1/features/screens/organizer_dashboard/TickitListScreen.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailScreen extends StatelessWidget {
@@ -68,8 +70,11 @@ class EventDetailScreen extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text('Name: ${event['organizerName'] ?? ''}', style: const TextStyle(fontSize: 15)),
                 Text('Email: ${event['organizerEmail'] ?? ''}', style: const TextStyle(fontSize: 15)),
+
                 const Spacer(),
-SizedBox(
+
+                // Sub-Events Button
+                SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.add),
@@ -84,7 +89,9 @@ SizedBox(
                     },
                   ),
                 ),
-                SizedBox(height: 20),
+
+                const SizedBox(height: 12),
+
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -95,6 +102,44 @@ SizedBox(
                         context,
                         MaterialPageRoute(
                           builder: (_) => SubEventListScreen(eventId: event['docId']),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // 🔗 Create Ticket Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.confirmation_number),
+                    label: const Text('Create Tickets'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CreateTicketScreen(eventId: event['docId']),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+
+                // 🔗 View Ticket Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.view_list),
+                    label: const Text('View Tickets'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>  TicketListScreen(eventId: event['docId']),
                         ),
                       );
                     },
