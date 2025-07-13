@@ -53,7 +53,7 @@ class SessionListScreen extends StatelessWidget {
             builder: (_) => SessionDetailScreen(
               eventId: eventId,
               subEventId: subEventId,
-              trackId: trackId,
+              trackId: trackId,  
               zoneId: zoneId,
               spaceId: spaceId,
               sessionId: docId,
