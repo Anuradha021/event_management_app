@@ -10,7 +10,7 @@ class TicketListScreen extends StatelessWidget {
   Future<List<Map<String, dynamic>>> _fetchTickets() async {
     final snapshot = await FirebaseFirestore.instance
         .collection('tickets')
-        .where('eventId', isEqualTo: eventId) // ✅ filter by event
+        .where('eventId', isEqualTo: eventId) 
         .get();
 
     return snapshot.docs.map((doc) {

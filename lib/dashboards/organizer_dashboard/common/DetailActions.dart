@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/common/GenericEditForm.dart';
-import 'package:event_management_app1/features/common/GenericFormScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/common/GenericEditForm.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/common/GenericFormScreen.dart';
 import 'package:flutter/material.dart';
 
 class DetailActions extends StatelessWidget {

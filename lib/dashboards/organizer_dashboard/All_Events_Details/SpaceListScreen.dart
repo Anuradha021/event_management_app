@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/common/GenericFormScreen.dart';
-import 'package:event_management_app1/features/common/GenericListScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SpaceDetailScreen.dart';  // ✅ You need this too
+import 'package:event_management_app1/dashboards/organizer_dashboard/common/GenericFormScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/common/GenericListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SpaceDetailScreen.dart';  
 
 import 'package:flutter/material.dart';
 
@@ -44,7 +44,7 @@ class SpaceListScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => SpaceDetailScreen(   // ✅ This screen shows Space details & has buttons
+            builder: (_) => SpaceDetailScreen(   
               eventId: eventId,
               subEventId: subEventId,
               trackId: trackId,

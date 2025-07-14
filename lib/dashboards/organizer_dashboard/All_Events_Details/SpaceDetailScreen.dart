@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/common/GenericFormScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/common/GenericFormScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/CreateSessionScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SessionListScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/StallListScreen.dart';

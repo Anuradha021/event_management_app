@@ -4,7 +4,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class CreateTicketScreen extends StatefulWidget {
   final String eventId;
-  final String? sessionId;  // optional
+  final String? sessionId;  
 
   const CreateTicketScreen({
     super.key,
@@ -27,7 +27,7 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
   Future<void> _createTicket() async {
     if (_formKey.currentState!.validate()) {
       final docRef = FirebaseFirestore.instance.collection('tickets').doc();
-      final String generatedQR = docRef.id; // Using document ID as QR data
+      final String generatedQR = docRef.id; //Unique id of firestore doc.
 
       await docRef.set({
         'ticketType': ticketTypeController.text.trim(),

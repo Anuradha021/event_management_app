@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/common/GenericListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/common/GenericListScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/CreateSessionScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SessionDetailScreen.dart';
 import 'package:flutter/material.dart';
