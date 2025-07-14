@@ -1,4 +1,4 @@
-import 'package:event_management_app1/features/screens/login_screen.dart';
+import 'package:event_management_app1/EntryPointFiles/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {

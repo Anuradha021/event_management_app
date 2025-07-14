@@ -1,7 +1,7 @@
 import 'package:event_management_app1/dashboards/admin_dashbaord/admin_setup.dart';
-import 'package:event_management_app1/features/screens/login_screen.dart';
-import 'package:event_management_app1/features/screens/sign_up_screen.dart';
-import 'package:event_management_app1/features/screens/welcome_screen.dart';
+import 'package:event_management_app1/EntryPointFiles/login_screen.dart';
+import 'package:event_management_app1/EntryPointFiles/sign_up_screen.dart';
+import 'package:event_management_app1/EntryPointFiles/welcome_screen.dart';
 import 'package:event_management_app1/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

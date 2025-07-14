@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/CreateSubEventScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/SubEventListScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/CreateTickitScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/TickitListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/CreateSubEventScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SubEventListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/CreateTickitScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/TickitListScreen.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailScreen extends StatelessWidget {
@@ -14,7 +14,7 @@ class EventDetailScreen extends StatelessWidget {
     final doc = await FirebaseFirestore.instance.collection('events').doc(eventId).get();
     if (doc.exists) {
       final data = doc.data()!;
-      data['docId'] = doc.id; // for sub-events screen
+      data['docId'] = doc.id; 
       return data;
     }
     return null;
@@ -73,7 +73,6 @@ class EventDetailScreen extends StatelessWidget {
 
                 const Spacer(),
 
-                // Sub-Events Button
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -110,7 +109,7 @@ class EventDetailScreen extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                // 🔗 Create Ticket Button
+              
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(
@@ -129,7 +128,7 @@ class EventDetailScreen extends StatelessWidget {
 
                 const SizedBox(height: 12),
 
-                // 🔗 View Ticket Button
+  
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton.icon(

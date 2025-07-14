@@ -1,20 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/common/GenericFormScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/ZoneListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SpaceListScreen.dart';
 import 'package:flutter/material.dart';
 
-class TrackDetailScreen extends StatelessWidget {
+class ZoneDetailScreen extends StatelessWidget {
   final String eventId;
   final String subEventId;
   final String trackId;
-  final Map<String, dynamic> trackData;
+  final String zoneId;
+  final Map<String, dynamic> zoneData;
 
-  const TrackDetailScreen({
+  const ZoneDetailScreen({
     super.key,
     required this.eventId,
     required this.subEventId,
     required this.trackId,
-    required this.trackData,
+    required this.zoneId,
+    required this.zoneData,
   });
 
   @override
@@ -26,29 +28,31 @@ class TrackDetailScreen extends StatelessWidget {
         .doc(subEventId)
         .collection('tracks')
         .doc(trackId)
-        .collection('zones');
+        .collection('zones')
+        .doc(zoneId)
+        .collection('spaces');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Track Details')),
+      appBar: AppBar(title: const Text('Zone Details')),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Title: ${trackData['title'] ?? 'N/A'}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            Text("Title: ${zoneData['title'] ?? 'N/A'}", style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            Text("Description: ${trackData['description'] ?? 'N/A'}"),
+            Text("Description: ${zoneData['description'] ?? 'N/A'}"),
             const SizedBox(height: 24),
 
             ElevatedButton.icon(
               icon: const Icon(Icons.add),
-              label: const Text('Create Zone'),
+              label: const Text('Create Space'),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) => GenericCreateForm(
-                      title: 'Create Zone',
+                      title: 'Create Space',
                       collectionRef: collectionRef,
                     ),
                   ),
@@ -58,15 +62,16 @@ class TrackDetailScreen extends StatelessWidget {
             const SizedBox(height: 10),
             ElevatedButton.icon(
               icon: const Icon(Icons.view_list),
-              label: const Text('View Zones'),
+              label: const Text('View Spaces'),
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ZoneListScreen(
+                    builder: (_) => SpaceListScreen(
                       eventId: eventId,
                       subEventId: subEventId,
                       trackId: trackId,
+                      zoneId: zoneId,
                     ),
                   ),
                 );

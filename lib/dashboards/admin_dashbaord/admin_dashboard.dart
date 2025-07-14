@@ -3,7 +3,7 @@ import 'package:event_management_app1/dashboards/admin_dashbaord/filter_chips.da
 import 'package:event_management_app1/dashboards/admin_dashbaord/admi_dashboard_widgets/appbar_actions.dart';
 import 'package:event_management_app1/dashboards/admin_dashbaord/admi_dashboard_widgets/event_request_list.dart';
 import 'package:event_management_app1/dashboards/admin_dashbaord/admi_dashboard_widgets/search_box.dart';
-import 'package:event_management_app1/admin_dashboard_services/user_permission.dart';
+import 'package:event_management_app1/dashboards/admin_dashbaord/admin_dashboard_services/user_permission.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

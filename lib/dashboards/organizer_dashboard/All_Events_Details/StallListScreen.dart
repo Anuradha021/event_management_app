@@ -1,22 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/common/GenericFormScreen.dart';
 import 'package:event_management_app1/features/common/GenericListScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/SpaceDetailScreen.dart';  // ✅ You need this too
-
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/StallDetailScreen.dart';
 import 'package:flutter/material.dart';
 
-class SpaceListScreen extends StatelessWidget {
+class StallListScreen extends StatelessWidget {
   final String eventId;
   final String subEventId;
   final String trackId;
   final String zoneId;
+  final String spaceId;
 
-  const SpaceListScreen({
+  const StallListScreen({
     super.key,
     required this.eventId,
     required this.subEventId,
     required this.trackId,
     required this.zoneId,
+    required this.spaceId,
   });
 
   @override
@@ -30,31 +31,29 @@ class SpaceListScreen extends StatelessWidget {
         .doc(trackId)
         .collection('zones')
         .doc(zoneId)
-        .collection('spaces');
+        .collection('spaces')
+        .doc(spaceId)
+        .collection('stalls');
 
     return GenericListScreen(
-      title: 'Spaces',
+      title: 'Stalls',
       collectionRef: collectionRef,
       displayFields: ['title', 'description'],
       createScreenBuilder: (ctx) => GenericCreateForm(
-        title: 'Create Space',
+        title: 'Create Stall',
         collectionRef: collectionRef,
       ),
       onItemTap: (data, docId) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SpaceDetailScreen(   // ✅ This screen shows Space details & has buttons
-              eventId: eventId,
-              subEventId: subEventId,
-              trackId: trackId,
-              zoneId: zoneId,
-              spaceId: docId,
-              spaceData: data,
-            ),
-          ),
-        );
-      },
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => StallDetailScreen(
+        stallData: data,
+      ),
+    ),
+  );
+},
+
     );
   }
 }

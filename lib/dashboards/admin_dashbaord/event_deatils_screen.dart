@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/admin_dashboard_utils/event_request_utils.dart';
+import 'package:event_management_app1/dashboards/admin_dashbaord/admin_dashboard_utils/event_request_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

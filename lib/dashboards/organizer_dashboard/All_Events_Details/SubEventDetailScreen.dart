@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/common/DetailActions.dart';
 import 'package:event_management_app1/features/common/GenericFormScreen.dart';
-import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/TrackListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackListScreen.dart';
 import 'package:flutter/material.dart';
 
 class SubEventDetailScreen extends StatelessWidget {
@@ -41,17 +41,17 @@ final trackCollectionRef = subEventRef
             Text("Date: ${subEventData['subEventDate'].toDate().toString().split(' ')[0]}"),
             const SizedBox(height: 16),
 
-            /// ✅ Edit/Delete Actions
+           
             DetailActions(
               title: 'Sub-Event',
               collectionRef: subEventRef,
               docId: subEventId,
                 initialData: {
     'title': subEventData['subEventTitle'] ?? '',
-    'description': subEventData['subEventType'] ?? '', // or subEventDescription if exists
+    'description': subEventData['subEventType'] ?? '', 
   },
               onDeleteSuccess: () {
-                Navigator.pop(context); // go back after deletion
+                Navigator.pop(context); 
               },
             ),
             const SizedBox(height: 20),

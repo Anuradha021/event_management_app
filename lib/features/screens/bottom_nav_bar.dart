@@ -1,4 +1,4 @@
-import 'package:event_management_app1/features/screens/entry_point_screen.dart';
+import 'package:event_management_app1/EntryPointFiles/entry_point_screen.dart';
 import 'package:event_management_app1/features/screens/home.dart';
 import 'package:event_management_app1/features/screens/profile_screen.dart';
 import 'package:flutter/material.dart';

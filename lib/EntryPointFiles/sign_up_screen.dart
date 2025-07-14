@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/screens/bottom_nav_bar.dart';
 import 'package:event_management_app1/features/screens/home.dart';
-import 'package:event_management_app1/features/screens/login_screen.dart';
+import 'package:event_management_app1/EntryPointFiles/login_screen.dart';
 import 'package:event_management_app1/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

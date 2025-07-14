@@ -1,17 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/features/common/GenericFormScreen.dart';
-import 'package:event_management_app1/features/common/GenericListScreen.dart';// ✅ NEW: Import this
-import 'package:event_management_app1/features/screens/organizer_dashboard/All_Events_Details/TrackDetailScreen.dart';
+import 'package:event_management_app1/features/common/GenericListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneDetailsScreens.dart';
+
 import 'package:flutter/material.dart';
 
-class TrackListScreen extends StatelessWidget {
+class ZoneListScreen extends StatelessWidget {
   final String eventId;
   final String subEventId;
+  final String trackId;
 
-  const TrackListScreen({
+  const ZoneListScreen({
     super.key,
     required this.eventId,
     required this.subEventId,
+    required this.trackId,
   });
 
   @override
@@ -21,25 +24,28 @@ class TrackListScreen extends StatelessWidget {
         .doc(eventId)
         .collection('subEvents')
         .doc(subEventId)
-        .collection('tracks');
+        .collection('tracks')
+        .doc(trackId)
+        .collection('zones');
 
     return GenericListScreen(
-      title: 'Tracks',
+      title: 'Zones',
       collectionRef: collectionRef,
-      displayFields: ['title', 'description'],  
-      createScreenBuilder: (ctx) => GenericCreateForm(   
-        title: 'Create Track',
+      displayFields: ['title', 'description'],
+      createScreenBuilder: (ctx) => GenericCreateForm(
+        title: 'Create Zone',
         collectionRef: collectionRef,
       ),
       onItemTap: (data, docId) {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => TrackDetailScreen(
+            builder: (_) => ZoneDetailScreen(   
               eventId: eventId,
               subEventId: subEventId,
-              trackId: docId,
-              trackData: data,
+              trackId: trackId,
+              zoneId: docId,
+              zoneData: data,
             ),
           ),
         );
