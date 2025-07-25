@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/assigned_event_list_screen.dart';
 import 'package:event_management_app1/features/screens/contact_form.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SessionListScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SubEventListScreen.dart';
+
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

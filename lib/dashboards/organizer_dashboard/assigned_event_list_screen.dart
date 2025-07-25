@@ -60,7 +60,7 @@ class AssignedEventListScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => EventDetailScreen(eventId: event['docId']),
+                        builder: (_) => EventDetailScreen(eventId: event['docId'], ),
                       ),
                     );
                   },

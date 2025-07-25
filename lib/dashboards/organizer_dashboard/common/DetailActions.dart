@@ -39,7 +39,7 @@ class DetailActions extends StatelessWidget {
           const SnackBar(content: Text('Item deleted successfully')),
         );
         onDeleteSuccess?.call();
-        Navigator.pop(context); // Go back after deletion
+        Navigator.pop(context); 
       }
     }
   }

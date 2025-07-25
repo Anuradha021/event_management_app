@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class GenericCreateForm extends StatefulWidget {
-  final String title;
+  final String title; // e.g. "Create Zone", "Create Track"
   final CollectionReference collectionRef;
 
   const GenericCreateForm({
@@ -19,7 +19,6 @@ class _GenericCreateFormState extends State<GenericCreateForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-
   bool _isSubmitting = false;
 
   Future<void> _submit() async {
@@ -37,6 +36,7 @@ class _GenericCreateFormState extends State<GenericCreateForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Item Created Successfully')),
       );
+
       Navigator.pop(context, true);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -60,14 +60,16 @@ class _GenericCreateFormState extends State<GenericCreateForm> {
               TextFormField(
                 controller: _titleController,
                 decoration: const InputDecoration(labelText: 'Title'),
-                validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
                 controller: _descriptionController,
                 decoration: const InputDecoration(labelText: 'Description'),
                 maxLines: 3,
-                validator: (value) => value == null || value.isEmpty ? 'Required' : null,
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Required' : null,
               ),
               const SizedBox(height: 20),
               ElevatedButton(
