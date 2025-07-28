@@ -6,7 +6,7 @@ class CreateSessionScreen extends StatefulWidget {
 
   // We no longer pass zoneId or trackId via constructor,
   // because user must select them from dropdowns here.
-  const CreateSessionScreen({super.key, required this.eventId});
+  const CreateSessionScreen({super.key, required this.eventId, required String zoneId, required String trackId});
 
   @override
   State<CreateSessionScreen> createState() => _CreateSessionScreenState();

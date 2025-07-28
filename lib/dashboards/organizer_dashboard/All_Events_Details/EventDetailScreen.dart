@@ -1,9 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/CreateTickitScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/TickitListScreen.dart';
 
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneListScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/common/GenericFormScreen.dart';
 
 import 'package:flutter/material.dart';
 

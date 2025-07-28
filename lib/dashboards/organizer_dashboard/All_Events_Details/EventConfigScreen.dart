@@ -1,15 +1,16 @@
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneSelectorScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/CreateSessionScreen.dart';
-
-// Import your list screens for zones, tracks, and sessions 
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/StallCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneListScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackListScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SessionListScreen.dart';
+
 
 class EventConfigScreen extends StatelessWidget {
   final String eventId;
+  
+  
 
   const EventConfigScreen({super.key, required this.eventId});
 
@@ -21,7 +22,7 @@ class EventConfigScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-            // Create Zone button
+           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -38,7 +39,7 @@ class EventConfigScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-            // View Zones button
+          
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -56,7 +57,7 @@ class EventConfigScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Create Track button
+            
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -66,34 +67,33 @@ class EventConfigScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => TrackCreateScreen(eventId: eventId),
+                      builder: (_) => TrackCreateScreen(eventId: eventId, zoneId: '',),
                     ),
                   );
                 },
               ),
             ),
             const SizedBox(height: 8),
-            // View Tracks button
+           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.list),
                 label: const Text('View Tracks'),
                 onPressed: () {
-                  // For choosing zone, you can navigate to a zone selection screen or handle accordingly
-                  // Here, we assume user chooses zone in ZoneListScreen and then goes to Tracks
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ZoneListScreen(eventId: eventId),
-                    ),
-                  );
-                },
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'track'),
+    ),
+  );
+},
+
               ),
             ),
             const SizedBox(height: 20),
 
-            // Create Session button
+           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -103,25 +103,59 @@ class EventConfigScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => CreateSessionScreen(eventId: eventId),
+                      builder: (_) => CreateSessionScreen(eventId: eventId, zoneId: 'zoneId', trackId: 'trackId',),
                     ),
                   );
                 },
               ),
             ),
             const SizedBox(height: 8),
-            // View Sessions button
+          
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.list),
                 label: const Text('View Sessions'),
                 onPressed: () {
-                  // Similarly, user needs to choose zone and track first!
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'session'),
+    ),
+  );
+},
+
+              ),
+            ),
+            const SizedBox(height: 20),
+
+           
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.storefront),
+                label: const Text('Create Stall'),
+                onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => ZoneListScreen(eventId: eventId),
+                      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'stall'),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.list_alt),
+                label: const Text('View Stalls'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'stall'),
                     ),
                   );
                 },

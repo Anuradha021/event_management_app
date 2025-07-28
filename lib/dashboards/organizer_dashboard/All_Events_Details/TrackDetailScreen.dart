@@ -26,13 +26,16 @@ class TrackDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(trackData['title'] ?? 'No Title',
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            Text(
+              trackData['title'] ?? 'No Title',
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 12),
-            Text(trackData['description'] ?? 'No Description',
-                style: const TextStyle(fontSize: 16)),
+            Text(
+              trackData['description'] ?? 'No Description',
+              style: const TextStyle(fontSize: 16),
+            ),
             const SizedBox(height: 24),
-
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -44,8 +47,8 @@ class TrackDetailScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (_) => CreateSessionScreen(
                         eventId: eventId,
-                        // zoneId: zoneId,
-                        // trackId: trackId,
+                        zoneId: zoneId,
+                        trackId: trackId,
                       ),
                     ),
                   );
@@ -53,7 +56,6 @@ class TrackDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(

@@ -1,9 +1,10 @@
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/CreateSessionScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/StallCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SessionCreateScreen.dart';
-// Ensure that the file 'SessionCreateScreen.dart' exists and contains a class named 'SessionCreateScreen'.
+
 
 class ManageEventComponentsScreen extends StatelessWidget {
   final String eventId;
@@ -22,9 +23,9 @@ class ManageEventComponentsScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         children: [
           _buildNavCard(context, "Zone", ZoneCreateScreen(eventId: eventId)),
-          _buildNavCard(context, "Track", TrackCreateScreen(eventId: eventId)),
+          _buildNavCard(context, "Track", TrackCreateScreen(eventId: eventId, zoneId: '',)),
          
-          _buildNavCard(context, "Stall", StallCreateScreen(eventId: eventId)),
+          _buildNavCard(context, "Stall", StallCreateScreen(eventId: eventId, zoneId: '', trackId: '',)),
           _buildNavCard(context, "Session", CreateSessionScreen(eventId: eventId , zoneId: zoneId,
       trackId: trackId,)),
         ],
