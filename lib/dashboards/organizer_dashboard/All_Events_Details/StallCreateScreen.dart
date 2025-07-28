@@ -13,11 +13,9 @@ class StallCreateScreen extends StatefulWidget {
     required this.zoneId,
     required this.trackId,
   });
-
   @override
   State<StallCreateScreen> createState() => _StallCreateScreenState();
 }
-
 class _StallCreateScreenState extends State<StallCreateScreen> {
   final TextEditingController _stallNameController = TextEditingController();
   final TextEditingController _stallDescriptionController = TextEditingController();
@@ -29,9 +27,7 @@ class _StallCreateScreenState extends State<StallCreateScreen> {
     if (stallName.isEmpty || stallDescription.isEmpty) return;
 
     setState(() => _isLoading = true);
-
     final String stallId = const Uuid().v4();
-
     final stallRef = FirebaseFirestore.instance
         .collection('events')
         .doc(widget.eventId)
@@ -52,7 +48,6 @@ class _StallCreateScreenState extends State<StallCreateScreen> {
     setState(() => _isLoading = false);
     Navigator.pop(context);
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

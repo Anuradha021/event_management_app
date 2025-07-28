@@ -26,35 +26,42 @@ class TrackDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              trackData['title'] ?? 'No Title',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              trackData['description'] ?? 'No Description',
-              style: const TextStyle(fontSize: 16),
-            ),
+           Text(
+  trackData['title'] != null && trackData['title'].toString().isNotEmpty
+      ? trackData['title']
+      : 'No Title',
+  style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+),
+const SizedBox(height: 12),
+Text(
+  trackData.containsKey('description') && trackData['description'] != null
+      ? trackData['description']
+      : 'No Description',
+  style: const TextStyle(fontSize: 16),
+),
+
+
             const SizedBox(height: 24),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.add),
-                label: const Text('Create Session'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => CreateSessionScreen(
-                        eventId: eventId,
-                        zoneId: zoneId,
-                        trackId: trackId,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+           // Update the Create Session button part:
+SizedBox(
+  width: double.infinity,
+  child: ElevatedButton.icon(
+    icon: const Icon(Icons.add),
+    label: const Text('Create Session'),
+    onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => CreateSessionScreen(
+            eventId: eventId,
+            zoneId: zoneId,
+            trackId: trackId,
+          ),
+        ),
+      );
+    },
+  ),
+),
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,

@@ -3,16 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/StallCreateScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SessionCreateScreen.dart';
+
 
 
 class ManageEventComponentsScreen extends StatelessWidget {
   final String eventId;
-
   const ManageEventComponentsScreen({super.key, required this.eventId});
-  
-  get zoneId => null;
-  
+  get zoneId => null; 
   get trackId => null;
 
   @override

@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/services/cache_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class ZoneCreateScreen extends StatefulWidget {
   final String eventId;
@@ -13,6 +15,7 @@ class ZoneCreateScreen extends StatefulWidget {
 class _ZoneCreateScreenState extends State<ZoneCreateScreen> {
   final TextEditingController _zoneNameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final CacheManager _cacheManager = CacheManager();
   bool _isLoading = false;
 
   Future<void> _createZone() async {
@@ -29,15 +32,30 @@ class _ZoneCreateScreenState extends State<ZoneCreateScreen> {
     setState(() => _isLoading = true);
 
     try {
-      await FirebaseFirestore.instance
+      // Create a document with an auto-generated ID
+      final docRef = FirebaseFirestore.instance
           .collection('events')
           .doc(widget.eventId)
           .collection('zones')
-          .add({
+          .doc();
+
+      final zoneData = {
         'title': zoneName,
         'description': description,
         'createdAt': Timestamp.now(),
-      });
+      };
+
+      await docRef.set(zoneData);
+
+      final newZone = {
+        ...zoneData,
+        'id': docRef.id,
+      };
+
+      final cacheKey = 'zones_${widget.eventId}';
+      final existing = _cacheManager.get(cacheKey) ?? [];
+      existing.insert(0, newZone);
+      _cacheManager.save(cacheKey, existing);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Zone created successfully")),
@@ -52,6 +70,13 @@ class _ZoneCreateScreenState extends State<ZoneCreateScreen> {
     } finally {
       setState(() => _isLoading = false);
     }
+  }
+
+  @override
+  void dispose() {
+    _zoneNameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -76,7 +101,11 @@ class _ZoneCreateScreenState extends State<ZoneCreateScreen> {
             ElevatedButton(
               onPressed: _isLoading ? null : _createZone,
               child: _isLoading
-                  ? const CircularProgressIndicator()
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
                   : const Text("Create Zone"),
             ),
           ],

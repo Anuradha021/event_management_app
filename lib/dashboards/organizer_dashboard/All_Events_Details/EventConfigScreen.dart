@@ -3,17 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/CreateSessionScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/StallCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneListScreen.dart';
-
-
 class EventConfigScreen extends StatelessWidget {
   final String eventId;
-  
-  
-
   const EventConfigScreen({super.key, required this.eventId});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +15,6 @@ class EventConfigScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
-           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -39,7 +31,6 @@ class EventConfigScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-          
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -56,8 +47,6 @@ class EventConfigScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-
-            
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -74,7 +63,6 @@ class EventConfigScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -88,12 +76,9 @@ class EventConfigScreen extends StatelessWidget {
     ),
   );
 },
-
               ),
             ),
-            const SizedBox(height: 20),
-
-           
+            const SizedBox(height: 20),     
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -110,7 +95,6 @@ class EventConfigScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 8),
-          
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -124,12 +108,9 @@ class EventConfigScreen extends StatelessWidget {
     ),
   );
 },
-
               ),
             ),
             const SizedBox(height: 20),
-
-           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(

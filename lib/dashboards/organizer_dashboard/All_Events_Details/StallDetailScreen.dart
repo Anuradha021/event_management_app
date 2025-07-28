@@ -28,8 +28,7 @@ class StallDetailScreen extends StatelessWidget {
               stallData['name'] ?? 'No Name',
               style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
-            Text('Owner: ${stallData['ownerName'] ?? 'N/A'}'),
+          
             const SizedBox(height: 10),
             const Text('Description:', style: TextStyle(fontWeight: FontWeight.bold)),
             const SizedBox(height: 5),

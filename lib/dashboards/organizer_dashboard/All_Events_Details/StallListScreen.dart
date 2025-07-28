@@ -42,30 +42,39 @@ class StallListScreen extends StatelessWidget {
           }
 
           return ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 8),
             itemCount: stalls.length,
             itemBuilder: (context, index) {
               final stallDoc = stalls[index];
               final stallData = stallDoc.data() as Map<String, dynamic>;
               final stallId = stallDoc.id;
 
-              return ListTile(
-                title: Text(stallData['name'] ?? 'Unnamed Stall'),
-                subtitle: Text('Owner: ${stallData['ownerName'] ?? 'N/A'}'),
-                trailing: const Icon(Icons.arrow_forward_ios),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => StallDetailScreen(
-                        eventId: eventId,
-                        zoneId: zoneId,
-                        trackId: trackId,
-                        stallId: stallId,
-                        stallData: stallData,
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                child: ListTile(
+                  title: Text(
+                    stallData['name'] ?? 'Unnamed Stall',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  subtitle: stallData['description'] != null && stallData['description'].toString().isNotEmpty
+                      ? Text(stallData['description'])
+                      : null,
+                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => StallDetailScreen(
+                          eventId: eventId,
+                          zoneId: zoneId,
+                          trackId: trackId,
+                          stallId: stallId,
+                          stallData: stallData,
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               );
             },
           );

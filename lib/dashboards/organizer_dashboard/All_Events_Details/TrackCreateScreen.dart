@@ -1,5 +1,5 @@
-// ✅ TrackCreateScreen.dart
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/services/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -16,6 +16,7 @@ class TrackCreateScreen extends StatefulWidget {
 class _TrackCreateScreenState extends State<TrackCreateScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final CacheManager _cacheManager = CacheManager();
   bool _isLoading = false;
 
   Future<void> _createTrack() async {
@@ -33,14 +34,26 @@ class _TrackCreateScreenState extends State<TrackCreateScreen> {
           .collection('tracks')
           .doc(trackId);
 
-      await trackRef.set({
-        'title': _titleController.text.trim(),
-        'description': _descriptionController.text.trim(),
-        'id': trackId,
-        'eventId': widget.eventId,
-        'zoneId': widget.zoneId,
-        'createdAt': FieldValue.serverTimestamp(),
-      });
+    await trackRef.set({
+  'title': _titleController.text.trim(),
+  'description': _descriptionController.text.trim(),
+  'id': trackId,
+  'eventId': widget.eventId,
+  'zoneId': widget.zoneId,
+  'createdAt': FieldValue.serverTimestamp(),
+});
+final newTrack = {
+  'title': _titleController.text.trim(),
+  'description': _descriptionController.text.trim(),
+  'id': trackId,
+  'eventId': widget.eventId,
+  'zoneId': widget.zoneId,
+};
+
+final cacheKey = 'tracks_${widget.eventId}_${widget.zoneId}';
+final existing = _cacheManager.get(cacheKey) ?? [];
+existing.insert(0, newTrack); // insert at top
+_cacheManager.save(cacheKey, existing);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Track created successfully')),

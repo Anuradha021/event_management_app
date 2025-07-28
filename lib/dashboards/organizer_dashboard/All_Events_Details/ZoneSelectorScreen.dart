@@ -6,7 +6,7 @@ import 'StallListScreen.dart';
 
 class ZoneSelectorScreen extends StatefulWidget {
   final String eventId;
-  final String type; // 'track', 'session', or 'stall'
+  final String type; 
 
   const ZoneSelectorScreen({
     super.key,
