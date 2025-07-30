@@ -1,150 +1,66 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneSelectorScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneCreateScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackCreateScreen.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/CreateSessionScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/SessionListScreen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/StallListScreen.dart';
+
 class EventConfigScreen extends StatelessWidget {
   final String eventId;
   const EventConfigScreen({super.key, required this.eventId});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Event Configuration')),
+      appBar: AppBar(title: const Text('Configure Event')),
       body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
           children: [
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.add),
-                label: const Text('Create Zone'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ZoneCreateScreen(eventId: eventId),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.list),
-                label: const Text('View Zones'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ZoneListScreen(eventId: eventId),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.add_chart),
-                label: const Text('Create Track'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => TrackCreateScreen(eventId: eventId, zoneId: '',),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.list),
-                label: const Text('View Tracks'),
-                onPressed: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'track'),
-    ),
-  );
-},
-              ),
-            ),
-            const SizedBox(height: 20),     
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.meeting_room),
-                label: const Text('Create Session'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => CreateSessionScreen(eventId: eventId, zoneId: 'zoneId', trackId: 'trackId',),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.list),
-                label: const Text('View Sessions'),
-                onPressed: () {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'session'),
-    ),
-  );
-},
-              ),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.storefront),
-                label: const Text('Create Stall'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'stall'),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.list_alt),
-                label: const Text('View Stalls'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => ZoneSelectorScreen(eventId: eventId, type: 'stall'),
-                    ),
-                  );
-                },
-              ),
-            ),
+            _buildNavigationButton(context, 'Zones', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => ZoneListScreen(eventId: eventId),
+                ),
+              );
+            }),
+            _buildNavigationButton(context, 'Tracks', () {
+              // Directly open TrackListScreen; zone-selection dropdown lives inside it
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => TrackListScreen(eventId: eventId, ),
+                ),
+              );
+            }),
+            _buildNavigationButton(context, 'Sessions', () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => SessionListScreen(eventId: eventId,),
+                ),
+              );
+            }),
+            // _buildNavigationButton(context, 'Stalls', () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (_) => StallListScreen(eventId: eventId),
+            //     ),
+            //   );
+            // }),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildNavigationButton(
+      BuildContext context, String title, VoidCallback onPressed) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: ElevatedButton(onPressed: onPressed, child: Text(title)),
     );
   }
 }

@@ -36,7 +36,6 @@ class _CreateSessionScreenState extends State<CreateSessionScreen> {
   bool _isSubmitting = false;
   bool _isInitializing = true;
 
-  @override
  @override
 void initState() {
   super.initState();
@@ -78,7 +77,6 @@ print(" Fetching zones from Firestore...");
 
   CacheManager().save('zones_${widget.eventId}', fetchedZones);
 }
-
 
   Future<void> _fetchTracksForZone(String? zoneId) async {
   if (zoneId == null || zoneId == 'new') {
@@ -149,7 +147,6 @@ Future<void> _navigateToCreateTrackScreen(String zoneId) async {
  CacheManager().clear('tracks_${widget.eventId}_$zoneId');
 await _fetchTracksForZone(zoneId);
 
-// Auto-select the newly created track if available
 if (_tracks.isNotEmpty && _tracks.any((t) => t['id'] != 'new')) {
   setState(() {
     _selectedTrackId = _tracks.firstWhere((t) => t['id'] != 'new')['id'];
@@ -222,19 +219,12 @@ if (_tracks.isNotEmpty && _tracks.any((t) => t['id'] != 'new')) {
                     DropdownButtonFormField<String>(
   decoration: const InputDecoration(labelText: 'Select Zone'),
   value: _zones.any((z) => z['id'] == _selectedZoneId) ? _selectedZoneId : null,
- items: [
-  const DropdownMenuItem<String>(
-    value: null,
-    child: Text('Default Zone '),
-  ),
-  ..._zones.map((zone) {
+  items: _zones.map((zone) {
     return DropdownMenuItem<String>(
       value: zone['id'] as String,
       child: Text(zone['title'] as String),
     );
-  })
-],
-
+  }).toList(),
   onChanged: (val) async {
     if (val == 'new') {
       await _navigateToCreateZoneScreen();
@@ -251,22 +241,15 @@ if (_tracks.isNotEmpty && _tracks.any((t) => t['id'] != 'new')) {
 
                     const SizedBox(height: 12),
                     if (_selectedZoneId != null && _selectedZoneId != 'new')
-                      DropdownButtonFormField<String>(
+                     DropdownButtonFormField<String>(
   decoration: const InputDecoration(labelText: 'Select Track'),
   value: _tracks.any((t) => t['id'] == _selectedTrackId) ? _selectedTrackId : null,
- items: [
-  const DropdownMenuItem<String>(
-    value: null,
-    child: Text(' DefaultTrack '),
-  ),
-  ..._tracks.map((track) {
+  items: _tracks.map((track) {
     return DropdownMenuItem<String>(
       value: track['id'] as String,
       child: Text(track['title'] as String),
     );
-  })
-],
-
+  }).toList(),
   onChanged: (val) async {
     if (val == 'new') {
       await _navigateToCreateTrackScreen(_selectedZoneId!);
@@ -278,6 +261,7 @@ if (_tracks.isNotEmpty && _tracks.any((t) => t['id'] != 'new')) {
   },
   validator: (val) => val == null || val == 'new' ? 'Please select a Track' : null,
 ),
+
 
                     const SizedBox(height: 12),
                     TextFormField(

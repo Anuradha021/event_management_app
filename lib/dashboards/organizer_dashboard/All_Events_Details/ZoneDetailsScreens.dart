@@ -6,7 +6,7 @@ import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_
 class ZoneDetailScreen extends StatelessWidget {
   final String eventId;
   final String zoneId;
-  final Map zoneData;
+  final Map<String, dynamic> zoneData;
 
   const ZoneDetailScreen({
     super.key,
@@ -17,7 +17,6 @@ class ZoneDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Fallback: if 'zoneName' is expected in other screens, we assign it from 'title'
     final String zoneName = zoneData['title'] ?? zoneData['title'] ?? 'Untitled Zone';
 
     return Scaffold(
@@ -34,7 +33,7 @@ class ZoneDetailScreen extends StatelessWidget {
                 style: const TextStyle(fontSize: 16)),
             const SizedBox(height: 24),
 
-            // Create Track
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -55,7 +54,6 @@ class ZoneDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 12),
 
-            // View Tracks
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -67,7 +65,7 @@ class ZoneDetailScreen extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (_) => TrackListScreen(
                         eventId: eventId,
-                        zoneId: zoneId,
+                       
                       ),
                     ),
                   );

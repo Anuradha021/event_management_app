@@ -32,7 +32,6 @@ class _ZoneCreateScreenState extends State<ZoneCreateScreen> {
     setState(() => _isLoading = true);
 
     try {
-      // Create a document with an auto-generated ID
       final docRef = FirebaseFirestore.instance
           .collection('events')
           .doc(widget.eventId)

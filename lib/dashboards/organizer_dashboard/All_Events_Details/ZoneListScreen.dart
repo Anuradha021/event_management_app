@@ -1,58 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/ZoneDetailsScreens.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/services/cache_manager.dart';
 import 'package:flutter/material.dart';
+import 'ZoneCreateScreen.dart';
 
-class ZoneListScreen extends StatefulWidget {
+
+class ZoneListScreen extends StatelessWidget {
   final String eventId;
 
-  const ZoneListScreen({super.key, required this.eventId});
+  const ZoneListScreen({Key? key, required this.eventId}) : super(key: key);
 
-  @override
-  State<ZoneListScreen> createState() => _ZoneListScreenState();
-}
-
-class _ZoneListScreenState extends State<ZoneListScreen> {
-  late Future<List<Map<String, dynamic>>> _zonesFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _zonesFuture = _loadZones();
-  }
-
-  Future<List<Map<String, dynamic>>> _loadZones() async {
-    final cacheKey = 'zones_${widget.eventId}';
-    final cached = CacheManager().get(cacheKey);
-    if (cached != null) {
-      print('Using cached zones');
-      return cached;
-    }
-
-    print('Fetching zones from Firestore...');
-    final snapshot = await FirebaseFirestore.instance
+  Stream<QuerySnapshot> _getZones() {
+    return FirebaseFirestore.instance
         .collection('events')
-        .doc(widget.eventId)
+        .doc(eventId)
         .collection('zones')
-        .orderBy('createdAt', descending: true)
-        .get();
-
-    final zones = snapshot.docs.map((doc) {
-      final data = doc.data();
-      data['id'] = doc.id;
-      return data;
-    }).toList();
-
-    CacheManager().save(cacheKey, zones);
-    return zones;
-  }
-
-  void _refreshZones() {
-    final cacheKey = 'zones_${widget.eventId}';
-    CacheManager().clear(cacheKey); 
-    setState(() {
-      _zonesFuture = _loadZones(); 
-    });
+        .snapshots();
   }
 
   @override
@@ -60,55 +22,59 @@ class _ZoneListScreenState extends State<ZoneListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Zones'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: 'Refresh Zones',
-            onPressed: _refreshZones,
-          )
-        ],
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _zonesFuture,
+      body: StreamBuilder<QuerySnapshot>(
+        stream: _getZones(),
         builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text('Error loading zones.'));
+          }
+
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final zones = snapshot.data ?? [];
+          final zones = snapshot.data!.docs;
+
           if (zones.isEmpty) {
-            return const Center(child: Text('No Zones found'));
+            return const Center(child: Text('No zones found.'));
           }
 
           return ListView.builder(
             itemCount: zones.length,
             itemBuilder: (context, index) {
               final zone = zones[index];
-              return Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                child: ListTile(
-                  title: Text(zone['title'] ?? 'No Title'),
-                  subtitle: zone['description']?.isNotEmpty == true
-                      ? Text(zone['description'])
-                      : null,
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ZoneDetailScreen(
-                          eventId: widget.eventId,
-                          zoneId: zone['id'],
-                          zoneData: zone,
-                        ),
+              final zoneData = zone.data() as Map<String, dynamic>;
+
+              return ListTile(
+                title: Text(zoneData['title'] ?? 'Unnamed Zone'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ZoneDetailScreen(
+                        eventId: eventId,
+                        zoneId: zone.id,
+                        zoneData: zoneData, 
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               );
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ZoneCreateScreen(eventId: eventId),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
       ),
     );
   }

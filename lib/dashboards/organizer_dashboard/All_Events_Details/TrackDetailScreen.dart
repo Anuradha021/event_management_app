@@ -74,8 +74,7 @@ SizedBox(
                     MaterialPageRoute(
                       builder: (_) => SessionListScreen(
                         eventId: eventId,
-                        zoneId: zoneId,
-                        trackId: trackId,
+                        
                       ),
                     ),
                   );
