@@ -27,7 +27,7 @@ class _StallCreateScreenState extends State<StallCreateScreen> {
     if (stallName.isEmpty || stallDescription.isEmpty) return;
 
     setState(() => _isLoading = true);
-    final String stallId = const Uuid().v4();
+    // final String stallId = const Uuid().v4();
     final stallRef = FirebaseFirestore.instance
         .collection('events')
         .doc(widget.eventId)
@@ -36,10 +36,10 @@ class _StallCreateScreenState extends State<StallCreateScreen> {
         .collection('tracks')
         .doc(widget.trackId)
         .collection('stalls')
-        .doc(stallId);
+        .doc();
 
     await stallRef.set({
-      'stallId': stallId,
+      //'stallId': stallId,
       'name': stallName,
       'description': stallDescription,
       'createdAt': FieldValue.serverTimestamp(),
