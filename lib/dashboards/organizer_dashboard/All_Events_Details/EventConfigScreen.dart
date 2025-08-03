@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/Uuer_dashboard/PublishedEventsListScreen.dart';
+import 'package:event_management_app1/dashboards/User_dashboard/PublishedEventsListScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/Tickit%20data/TicketCreateScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/Tickit%20data/TicketScannerScreen.dart';
 import 'package:flutter/material.dart';

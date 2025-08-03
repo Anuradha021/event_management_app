@@ -1,4 +1,4 @@
-import 'package:event_management_app1/dashboards/Uuer_dashboard/PublishedEventsListScreen.dart';
+import 'package:event_management_app1/dashboards/User_dashboard/PublishedEventsListScreen.dart';
 import 'package:flutter/material.dart';
 
 
