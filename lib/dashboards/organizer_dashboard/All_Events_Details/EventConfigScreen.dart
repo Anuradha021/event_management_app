@@ -116,8 +116,6 @@ ElevatedButton(
   style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
   child: const Text('Publish Event'),
 ),
-
-
             ],
           ),
         ),

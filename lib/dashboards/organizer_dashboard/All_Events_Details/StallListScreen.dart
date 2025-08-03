@@ -168,7 +168,6 @@ onChanged: (trackId) {
     _fetchStalls();
   }
 },
-
                     ),
                   ),
                 const SizedBox(height: 8),
