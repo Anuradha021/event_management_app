@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class GenericCreateForm extends StatefulWidget {
-  final String title; // e.g. "Create Zone", "Create Track"
+  final String title; 
   final CollectionReference collectionRef;
 
   const GenericCreateForm({

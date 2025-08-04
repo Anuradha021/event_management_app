@@ -1,4 +1,4 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/widgets/session_form.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/event_widgets/session_form.dart';
 import 'package:flutter/material.dart';
 class CreateSessionScreen extends StatelessWidget {
   final String eventId;

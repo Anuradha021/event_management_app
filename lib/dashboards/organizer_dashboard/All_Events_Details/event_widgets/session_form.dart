@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/widgets/DropdownWidgets.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/event_widgets/DropdownWidgets.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/services/session_firestore_service.dart';
 import 'package:flutter/material.dart';
 
