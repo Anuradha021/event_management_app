@@ -14,7 +14,20 @@ class EventConfigScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Configure Event')),
+     appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Configure Event',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
+
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
@@ -53,22 +66,7 @@ class EventConfigScreen extends StatelessWidget {
                 );
               }),
               const Divider(height: 32),
-              // _buildNavigationButton(context, '🎟️ Create Ticket (QR)', () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (_) => TicketCreateScreen(eventId: eventId),
-              //     ),
-              //   );
-              // }),
-              // _buildNavigationButton(context, '📷 Scan Ticket (QR)', () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (_) => TicketScannerScreen(eventId: eventId),
-              //     ),
-              //   );
-              // }),
+            
               ElevatedButton.icon(
   onPressed: () async {
     try {

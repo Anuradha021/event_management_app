@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackListScreen.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/TrackCreateScreen.dart';
@@ -20,7 +19,20 @@ class ZoneDetailScreen extends StatelessWidget {
     final String zoneName = zoneData['title'] ?? zoneData['title'] ?? 'Untitled Zone';
 
     return Scaffold(
-      appBar: AppBar(title: Text('$zoneName Details')),
+      appBar:  AppBar(
+  title: Text(
+    '$zoneName Details',
+    style: const TextStyle(
+      fontWeight: FontWeight.w600,
+      color: Colors.white,
+    ),
+  ),
+  iconTheme: const IconThemeData(color: Colors.white), // White back arrow
+  backgroundColor: Colors.deepPurple,
+  elevation: 0,
+  centerTitle: true,
+),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

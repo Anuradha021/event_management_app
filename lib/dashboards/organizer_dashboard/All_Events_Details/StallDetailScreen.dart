@@ -19,7 +19,19 @@ class StallDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(stallData['name'] ?? 'Stall Details')),
+      appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Stall Details',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(

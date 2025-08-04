@@ -41,7 +41,7 @@ class _SessionFormState extends State<SessionForm> {
     _selectedTrackId = widget.trackId;
 
     fetchZones(widget.eventId).then((zones) async {
-      setState(() => _zones = zones);
+      setState(() => _zones = zones); 
       if (_selectedZoneId != null && _selectedZoneId != 'new') {
         _tracks = await fetchTracksForZone(widget.eventId, _selectedZoneId!);
       }

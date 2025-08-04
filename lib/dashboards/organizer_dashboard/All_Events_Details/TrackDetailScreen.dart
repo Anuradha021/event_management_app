@@ -20,7 +20,20 @@ class TrackDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Track Details')),
+     appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Track Details',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -42,7 +55,7 @@ Text(
 
 
             const SizedBox(height: 24),
-           // Update the Create Session button part:
+         
 SizedBox(
   width: double.infinity,
   child: ElevatedButton.icon(

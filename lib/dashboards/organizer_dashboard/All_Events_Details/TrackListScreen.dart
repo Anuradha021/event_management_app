@@ -46,8 +46,6 @@ class _TrackListScreenState extends State<TrackListScreen> {
 
     setState(() {
       _loadingZones = false;
-      // default to first real zone if you like:
-      // if (_zones.isNotEmpty) _selectedZoneId = _zones.first['id'];
     });
   }
 
@@ -96,7 +94,20 @@ class _TrackListScreenState extends State<TrackListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tracks')),
+     appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Tracks',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
+
       body: _loadingZones
           ? const Center(child: CircularProgressIndicator())
           : Column(

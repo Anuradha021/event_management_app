@@ -70,7 +70,20 @@ _cacheManager.save(cacheKey, existing);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Track')),
+     appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Create Track',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

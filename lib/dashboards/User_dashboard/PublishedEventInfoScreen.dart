@@ -21,9 +21,18 @@ class PublishedEventInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Event Info'),
-        backgroundColor: const Color(0xFF5E35B1),
-      ),
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Event Info',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
       body: FutureBuilder<Map<String, dynamic>?>(
         future: _fetchEvent(),
         builder: (context, snapshot) {

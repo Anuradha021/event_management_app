@@ -28,6 +28,7 @@ class ZoneListScreen extends StatelessWidget {
             color: Colors.white,
           ),
         ),
+         iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.deepPurple,
         elevation: 0,
         centerTitle: true,
@@ -88,47 +89,33 @@ class ZoneListScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.location_off_outlined, size: 80, color: Colors.grey[300]),
-          const SizedBox(height: 24),
-          Text(
-            'No zones yet',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w600,
-              color: Colors.grey[700],
-            ),
+ Widget _buildEmptyState(BuildContext context) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 24),
+        Text(
+          'No zones yet',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[700],
           ),
-          const SizedBox(height: 8),
-          Text(
-            'Create your first zone to get started',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[500],
-            ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          'Create your first zone',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[500],
           ),
-          const SizedBox(height: 32),
-          ElevatedButton.icon(
-            onPressed: () => _navigateToCreateZone(context),
-            icon: const Icon(Icons.add),
-            label: const Text('Create Zone'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.deepPurple,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildZoneList(BuildContext context, List<QueryDocumentSnapshot> zones) {
     return ListView.builder(

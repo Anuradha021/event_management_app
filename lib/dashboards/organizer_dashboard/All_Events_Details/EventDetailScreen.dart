@@ -27,10 +27,20 @@ class EventDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Event Details'),
-        backgroundColor: appColor,
-      ),
+     appBar: AppBar(
+  backgroundColor: appColor,
+  iconTheme: const IconThemeData(color: Colors.white), // Makes back arrow white
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Event Details',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
+
       body: FutureBuilder<Map<String, dynamic>?>(
         future: _fetchEventDetails(),
         builder: (context, snapshot) {

@@ -38,7 +38,6 @@ class SessionDropdowns extends StatelessWidget {
             if (val == 'new') {
               Navigator.pushNamed(context, '/create-zone');
             } else {
-              // Fetch updated tracks for new zone
               List<Map<String, dynamic>> updatedTracks = await fetchTracksForZone(eventId, val!);
               onZoneChanged(val, updatedTracks);
             }

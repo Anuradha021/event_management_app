@@ -39,7 +39,7 @@ class _StallCreateScreenState extends State<StallCreateScreen> {
         .doc();
 
     await stallRef.set({
-      //'stallId': stallId,
+     
       'name': stallName,
       'description': stallDescription,
       'createdAt': FieldValue.serverTimestamp(),
@@ -51,7 +51,19 @@ class _StallCreateScreenState extends State<StallCreateScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Stall')),
+      appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Create Stall',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

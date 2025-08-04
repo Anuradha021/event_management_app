@@ -33,7 +33,19 @@ class AssignedEventListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("My Assigned Events")),
+      appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'My Assigned Events',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
       body: FutureBuilder<List<Map<String, dynamic>>>(
         future: _fetchAssignedEvents(),
         builder: (context, snapshot) {

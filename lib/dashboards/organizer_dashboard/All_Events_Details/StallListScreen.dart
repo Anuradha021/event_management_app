@@ -89,15 +89,12 @@ class _StallListScreenState extends State<StallListScreen> {
 
     setState(() => _loadingTracks = false);
   }
-
   Future<void> _fetchStalls() async {
     if (_selectedZoneId == null || _selectedTrackId == null) return;
-
     setState(() {
       _loadingStalls = true;
       _stalls = [];
     });
-
     final q = await FirebaseFirestore.instance
         .collection('events')
         .doc(widget.eventId)
@@ -108,6 +105,7 @@ class _StallListScreenState extends State<StallListScreen> {
         .collection('stalls')
         .get();
 
+    print('Fetched ${q.docs.length} stalls');
     _stalls = q.docs.map((doc) {
       final data = doc.data();
       data['id'] = doc.id;
@@ -120,7 +118,19 @@ class _StallListScreenState extends State<StallListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Stalls')),
+    appBar: AppBar(
+  backgroundColor: Colors.deepPurple,
+  iconTheme: const IconThemeData(color: Colors.white),
+  elevation: 0,
+  centerTitle: true,
+  title: const Text(
+    'Stalls',
+    style: TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.w600,
+    ),
+  ),
+),
       body: _loadingZones
           ? const Center(child: CircularProgressIndicator())
           : Column(
