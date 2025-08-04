@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/services/cache_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+
 
 class ZoneCreateScreen extends StatefulWidget {
   final String eventId;

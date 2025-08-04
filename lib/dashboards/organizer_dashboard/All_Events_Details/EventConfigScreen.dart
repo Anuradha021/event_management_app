@@ -55,40 +55,23 @@ class EventConfigScreen extends StatelessWidget {
                 );
               }),
               const Divider(height: 32),
-              _buildNavigationButton(context, '🎟️ Create Ticket (QR)', () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TicketCreateScreen(eventId: eventId),
-                  ),
-                );
-              }),
-              _buildNavigationButton(context, '📷 Scan Ticket (QR)', () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => TicketScannerScreen(eventId: eventId),
-                  ),
-                );
-              }),
-              ElevatedButton(
-  onPressed: () async {
-    await FirebaseFirestore.instance
-        .collection('events')
-        .doc(eventId)
-        .update({'status': 'published'});
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Event Published Successfully!')),
-    );
-  },
-  style: ElevatedButton.styleFrom(
-    backgroundColor: Colors.green,
-    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-  ),
-  child: Text("Publish Event", style: TextStyle(fontSize: 16)),
-),
-ElevatedButton(
+              // _buildNavigationButton(context, '🎟️ Create Ticket (QR)', () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (_) => TicketCreateScreen(eventId: eventId),
+              //     ),
+              //   );
+              // }),
+              // _buildNavigationButton(context, '📷 Scan Ticket (QR)', () {
+              //   Navigator.push(
+              //     context,
+              //     MaterialPageRoute(
+              //       builder: (_) => TicketScannerScreen(eventId: eventId),
+              //     ),
+              //   );
+              // }),
+              ElevatedButton.icon(
   onPressed: () async {
     try {
       await FirebaseFirestore.instance
@@ -97,10 +80,9 @@ ElevatedButton(
           .update({'status': 'published'});
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Event published successfully')),
+        const SnackBar(content: Text('✅ Event published successfully')),
       );
 
-      // Navigate to PublishedEventsListScreen after publishing
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -109,13 +91,27 @@ ElevatedButton(
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error publishing event: $e')),
+        SnackBar(content: Text(' Error publishing event: $e')),
       );
     }
   },
-  style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurple),
-  child: const Text('Publish Event'),
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.deepPurple,
+    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+    elevation: 5,
+  ),
+  icon: const Icon(Icons.publish, color: Colors.white),
+  label: const Text(
+    'Publish Event',
+    style: TextStyle(
+      fontSize: 16,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+    ),
+  ),
 ),
+
             ],
           ),
         ),

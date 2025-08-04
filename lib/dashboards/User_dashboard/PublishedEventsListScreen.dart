@@ -9,8 +9,12 @@ class PublishedEventsListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Explore Events'),
+        title: const Text('Explore Events',style: TextStyle(
+      color: Colors.white,         
+      fontWeight: FontWeight.bold, 
+    ),),
         backgroundColor: const Color(0xFF5E35B1),
+        
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
