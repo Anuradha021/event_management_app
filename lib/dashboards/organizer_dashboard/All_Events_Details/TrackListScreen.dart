@@ -14,11 +14,13 @@ class TrackListScreen extends StatefulWidget {
 }
 
 class _TrackListScreenState extends State<TrackListScreen> {
+  // Keep all existing state variables
   String? _selectedZoneId;
   List<Map<String, dynamic>> _zones = [];
   List<Map<String, dynamic>> _tracks = [];
   bool _loadingZones = true, _loadingTracks = false;
 
+  // Keep all existing methods exactly the same
   @override
   void initState() {
     super.initState();
@@ -43,10 +45,7 @@ class _TrackListScreenState extends State<TrackListScreen> {
       }).toList();
       CacheManager().save('zones_${widget.eventId}', _zones);
     }
-
-    setState(() {
-      _loadingZones = false;
-    });
+    setState(() => _loadingZones = false);
   }
 
   Future<void> _fetchTracks() async {
@@ -73,7 +72,6 @@ class _TrackListScreenState extends State<TrackListScreen> {
       }).toList();
       CacheManager().save(cacheKey, _tracks);
     }
-
     setState(() => _loadingTracks = false);
   }
 
@@ -91,75 +89,162 @@ class _TrackListScreenState extends State<TrackListScreen> {
     }
   }
 
+  // UI Improvements Only Below
+  Widget _buildTrackItem(Map<String, dynamic> track) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(16),
+        leading: Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: Colors.deepPurple.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: const Icon(Icons.timeline, color: Colors.deepPurple),
+        ),
+        title: Text(
+          track['title'] ?? 'Untitled Track',
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        subtitle: track['description'] != null && track['description'].isNotEmpty
+            ? Text(
+                track['description'],
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              )
+            : null,
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => TrackDetailScreen(
+              eventId: widget.eventId,
+              zoneId: _selectedZoneId!,
+              trackId: track['id'],
+              trackData: track,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.track_changes,
+            size: 48,
+            color: Colors.grey[400],
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'No tracks available',
+            style: TextStyle(fontSize: 18),
+          ),
+          if (_selectedZoneId != null) ...[
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => TrackCreateScreen(
+                    eventId: widget.eventId,
+                    zoneId: _selectedZoneId!,
+                  ),
+                ),
+              ).then((_) => _fetchTracks()),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                'Create First Track',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     appBar: AppBar(
-  backgroundColor: Colors.deepPurple,
-  iconTheme: const IconThemeData(color: Colors.white),
-  elevation: 0,
-  centerTitle: true,
-  title: const Text(
-    'Tracks',
-    style: TextStyle(
-      color: Colors.white,
-      fontWeight: FontWeight.w600,
-    ),
-  ),
-),
-
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurple,
+        iconTheme: const IconThemeData(color: Colors.white),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          'Tracks',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
       body: _loadingZones
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: 'Select Zone'),
-                    value: _selectedZoneId,
-                    items: [
-                      const DropdownMenuItem(
-                        value: null,
-                        child: Text('-- Select Zone --'),
+                Card(
+                  margin: const EdgeInsets.all(16),
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: DropdownButtonFormField<String>(
+                      decoration: InputDecoration(
+                        labelText: 'Select Zone',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[100],
                       ),
-                      ..._zones.map((z) => DropdownMenuItem(
-                            value: z['id'] as String,
-                            child: Text(z['title'] ?? 'Unnamed Zone'),
-                          )),
-                      const DropdownMenuItem(
-                        value: 'new',
-                        child: Text('+ Create New Zone'),
-                      ),
-                    ],
-                    onChanged: _onZoneChanged,
+                      value: _selectedZoneId,
+                      items: [
+                        const DropdownMenuItem(
+                          value: null,
+                          child: Text('-- Select Zone --'),
+                        ),
+                        ..._zones.map((z) => DropdownMenuItem(
+                              value: z['id'] as String,
+                              child: Text(z['title'] ?? 'Unnamed Zone'),
+                            )),
+                        const DropdownMenuItem(
+                          value: 'new',
+                          child: Text('+ Create New Zone'),
+                        ),
+                      ],
+                      onChanged: _onZoneChanged,
+                    ),
                   ),
                 ),
                 Expanded(
                   child: _loadingTracks
                       ? const Center(child: CircularProgressIndicator())
                       : (_tracks.isEmpty
-                          ? const Center(child: Text('No tracks found.'))
+                          ? _buildEmptyState()
                           : ListView.builder(
                               itemCount: _tracks.length,
-                              itemBuilder: (_, i) {
-                                final t = _tracks[i];
-                                return ListTile(
-                                  title:
-                                      Text(t['title'] ?? 'Untitled Track'),
-                                  subtitle: Text(t['description'] ?? ''),
-                                  onTap: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => TrackDetailScreen(
-                                        eventId: widget.eventId,
-                                        zoneId: _selectedZoneId!,
-                                        trackId: t['id'],
-                                        trackData: t,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
+                              itemBuilder: (_, i) => _buildTrackItem(_tracks[i]),
                             )),
                 ),
               ],
@@ -175,7 +260,8 @@ class _TrackListScreenState extends State<TrackListScreen> {
                   ),
                 ),
               ).then((_) => _fetchTracks()),
-              child: const Icon(Icons.add),
+              backgroundColor: Colors.deepPurple,
+              child: const Icon(Icons.add, color: Colors.white),
             )
           : null,
     );

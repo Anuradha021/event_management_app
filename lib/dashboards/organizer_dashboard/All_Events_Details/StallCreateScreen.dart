@@ -27,7 +27,7 @@ class _StallCreateScreenState extends State<StallCreateScreen> {
     if (stallName.isEmpty || stallDescription.isEmpty) return;
 
     setState(() => _isLoading = true);
-    // final String stallId = const Uuid().v4();
+    
     final stallRef = FirebaseFirestore.instance
         .collection('events')
         .doc(widget.eventId)
