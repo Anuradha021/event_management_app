@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/services/cache_manager.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/cache_manager.dart';
 
 class ZoneCreateScreen extends StatefulWidget {
   final String eventId;
-
   const ZoneCreateScreen({super.key, required this.eventId});
 
   @override
@@ -18,6 +16,7 @@ class _ZoneCreateScreenState extends State<ZoneCreateScreen> {
   final CacheManager _cacheManager = CacheManager();
   bool _isLoading = false;
 
+  // Keep all existing methods exactly the same
   Future<void> _createZone() async {
     final zoneName = _zoneNameController.text.trim();
     final description = _descriptionController.text.trim();
@@ -80,33 +79,69 @@ class _ZoneCreateScreenState extends State<ZoneCreateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final buttonStyle = ElevatedButton.styleFrom(
+      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      minimumSize: const Size(double.infinity, 50),
+    );
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Create Zone")),
+      appBar: AppBar(
+        title: const Text(
+          'Create Zone',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.deepPurple,
+        iconTheme: const IconThemeData(color: Colors.white),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: _zoneNameController,
-              decoration: const InputDecoration(labelText: "Zone Name"),
+              decoration: InputDecoration(
+                labelText: 'Zone Name',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                filled: true,
+                fillColor: Colors.grey[50],
+              ),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: "Description"),
-              maxLines: 3,
+              decoration: InputDecoration(
+                labelText: 'Description',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                filled: true,
+                fillColor: Colors.grey[50],
+              ),
+              maxLines: 4,
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
+              icon: const Icon(Icons.add, size: 20),
+              label: const Text('CREATE ZONE'),
+              style: buttonStyle.copyWith(
+                backgroundColor: MaterialStateProperty.all(Colors.deepPurple),
+                foregroundColor: MaterialStateProperty.all(Colors.white),
+              ),
               onPressed: _isLoading ? null : _createZone,
-              child: _isLoading
-                  ? const SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text("Create Zone"),
             ),
+            if (_isLoading) const SizedBox(height: 10),
+            if (_isLoading)
+              const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.deepPurple,
+                ),
+              ),
           ],
         ),
       ),

@@ -2,7 +2,6 @@ import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_
 import 'package:event_management_app1/dashboards/organizer_dashboard/services/session_firestore_service.dart';
 import 'package:flutter/material.dart';
 
-
 class SessionForm extends StatefulWidget {
   final String eventId;
   final String? zoneId;
@@ -39,19 +38,44 @@ class _SessionFormState extends State<SessionForm> {
     super.initState();
     _selectedZoneId = widget.zoneId;
     _selectedTrackId = widget.trackId;
+    _initializeData();
+  }
 
-    fetchZones(widget.eventId).then((zones) async {
-      setState(() => _zones = zones); 
-      if (_selectedZoneId != null && _selectedZoneId != 'new') {
-        _tracks = await fetchTracksForZone(widget.eventId, _selectedZoneId!);
-      }
-      _isInitializing = false;
-      setState(() {});
-    });
+  Future<void> _initializeData() async {
+    final zones = await fetchZones(widget.eventId);
+    setState(() => _zones = zones);
+    
+    if (_selectedZoneId != null && _selectedZoneId != 'new') {
+      final tracks = await fetchTracksForZone(widget.eventId, _selectedZoneId!);
+      setState(() => _tracks = tracks);
+    }
+    
+    setState(() => _isInitializing = false);
   }
 
   Future<void> _pickTime(bool isStart) async {
-    final picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: Colors.deepPurple,
+              onPrimary: Colors.white,
+              onSurface: Colors.black,
+            ),
+            timePickerTheme: TimePickerThemeData(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    
     if (picked != null) {
       setState(() {
         if (isStart) _startTime = picked;
@@ -61,13 +85,24 @@ class _SessionFormState extends State<SessionForm> {
   }
 
   Future<void> _submitSession() async {
-    if (!_formKey.currentState!.validate() || _startTime == null || _endTime == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please fill all fields')));
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all required fields')),
+      );
       return;
     }
 
-    if (_selectedZoneId == null || _selectedTrackId == null || _selectedZoneId == 'new' || _selectedTrackId == 'new') {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Please select Zone and Track')));
+    if (_selectedZoneId == null || _selectedTrackId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select both Zone and Track')),
+      );
+      return;
+    }
+
+    if (_startTime == null || _endTime == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select both start and end times')),
+      );
       return;
     }
 
@@ -86,10 +121,14 @@ class _SessionFormState extends State<SessionForm> {
         context: context,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Session Created')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Session created successfully!')),
+      );
       Navigator.pop(context, true);
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error creating session: ${e.toString()}")),
+      );
     } finally {
       setState(() => _isSubmitting = false);
     }
@@ -97,67 +136,135 @@ class _SessionFormState extends State<SessionForm> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isInitializing) return const Center(child: CircularProgressIndicator());
+    if (_isInitializing) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          children: [
-            SessionDropdowns(
-              eventId: widget.eventId,
-              selectedZoneId: _selectedZoneId,
-              selectedTrackId: _selectedTrackId,
-              zones: _zones,
-              tracks: _tracks,
-              onZoneChanged: (val, tracks) {
-                setState(() {
-                  _selectedZoneId = val;
-                  _tracks = tracks;
-                  _selectedTrackId = null;
-                });
-              },
-              onTrackChanged: (val) => setState(() => _selectedTrackId = val),
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          SessionDropdowns(
+            eventId: widget.eventId,
+            selectedZoneId: _selectedZoneId,
+            selectedTrackId: _selectedTrackId,
+            zones: _zones,
+            tracks: _tracks,
+            onZoneChanged: (val, tracks) {
+              setState(() {
+                _selectedZoneId = val;
+                _tracks = tracks;
+                _selectedTrackId = null;
+              });
+            },
+            onTrackChanged: (val) => setState(() => _selectedTrackId = val),
+          ),
+          const SizedBox(height: 20),
+          _buildTextFormField(
+            controller: _sessionTitleController,
+            label: 'Session Title',
+            isRequired: true,
+          ),
+          const SizedBox(height: 16),
+          _buildTextFormField(
+            controller: _speakerController,
+            label: 'Speaker Name',
+            isRequired: true,
+          ),
+          const SizedBox(height: 16),
+          _buildTimePickerField(
+            label: 'Start Time',
+            time: _startTime,
+            onTap: () => _pickTime(true),
+          ),
+          const SizedBox(height: 16),
+          _buildTimePickerField(
+            label: 'End Time',
+            time: _endTime,
+            onTap: () => _pickTime(false),
+          ),
+          const SizedBox(height: 16),
+          _buildTextFormField(
+            controller: _descriptionController,
+            label: 'Description',
+            isRequired: true,
+            maxLines: 4,
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton(
+            onPressed: _isSubmitting ? null : _submitSession,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.deepPurple,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-            const SizedBox(height: 12),
-            TextFormField(
-              controller: _sessionTitleController,
-              decoration: const InputDecoration(labelText: 'Session Title'),
-              validator: (val) => val == null || val.isEmpty ? 'Required' : null,
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _speakerController,
-              decoration: const InputDecoration(labelText: 'Speaker Name'),
-              validator: (val) => val == null || val.isEmpty ? 'Required' : null,
-            ),
-            const SizedBox(height: 10),
-            ListTile(
-              title: Text(_startTime == null ? 'Pick Start Time' : 'Start Time: ${_startTime!.format(context)}'),
-              trailing: const Icon(Icons.access_time),
-              onTap: () => _pickTime(true),
-            ),
-            ListTile(
-              title: Text(_endTime == null ? 'Pick End Time' : 'End Time: ${_endTime!.format(context)}'),
-              trailing: const Icon(Icons.access_time),
-              onTap: () => _pickTime(false),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
-              maxLines: 3,
-              validator: (val) => val == null || val.isEmpty ? 'Required' : null,
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isSubmitting ? null : _submitSession,
-              child: _isSubmitting
-                  ? const CircularProgressIndicator()
-                  : const Text('Create Session'),
-            ),
-          ],
+            child: _isSubmitting
+                ? const CircularProgressIndicator(color: Colors.white)
+                : const Text(
+                    'Create Session',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTextFormField({
+    required TextEditingController controller,
+    required String label,
+    bool isRequired = false,
+    int maxLines = 1,
+  }) {
+    return TextFormField(
+      controller: controller,
+      decoration: InputDecoration(
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        filled: true,
+        fillColor: Colors.grey[50],
+      ),
+      maxLines: maxLines,
+      validator: isRequired
+          ? (val) => val == null || val.isEmpty ? 'This field is required' : null
+          : null,
+    );
+  }
+
+  Widget _buildTimePickerField({
+    required String label,
+    required TimeOfDay? time,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          filled: true,
+          fillColor: Colors.grey[50],
+          suffixIcon: const Icon(Icons.access_time),
+        ),
+        child: Text(
+          time != null 
+              ? time.format(context) 
+              : 'Select $label',
+          style: TextStyle(
+            color: time != null ? Colors.black : Colors.grey[600],
+            fontSize: 16,
+          ),
         ),
       ),
     );

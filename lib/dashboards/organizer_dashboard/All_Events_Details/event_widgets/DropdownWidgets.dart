@@ -25,46 +25,97 @@ class SessionDropdowns extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        DropdownButtonFormField<String>(
-          decoration: const InputDecoration(labelText: 'Select Zone'),
-          value: zones.any((z) => z['id'] == selectedZoneId) ? selectedZoneId : null,
-          items: zones.map((zone) {
-            return DropdownMenuItem<String>(
-              value: zone['id'] as String,
-              child: Text(zone['title'] as String),
-            );
-          }).toList(),
-          onChanged: (val) async {
-            if (val == 'new') {
-              Navigator.pushNamed(context, '/create-zone');
-            } else {
-              List<Map<String, dynamic>> updatedTracks = await fetchTracksForZone(eventId, val!);
-              onZoneChanged(val, updatedTracks);
-            }
-          },
-          validator: (val) => val == null || val == 'new' ? 'Please select a Zone' : null,
-        ),
-        const SizedBox(height: 12),
+        _buildZoneDropdown(context),
+        const SizedBox(height: 16),
         if (selectedZoneId != null && selectedZoneId != 'new')
-          DropdownButtonFormField<String>(
-            decoration: const InputDecoration(labelText: 'Select Track'),
-            value: tracks.any((t) => t['id'] == selectedTrackId) ? selectedTrackId : null,
-            items: tracks.map((track) {
-              return DropdownMenuItem<String>(
-                value: track['id'] as String,
-                child: Text(track['title'] as String),
-              );
-            }).toList(),
-            onChanged: (val) async {
-              if (val == 'new') {
-                Navigator.pushNamed(context, '/create-track');
-              } else {
-                onTrackChanged(val);
-              }
-            },
-            validator: (val) => val == null || val == 'new' ? 'Please select a Track' : null,
-          ),
+          _buildTrackDropdown(context),
       ],
+    );
+  }
+
+  Widget _buildZoneDropdown(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: 'Zone',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        filled: true,
+        fillColor: Colors.grey[50],
+      ),
+      value: zones.any((z) => z['id'] == selectedZoneId) ? selectedZoneId : null,
+      items: [
+        ...zones.map((zone) {
+          return DropdownMenuItem<String>(
+            value: zone['id'] as String,
+            child: Text(
+              zone['title'] as String,
+              style: const TextStyle(fontSize: 16),
+            ),
+          );
+        }),
+        const DropdownMenuItem<String>(
+          value: 'new',
+          child: Text(
+            '+ Create New Zone',
+            style: TextStyle(color: Colors.deepPurple),
+          ),
+        ),
+      ],
+      onChanged: (val) async {
+        if (val == 'new') {
+          Navigator.pushNamed(context, '/create-zone');
+        } else {
+          List<Map<String, dynamic>> updatedTracks = 
+              await fetchTracksForZone(eventId, val!);
+          onZoneChanged(val, updatedTracks);
+        }
+      },
+      validator: (val) => val == null || val == 'new' 
+          ? 'Please select a Zone' 
+          : null,
+    );
+  }
+
+  Widget _buildTrackDropdown(BuildContext context) {
+    return DropdownButtonFormField<String>(
+      decoration: InputDecoration(
+        labelText: 'Track',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        filled: true,
+        fillColor: Colors.grey[50],
+      ),
+      value: tracks.any((t) => t['id'] == selectedTrackId) ? selectedTrackId : null,
+      items: [
+        ...tracks.map((track) {
+          return DropdownMenuItem<String>(
+            value: track['id'] as String,
+            child: Text(
+              track['title'] as String,
+              style: const TextStyle(fontSize: 16),
+            ),
+          );
+        }),
+        const DropdownMenuItem<String>(
+          value: 'new',
+          child: Text(
+            '+ Create New Track',
+            style: TextStyle(color: Colors.deepPurple),
+          ),
+        ),
+      ],
+      onChanged: (val) async {
+        if (val == 'new') {
+          Navigator.pushNamed(context, '/create-track');
+        } else {
+          onTrackChanged(val);
+        }
+      },
+      validator: (val) => val == null || val == 'new' 
+          ? 'Please select a Track' 
+          : null,
     );
   }
 }
