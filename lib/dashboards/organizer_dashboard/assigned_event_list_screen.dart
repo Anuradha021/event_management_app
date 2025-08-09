@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/EventDetailScreen.dart';
+
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/event_management_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -65,16 +66,22 @@ class AssignedEventListScreen extends StatelessWidget {
               return Card(
                 margin: const EdgeInsets.all(8),
                 child: ListTile(
-                  title: Text(event['eventTitle'] ?? 'No Title', style: const TextStyle(fontWeight: FontWeight.bold)),
+                  title: Text(event['eventTitle']?.toString() ?? event['title']?.toString() ?? 'No Title', style: const TextStyle(fontWeight: FontWeight.bold)),
                   subtitle: Text("Date: ${_formatDate(event['eventDate'])}"),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => EventDetailScreen(eventId: event['docId'], ),
-                      ),
-                    );
+                    if (event['docId'] != null) { 
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => EventManagementScreen(eventId: event['docId']),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error: Event ID is missing')),
+      );
+    }
                   },
                 ),
               );

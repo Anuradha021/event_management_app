@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'CreateSessionScreen.dart';
-import 'SessionListScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class TrackDetailScreen extends StatelessWidget {
+class TrackDetailScreen extends StatefulWidget {
   final String eventId;
   final String zoneId;
   final String trackId;
-  final Map trackData;
+  final Map<String, dynamic> trackData;
 
   const TrackDetailScreen({
     super.key,
@@ -17,17 +16,43 @@ class TrackDetailScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    final title = trackData['title'] ?? 'No Title';
-    final description = trackData['description'] ?? 'No Description';
+  State<TrackDetailScreen> createState() => _TrackDetailScreenState();
+}
 
-    final buttonStyle = ElevatedButton.styleFrom(
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8), 
-      ),
-      minimumSize: const Size(double.infinity, 50), 
-    );
+class _TrackDetailScreenState extends State<TrackDetailScreen> {
+  Map<String, dynamic> _currentTrackData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTrackData = Map<String, dynamic>.from(widget.trackData);
+  }
+
+  Future<void> _refreshTrackData() async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(widget.eventId)
+          .collection('zones')
+          .doc(widget.zoneId)
+          .collection('tracks')
+          .doc(widget.trackId)
+          .get();
+
+      if (doc.exists && mounted) {
+        setState(() {
+          _currentTrackData = doc.data() ?? {};
+        });
+      }
+    } catch (e) {
+      // Handle error silently or show a message if needed
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final title = _currentTrackData['title'] ?? 'No Title';
+    final description = _currentTrackData['description'] ?? 'No Description';
 
     return Scaffold(
       appBar: AppBar(
@@ -43,7 +68,6 @@ class TrackDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-         
             Card(
               elevation: 2,
               child: Padding(
@@ -51,17 +75,38 @@ class TrackDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      description,
-                      style: const TextStyle(fontSize: 16),
+                    Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.deepPurple.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.timeline, color: Colors.deepPurple),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                description,
+                                style: const TextStyle(fontSize: 16, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
@@ -69,58 +114,106 @@ class TrackDetailScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             
-          
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.add, size: 20),
-                    label: const Text('Create Session'),
-                    style: buttonStyle.copyWith(
-                      backgroundColor: WidgetStateProperty.all(Colors.deepPurple),
-                      foregroundColor: WidgetStateProperty.all(Colors.white),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => CreateSessionScreen(
-                            eventId: eventId,
-                            zoneId: zoneId,
-                            trackId: trackId,
-                          ),
-                        ),
-                      );
-                    },
+            // Update Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _showUpdateDialog(context, title, description),
+                icon: const Icon(Icons.edit),
+                label: const Text('Update Track'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                const SizedBox(width: 12), 
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.list, size: 20),
-                    label: const Text('View Sessions'),
-                    style: buttonStyle.copyWith(
-                      backgroundColor: WidgetStateProperty.all(Colors.white),
-                      foregroundColor: WidgetStateProperty.all(Colors.deepPurple),
-                      side: WidgetStateProperty.all(
-                        const BorderSide(color: Colors.deepPurple)),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => SessionListScreen(
-                            eventId: eventId,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showUpdateDialog(BuildContext context, String currentTitle, String currentDescription) {
+    final titleController = TextEditingController(text: currentTitle);
+    final descController = TextEditingController(text: currentDescription);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Update Track'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: titleController,
+              decoration: const InputDecoration(
+                labelText: 'Track Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: descController,
+              decoration: const InputDecoration(
+                labelText: 'Description (Optional)',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (titleController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Track title cannot be empty')),
+                );
+                return;
+              }
+
+              try {
+                await FirebaseFirestore.instance
+                    .collection('events')
+                    .doc(widget.eventId)
+                    .collection('zones')
+                    .doc(widget.zoneId)
+                    .collection('tracks')
+                    .doc(widget.trackId)
+                    .update({
+                  'title': titleController.text.trim(),
+                  'description': descController.text.trim(),
+                  'updatedAt': FieldValue.serverTimestamp(),
+                });
+
+                // Refresh the track data to show updated information
+                await _refreshTrackData();
+
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Track updated successfully')),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error updating track: ${e.toString()}')),
+                  );
+                }
+              }
+            },
+            child: const Text('Update'),
+          ),
+        ],
       ),
     );
   }

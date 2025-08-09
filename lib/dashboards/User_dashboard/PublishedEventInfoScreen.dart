@@ -59,7 +59,7 @@ class PublishedEventInfoScreen extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        event['eventTitle'] ?? 'No Title',
+                        event['eventTitle']?.toString() ?? event['title']?.toString() ?? 'No Title',
                         style: const TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class PublishedEventInfoScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      event['eventDescription'] ?? 'No description provided.',
+                      event['eventDescription']?.toString() ?? event['description']?.toString() ?? 'No description provided.',
                       style: const TextStyle(fontSize: 15),
                     ),
                   ],

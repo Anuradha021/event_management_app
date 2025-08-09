@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'StallCreateScreen.dart';
-import 'StallListScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class StallDetailScreen extends StatelessWidget {
+class StallDetailScreen extends StatefulWidget {
   final String eventId;
   final String zoneId;
   final String trackId;
   final String stallId;
-  final Map stallData;
+  final Map<String, dynamic> stallData;
 
   const StallDetailScreen({
     super.key,
@@ -19,9 +18,45 @@ class StallDetailScreen extends StatelessWidget {
   });
 
   @override
+  State<StallDetailScreen> createState() => _StallDetailScreenState();
+}
+
+class _StallDetailScreenState extends State<StallDetailScreen> {
+  Map<String, dynamic> _currentStallData = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _currentStallData = Map<String, dynamic>.from(widget.stallData);
+  }
+
+  Future<void> _refreshStallData() async {
+    try {
+      final doc = await FirebaseFirestore.instance
+          .collection('events')
+          .doc(widget.eventId)
+          .collection('zones')
+          .doc(widget.zoneId)
+          .collection('tracks')
+          .doc(widget.trackId)
+          .collection('stalls')
+          .doc(widget.stallId)
+          .get();
+
+      if (doc.exists && mounted) {
+        setState(() {
+          _currentStallData = doc.data() ?? {};
+        });
+      }
+    } catch (e) {
+      // Handle error silently or show a message if needed
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final name = stallData['name'] ?? 'No Name';
-    final description = stallData['description'] ?? 'No Description';
+    final name = _currentStallData['name'] ?? 'No Name';
+    final description = _currentStallData['description'] ?? 'No Description';
 
     return Scaffold(
       appBar: AppBar(
@@ -52,84 +87,147 @@ class StallDetailScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      name,
-                      style: const TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    Row(
+                      children: [
+                        Container(
+                          width: 48,
+                          height: 48,
+                          decoration: BoxDecoration(
+                            color: Colors.deepPurple.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: const Icon(Icons.storefront, color: Colors.deepPurple),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                name,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                description,
+                                style: const TextStyle(fontSize: 16, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Description:',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(description),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.add),
-                    label: const Text('Create Stall'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepPurple,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => StallCreateScreen(
-                            eventId: eventId,
-                            zoneId: zoneId,
-                            trackId: trackId,
-                          ),
-                        ),
-                      );
-                    },
+            
+            // Update Button
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () => _showUpdateDialog(context, name, description),
+                icon: const Icon(Icons.edit),
+                label: const Text('Update Stall'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.list),
-                    label: const Text('View Stalls'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: Colors.deepPurple,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: Colors.deepPurple),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => StallListScreen(
-                            eventId: eventId,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showUpdateDialog(BuildContext context, String currentName, String currentDescription) {
+    final nameController = TextEditingController(text: currentName);
+    final descController = TextEditingController(text: currentDescription);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Update Stall'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Stall Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: descController,
+              decoration: const InputDecoration(
+                labelText: 'Description (Optional)',
+                border: OutlineInputBorder(),
+              ),
+              maxLines: 3,
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (nameController.text.trim().isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Stall name cannot be empty')),
+                );
+                return;
+              }
+
+              try {
+                await FirebaseFirestore.instance
+                    .collection('events')
+                    .doc(widget.eventId)
+                    .collection('zones')
+                    .doc(widget.zoneId)
+                    .collection('tracks')
+                    .doc(widget.trackId)
+                    .collection('stalls')
+                    .doc(widget.stallId)
+                    .update({
+                  'name': nameController.text.trim(),
+                  'description': descController.text.trim(),
+                  'updatedAt': FieldValue.serverTimestamp(),
+                });
+
+                // Refresh the stall data to show updated information
+                await _refreshStallData();
+
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Stall updated successfully')),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error updating stall: ${e.toString()}')),
+                  );
+                }
+              }
+            },
+            child: const Text('Update'),
+          ),
+        ],
       ),
     );
   }
