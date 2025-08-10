@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/app_theme.dart';
+import '../../../../../core/widgets/modern_button.dart';
 
-/// Single Responsibility: Handle zone creation dialog UI and validation
+/// Enhanced zone creation dialog with modern styling and better UX
 class CreateZoneDialog extends StatefulWidget {
   final Future<void> Function(String name, String description) onCreate;
 
@@ -62,45 +64,140 @@ class _CreateZoneDialogState extends State<CreateZoneDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Create New Zone'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Zone Name *',
-              border: OutlineInputBorder(),
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      child: Container(
+        constraints: const BoxConstraints(maxWidth: 400),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(AppTheme.radiusL),
+          boxShadow: AppTheme.elevatedShadow,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Header
+            Container(
+              padding: const EdgeInsets.all(AppTheme.spacingL),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    AppTheme.primaryColor.withValues(alpha: 0.1),
+                    AppTheme.primaryColor.withValues(alpha: 0.05),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(AppTheme.radiusL),
+                  topRight: Radius.circular(AppTheme.radiusL),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(AppTheme.spacingS),
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                    ),
+                    child: const Icon(
+                      Icons.map_outlined,
+                      color: AppTheme.primaryColor,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: AppTheme.spacingM),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Create New Zone',
+                          style: AppTheme.headingSmall,
+                        ),
+                        Text(
+                          'Add a new zone to organize your event',
+                          style: AppTheme.bodyMedium,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: _descController,
-            decoration: const InputDecoration(
-              labelText: 'Description (Optional)',
-              border: OutlineInputBorder(),
+
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(AppTheme.spacingL),
+              child: Column(
+                children: [
+                  // Zone Name Field
+                  TextField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Zone Name',
+                      hintText: 'Enter zone name',
+                      prefixIcon: const Icon(Icons.label_outline),
+                      suffixText: '*',
+                      suffixStyle: const TextStyle(color: AppTheme.errorColor),
+                    ),
+                    textCapitalization: TextCapitalization.words,
+                  ),
+
+                  const SizedBox(height: AppTheme.spacingL),
+
+                  // Description Field
+                  TextField(
+                    controller: _descController,
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                      hintText: 'Enter zone description (optional)',
+                      prefixIcon: Icon(Icons.description_outlined),
+                      alignLabelWithHint: true,
+                    ),
+                    maxLines: 3,
+                    textCapitalization: TextCapitalization.sentences,
+                  ),
+                ],
+              ),
             ),
-            maxLines: 3,
-          ),
-        ],
+
+            // Actions
+            Container(
+              padding: const EdgeInsets.all(AppTheme.spacingL),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceColor,
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(AppTheme.radiusL),
+                  bottomRight: Radius.circular(AppTheme.radiusL),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ModernButton.outline(
+                      text: 'Cancel',
+                      onPressed: () => Navigator.pop(context),
+                      isFullWidth: true,
+                    ),
+                  ),
+                  const SizedBox(width: AppTheme.spacingM),
+                  Expanded(
+                    child: ModernButton.primary(
+                      text: 'Create Zone',
+                      icon: Icons.add,
+                      onPressed: _isLoading ? null : _handleCreate,
+                      isLoading: _isLoading,
+                      isFullWidth: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-      actions: [
-        TextButton(
-          onPressed: _isLoading ? null : () => Navigator.pop(context),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          onPressed: _isLoading ? null : _handleCreate,
-          child: _isLoading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Text('Create'),
-        ),
-      ],
     );
   }
 }

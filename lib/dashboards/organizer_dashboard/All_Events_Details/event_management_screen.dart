@@ -1,10 +1,13 @@
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_panel.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_panel.dart';
+import 'package:event_management_app1/core/theme/app_theme.dart';
+import 'package:event_management_app1/core/widgets/modern_card.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'zone_panel.dart';
 import 'track_panel.dart';
+import 'components/widgets/simple_ticket_widget.dart';
 
 
 class EventManagementScreen extends StatefulWidget {
@@ -27,18 +30,29 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: const Text('Event Management'),
+        backgroundColor: AppTheme.primaryColor,
+        foregroundColor: Colors.white,
+        elevation: 0,
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh_outlined),
             onPressed: _refreshAllData,
             tooltip: 'Refresh All Data',
           ),
-          IconButton(
-            icon: const Icon(Icons.publish),
-            onPressed: _publishEvent,
-            tooltip: 'Publish Event',
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              icon: const Icon(Icons.publish_outlined),
+              onPressed: _publishEvent,
+              tooltip: 'Publish Event',
+              style: IconButton.styleFrom(
+                backgroundColor: AppTheme.successColor.withValues(alpha: 0.1),
+                foregroundColor: AppTheme.successColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -61,6 +75,7 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
                 TrackPanel(eventId: widget.eventId),
                 SessionPanel(eventId: widget.eventId),
                 StallPanel(eventId: widget.eventId),
+                _buildTicketsPanel(),
               ],
             ),
           ),
@@ -186,38 +201,86 @@ String _formatDate(dynamic timestamp) {
 }
 
   Widget _buildTabNavigation() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+    return Container(
+      margin: const EdgeInsets.all(AppTheme.spacingM),
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppTheme.radiusL),
+        boxShadow: AppTheme.cardShadow,
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildTabButton(0, Icons.map, 'Zones'),
-          _buildTabButton(1, Icons.timeline, 'Tracks'),
-          _buildTabButton(2, Icons.schedule, 'Sessions'),
-          _buildTabButton(3, Icons.store, 'Stalls'),
+          _buildTabButton(0, Icons.map_outlined, 'Zones'),
+          _buildTabButton(1, Icons.timeline_outlined, 'Tracks'),
+          _buildTabButton(2, Icons.schedule_outlined, 'Sessions'),
+          _buildTabButton(3, Icons.store_outlined, 'Stalls'),
+          _buildTabButton(4, Icons.confirmation_number, 'Tickets'),
         ],
       ),
     );
   }
 
   Widget _buildTabButton(int index, IconData icon, String label) {
-    return TextButton(
-      onPressed: () => _pageController.animateToPage(
-        index,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+    final isActive = _activeTabIndex == index;
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          setState(() => _activeTabIndex = index);
+          _pageController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: const EdgeInsets.all(2),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          decoration: BoxDecoration(
+            gradient: isActive
+                ? AppTheme.primaryGradient
+                : null,
+            color: isActive ? null : Colors.transparent,
+            borderRadius: BorderRadius.circular(AppTheme.radiusM),
+            boxShadow: isActive ? [
+              BoxShadow(
+                color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ] : null,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                color: isActive ? Colors.white : AppTheme.textSecondary,
+                size: 22,
+              ),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isActive ? Colors.white : AppTheme.textSecondary,
+                  fontSize: 12,
+                  fontWeight: isActive ? FontWeight.w600 : FontWeight.w500,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
       ),
-      style: TextButton.styleFrom(
-        foregroundColor: _activeTabIndex == index 
-            ? Colors.deepPurple 
-            : Colors.grey,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon),
-          Text(label),
-        ],
+    );
+  }
+
+  Widget _buildTicketsPanel() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(AppTheme.spacingM),
+      child: SimpleTicketWidget(
+        eventId: widget.eventId,
       ),
     );
   }

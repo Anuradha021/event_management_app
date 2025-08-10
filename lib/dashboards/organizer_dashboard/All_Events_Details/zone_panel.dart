@@ -18,8 +18,8 @@ class ZonePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: PanelHeader(
             title: 'Event Zones',
             onCreatePressed: () => _showCreateZoneDialog(context),

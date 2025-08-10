@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../../core/widgets/empty_state.dart';
 import 'session_list_item.dart';
 
 /// Single Responsibility: Handle session list display with loading and error states
@@ -40,23 +41,9 @@ class SessionListWidget extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.schedule_outlined, size: 48, color: Colors.grey),
-                SizedBox(height: 16),
-                Text(
-                  'No sessions in this track yet',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Tap the + button to create your first session',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ],
-            ),
+          return const MinimalEmptyState(
+            icon: Icons.schedule_outlined,
+            title: 'No sessions yet - Tap + to create',
           );
         }
 

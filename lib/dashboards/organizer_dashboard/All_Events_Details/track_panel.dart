@@ -50,9 +50,10 @@ class _TrackPanelState extends State<TrackPanel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               PanelHeader(
                 title: 'Event Tracks',
@@ -62,7 +63,7 @@ class _TrackPanelState extends State<TrackPanel> {
                 createTooltip: 'Create Track',
                 canCreate: _selectedZoneId != null,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
               if (_zones.isNotEmpty)
                 ZoneDropdown(
                   selectedZoneId: _selectedZoneId,

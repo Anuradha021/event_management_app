@@ -6,8 +6,17 @@ class UserBookTicketScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Book Tickets")),
-      body: Center(child: Text("Coming Soon...")),
+      appBar: AppBar(
+        title: const Text("Book Tickets"),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
+      body: const Center(
+        child: Text(
+          'Book Tickets Screen',
+          style: TextStyle(fontSize: 24),
+        ),
+      ),
     );
   }
 }

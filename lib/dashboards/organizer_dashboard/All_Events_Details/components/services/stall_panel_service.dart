@@ -25,6 +25,7 @@ class StallPanelService {
     }
   }
 
+  /// Load tracks for a specific zone
   static Future<List<Map<String, dynamic>>> loadTracks(String eventId, String zoneId) async {
     try {
       final snapshot = await _firestore

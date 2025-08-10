@@ -80,9 +80,10 @@ class _StallPanelState extends State<StallPanel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(16),
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               PanelHeader(
                 title: 'Event Stalls',

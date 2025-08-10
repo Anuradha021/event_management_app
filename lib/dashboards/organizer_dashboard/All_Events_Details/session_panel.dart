@@ -69,19 +69,21 @@ class _SessionPanelState extends State<SessionPanel> {
       builder: (context, child) {
         return Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16),
+            // Ultra-compact header section
+            Container(
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   PanelHeader(
                     title: 'Event Sessions',
-                    onCreatePressed: _filterState.canCreateSession 
+                    onCreatePressed: _filterState.canCreateSession
                         ? () => _showCreateSessionDialog()
                         : null,
                     createTooltip: 'Create Session',
                     canCreate: _filterState.canCreateSession,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 4),
                   ZoneTrackFilter(
                     selectedZoneId: _filterState.selectedZoneId,
                     selectedTrackId: _filterState.selectedTrackId,
@@ -102,7 +104,17 @@ class _SessionPanelState extends State<SessionPanel> {
                       onSessionDelete: _handleDeleteSession,
                     )
                   : const Center(
-                      child: Text('Please select a zone and track to view sessions'),
+                      child: Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          'Select zone & track to view sessions',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
             ),
           ],

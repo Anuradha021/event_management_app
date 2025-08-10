@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/theme/app_theme.dart';
 
-/// Single Responsibility: Handle zone and track dropdown filtering
+/// Compact zone and track dropdown filtering with modern styling
 class ZoneTrackFilter extends StatelessWidget {
   final String? selectedZoneId;
   final String? selectedTrackId;
@@ -21,34 +22,50 @@ class ZoneTrackFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: DropdownButton<String>(
-            value: selectedZoneId,
-            hint: const Text('Select Zone'),
-            isExpanded: true,
-            items: [
-              const DropdownMenuItem<String>(
-                value: 'default',
-                child: Text('Default Zone'),
-              ),
-              ...zones.map((zone) {
-                return DropdownMenuItem<String>(
-                  value: zone['id'],
-                  child: Text(zone['title']),
-                );
-              }),
-            ],
-            onChanged: onZoneChanged,
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(AppTheme.radiusS),
+        border: Border.all(color: Colors.grey.shade200),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: DropdownButton<String>(
+              value: selectedZoneId,
+              hint: const Text('Select Zone', style: TextStyle(fontSize: 13)),
+              isExpanded: true,
+              underline: const SizedBox(),
+              style: const TextStyle(fontSize: 13, color: Colors.black87),
+              items: [
+                const DropdownMenuItem<String>(
+                  value: 'default',
+                  child: Text('Default Zone'),
+                ),
+                ...zones.map((zone) {
+                  return DropdownMenuItem<String>(
+                    value: zone['id'],
+                    child: Text(zone['title']),
+                  );
+                }),
+              ],
+              onChanged: onZoneChanged,
+            ),
           ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: DropdownButton<String>(
-            value: selectedTrackId,
-            hint: const Text('Select Track'),
+          Container(
+            width: 1,
+            height: 16,
+            color: Colors.grey.shade300,
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+          ),
+          Expanded(
+            child: DropdownButton<String>(
+              value: selectedTrackId,
+              hint: const Text('Select Track', style: TextStyle(fontSize: 13)),
             isExpanded: true,
+            underline: const SizedBox(),
+            style: const TextStyle(fontSize: 13, color: Colors.black87),
             items: [
               const DropdownMenuItem<String>(
                 value: 'default',
@@ -65,6 +82,7 @@ class ZoneTrackFilter extends StatelessWidget {
           ),
         ),
       ],
+      ),
     );
   }
 }

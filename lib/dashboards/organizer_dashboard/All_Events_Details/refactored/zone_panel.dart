@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import '../shared/base/base_panel.dart';
 import '../shared/widgets/list_item_card.dart';
 import 'zone_detail_screen.dart';
@@ -172,14 +173,13 @@ class _ZonePanelState extends BasePanelState<ZonePanel> {
     }
 
     try {
-      await FirebaseFirestore.instance
-          .collection('events')
-          .doc(widget.eventId)
-          .collection('zones')
-          .add({
+      // Use Cloud Functions instead of direct Firestore access
+      final functions = FirebaseFunctions.instance;
+      final callable = functions.httpsCallable('zones-createZone');
+      await callable.call({
+        'eventId': widget.eventId,
         'title': title.trim(),
         'description': description.trim(),
-        'createdAt': FieldValue.serverTimestamp(),
       });
 
       if (mounted) {

@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 
-/// Single Responsibility: Handle all track panel data operations
+/// Single Responsibility: Handle all track panel data operations via Cloud Functions
 class TrackPanelService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  static final FirebaseFunctions _functions = FirebaseFunctions.instance;
 
   /// Load zones for an event
   static Future<List<Map<String, dynamic>>> loadZones(String eventId) async {
@@ -36,36 +38,30 @@ class TrackPanelService {
         .snapshots();
   }
 
-  /// Create a new track
+  /// Create a new track via Cloud Functions
   static Future<void> createTrack(String eventId, String zoneId, String title, String description) async {
     try {
-      await _firestore
-          .collection('events')
-          .doc(eventId)
-          .collection('zones')
-          .doc(zoneId)
-          .collection('tracks')
-          .add({
+      final callable = _functions.httpsCallable('tracks-createTrack');
+      await callable.call({
+        'eventId': eventId,
+        'zoneId': zoneId,
         'title': title,
-        'description': description.isNotEmpty ? description : null,
-        'createdAt': FieldValue.serverTimestamp(),
+        'description': description,
       });
     } catch (e) {
       throw Exception('Failed to create track: $e');
     }
   }
 
-  /// Delete a track
+  /// Delete a track via Cloud Functions
   static Future<void> deleteTrack(String eventId, String zoneId, String trackId) async {
     try {
-      await _firestore
-          .collection('events')
-          .doc(eventId)
-          .collection('zones')
-          .doc(zoneId)
-          .collection('tracks')
-          .doc(trackId)
-          .delete();
+      final callable = _functions.httpsCallable('tracks-deleteTrack');
+      await callable.call({
+        'eventId': eventId,
+        'zoneId': zoneId,
+        'trackId': trackId,
+      });
     } catch (e) {
       throw Exception('Failed to delete track: $e');
     }

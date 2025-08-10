@@ -3,6 +3,7 @@ import 'package:event_management_app1/EntryPointFiles/login_screen.dart';
 import 'package:event_management_app1/EntryPointFiles/sign_up_screen.dart';
 import 'package:event_management_app1/EntryPointFiles/welcome_screen.dart';
 import 'package:event_management_app1/firebase_options.dart';
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,10 +26,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Unite',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: AppTheme.lightTheme,
       home: AppInitializer(), 
       routes: {
         '/admin-setup': (context) => AdminSetupScreen(),

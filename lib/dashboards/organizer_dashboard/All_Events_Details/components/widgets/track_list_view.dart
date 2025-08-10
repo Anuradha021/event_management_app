@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../../../core/widgets/empty_state.dart';
 import 'track_list_item.dart';
 
 /// Single Responsibility: Handle track list display with loading and error states
@@ -40,23 +41,10 @@ class TrackListView extends StatelessWidget {
         }
 
         if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.timeline_outlined, size: 48, color: Colors.grey),
-                SizedBox(height: 16),
-                Text(
-                  'No tracks in this zone yet',
-                  style: TextStyle(fontSize: 16, color: Colors.grey),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Tap the + button to create your first track',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
-                ),
-              ],
-            ),
+          return const CompactEmptyState(
+            icon: Icons.timeline_outlined,
+            title: 'No tracks yet',
+            subtitle: 'Tap + to create your first track',
           );
         }
 

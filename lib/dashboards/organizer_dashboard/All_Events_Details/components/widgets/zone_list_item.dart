@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/widgets/modern_card.dart';
+import '../../../../../core/theme/app_theme.dart';
 
-/// Single Responsibility: Display a single zone item in the list
+/// Enhanced zone list item with modern styling
 class ZoneListItem extends StatelessWidget {
   final Map<String, dynamic> zoneData;
   final VoidCallback? onTap;
@@ -17,44 +19,39 @@ class ZoneListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: ListTile(
-        leading: Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: Colors.deepPurple.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(8),
+    return ModernListCard(
+      icon: Icons.map_outlined,
+      iconColor: AppTheme.primaryColor,
+      title: zoneData['title']?.toString() ?? 'Unnamed Zone',
+      subtitle: zoneData['description']?.toString() ?? 'No description',
+      onTap: onTap,
+      onEdit: onEdit,
+      onDelete: onDelete,
+      additionalInfo: [
+        if (zoneData['createdAt'] != null)
+          Text(
+            'Created: ${_formatDate(zoneData['createdAt'])}',
+            style: AppTheme.bodySmall,
           ),
-          child: const Icon(Icons.map, color: Colors.deepPurple),
-        ),
-        title: Text(
-          zoneData['title']?.toString() ?? 'Unnamed Zone',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text(
-          zoneData['description']?.toString() ?? 'No description',
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (onEdit != null)
-              IconButton(
-                icon: const Icon(Icons.edit),
-                onPressed: onEdit,
-                tooltip: 'Edit Zone',
-              ),
-            if (onDelete != null)
-              IconButton(
-                icon: const Icon(Icons.delete, color: Colors.red),
-                onPressed: onDelete,
-                tooltip: 'Delete Zone',
-              ),
-          ],
-        ),
-        onTap: onTap,
-      ),
+      ],
     );
+  }
+
+  String _formatDate(dynamic timestamp) {
+    try {
+      if (timestamp == null) return 'Unknown';
+      // Handle Firestore Timestamp or DateTime
+      DateTime date;
+      if (timestamp.runtimeType.toString().contains('Timestamp')) {
+        date = timestamp.toDate();
+      } else if (timestamp is DateTime) {
+        date = timestamp;
+      } else {
+        return 'Unknown';
+      }
+      return '${date.day}/${date.month}/${date.year}';
+    } catch (e) {
+      return 'Unknown';
+    }
   }
 }
