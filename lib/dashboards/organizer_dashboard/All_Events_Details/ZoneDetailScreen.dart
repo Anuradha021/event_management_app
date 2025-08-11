@@ -39,7 +39,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
         });
       }
     } catch (e) {
-      // Handle error silently or show a message if needed
+      
     }
   }
 

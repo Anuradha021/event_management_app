@@ -45,7 +45,7 @@ class _TrackDetailScreenState extends State<TrackDetailScreen> {
         });
       }
     } catch (e) {
-      // Handle error silently or show a message if needed
+
     }
   }
 
@@ -114,7 +114,7 @@ class _TrackDetailScreenState extends State<TrackDetailScreen> {
             ),
             const SizedBox(height: 20),
             
-            // Update Button
+           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -194,7 +194,6 @@ class _TrackDetailScreenState extends State<TrackDetailScreen> {
                   'updatedAt': FieldValue.serverTimestamp(),
                 });
 
-                // Refresh the track data to show updated information
                 await _refreshTrackData();
 
                 if (context.mounted) {

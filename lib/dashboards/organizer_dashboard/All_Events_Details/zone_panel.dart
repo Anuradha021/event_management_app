@@ -61,8 +61,8 @@ class ZonePanel extends StatelessWidget {
   }
 
   void _handleDeleteZone(BuildContext context, String zoneId) {
-    // Get zone name for confirmation dialog
-    final zoneName = 'Zone'; // Could be enhanced to get actual name
+   
+    final zoneName = 'Zone'; 
 
     DeleteConfirmationDialog.show(
       context,

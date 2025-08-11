@@ -6,7 +6,6 @@ import 'components/widgets/zone_dropdown.dart';
 import 'components/widgets/track_list_view.dart';
 import 'components/widgets/delete_confirmation_dialog.dart';
 
-/// Refactored Track Panel - Single Responsibility: Coordinate track management components
 class TrackPanel extends StatefulWidget {
   final String eventId;
 
@@ -89,7 +88,7 @@ class _TrackPanelState extends State<TrackPanel> {
   }
 
   Widget _buildTracksList() {
-    // Determine the actual zone ID to use
+ 
     String? actualZoneId = _selectedZoneId;
     if (_selectedZoneId == 'default' && _zones.isNotEmpty) {
       actualZoneId = _zones.first['id'];
@@ -131,7 +130,7 @@ class _TrackPanelState extends State<TrackPanel> {
   }
 
   void _showCreateTrackDialog() {
-    // Determine the actual zone ID to use
+   
     String? actualZoneId = _selectedZoneId;
     if (_selectedZoneId == 'default' && _zones.isNotEmpty) {
       actualZoneId = _zones.first['id'];
@@ -154,7 +153,6 @@ class _TrackPanelState extends State<TrackPanel> {
   }
 }
 
-/// Single Responsibility: Handle track creation dialog
 class _CreateTrackDialog extends StatefulWidget {
   final String eventId;
   final String zoneId;
