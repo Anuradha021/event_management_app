@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Base class for all panel widgets
-/// Follows Single Responsibility Principle - provides common panel structure
 abstract class BasePanel extends StatefulWidget {
   final String eventId;
 
@@ -15,17 +13,16 @@ abstract class BasePanel extends StatefulWidget {
 abstract class BasePanelState<T extends BasePanel> extends State<T> {
   bool _isLoading = false;
 
-  /// Abstract methods to be implemented by subclasses
+
   String get panelTitle;
   IconData get panelIcon;
   String get createButtonTooltip;
   Widget buildContent();
   Future<void> onCreatePressed();
 
-  /// Optional filter widgets
+
   Widget? buildFilters() => null;
 
-  /// Loading state management
   void setLoading(bool loading) {
     if (mounted) {
       setState(() => _isLoading = loading);
@@ -34,7 +31,7 @@ abstract class BasePanelState<T extends BasePanel> extends State<T> {
 
   bool get isLoading => _isLoading;
 
-  /// Show success message
+ 
   void showSuccessMessage(String message) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -43,7 +40,7 @@ abstract class BasePanelState<T extends BasePanel> extends State<T> {
     }
   }
 
-  /// Show error message
+ 
   void showErrorMessage(String message) {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -59,7 +56,7 @@ abstract class BasePanelState<T extends BasePanel> extends State<T> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // Header with title and create button
+      
         Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -84,7 +81,7 @@ abstract class BasePanelState<T extends BasePanel> extends State<T> {
                 ],
               ),
               
-              // Filters if provided
+             
               if (buildFilters() != null) ...[
                 const SizedBox(height: 16),
                 buildFilters()!,
@@ -93,7 +90,7 @@ abstract class BasePanelState<T extends BasePanel> extends State<T> {
           ),
         ),
 
-        // Content area
+       
         Expanded(
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
@@ -104,7 +101,6 @@ abstract class BasePanelState<T extends BasePanel> extends State<T> {
   }
 }
 
-/// Base class for panels with zone/track filtering
 abstract class FilteredPanel extends BasePanel {
   const FilteredPanel({
     super.key,
@@ -147,7 +143,7 @@ abstract class FilteredPanelState<T extends FilteredPanel> extends BasePanelStat
             };
           }).toList();
 
-          // Set default selections
+        
           _selectedZoneId = 'default';
           _selectedTrackId = 'default';
         });

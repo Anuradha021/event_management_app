@@ -3,8 +3,6 @@ import '../widgets/detail_info_card.dart';
 import '../widgets/action_button.dart';
 import '../widgets/update_dialog.dart';
 
-/// Base class for all detail screens
-/// Follows Single Responsibility Principle - provides common detail screen structure
 abstract class BaseDetailScreen<T> extends StatefulWidget {
   final String eventId;
   final Map<String, dynamic> initialData;
@@ -26,7 +24,6 @@ abstract class BaseDetailScreenState<T extends BaseDetailScreen> extends State<T
     _currentData = Map<String, dynamic>.from(widget.initialData);
   }
 
-  /// Abstract methods to be implemented by subclasses
   String get screenTitle;
   IconData get screenIcon;
   Color get screenIconColor;
@@ -37,10 +34,10 @@ abstract class BaseDetailScreenState<T extends BaseDetailScreen> extends State<T
   Future<void> updateData(Map<String, String> values);
   Future<void> deleteData();
 
-  /// Optional additional info widgets
+  
   List<Widget> get additionalInfoWidgets => [];
 
-  /// Handle update dialog
+
   Future<void> _showUpdateDialog() async {
     await showDialog(
       context: context,
@@ -52,7 +49,7 @@ abstract class BaseDetailScreenState<T extends BaseDetailScreen> extends State<T
     );
   }
 
-  /// Handle update operation
+ 
   Future<void> _handleUpdate(Map<String, String> values) async {
     try {
       await updateData(values);
@@ -72,7 +69,7 @@ abstract class BaseDetailScreenState<T extends BaseDetailScreen> extends State<T
     }
   }
 
-  /// Handle delete operation
+  
   Future<void> _handleDelete() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -136,7 +133,7 @@ abstract class BaseDetailScreenState<T extends BaseDetailScreen> extends State<T
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Main info card
+           
             DetailInfoCard(
               icon: screenIcon,
               iconColor: screenIconColor,
@@ -145,7 +142,7 @@ abstract class BaseDetailScreenState<T extends BaseDetailScreen> extends State<T
               additionalInfo: additionalInfoWidgets,
             ),
 
-            // Action buttons
+           
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(

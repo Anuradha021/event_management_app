@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/session_data_service.dart';
 
-/// Single Responsibility: Manage session filter state (zones and tracks)
+
 class SessionFilterState extends ChangeNotifier {
   String? _selectedZoneId;
   String? _selectedTrackId;
@@ -9,7 +9,7 @@ class SessionFilterState extends ChangeNotifier {
   List<Map<String, dynamic>> _tracks = [];
   bool _isLoading = false;
 
-  // Getters
+
   String? get selectedZoneId => _selectedZoneId;
   String? get selectedTrackId => _selectedTrackId;
   List<Map<String, dynamic>> get zones => _zones;
@@ -17,7 +17,7 @@ class SessionFilterState extends ChangeNotifier {
   bool get isLoading => _isLoading;
   bool get canCreateSession => _selectedZoneId != null && _selectedTrackId != null;
 
-  /// Initialize filter state
+
   Future<void> initialize(String eventId) async {
     _setLoading(true);
     try {
@@ -27,14 +27,14 @@ class SessionFilterState extends ChangeNotifier {
       _tracks = [];
       notifyListeners();
     } catch (e) {
-      // Handle error
+    
       rethrow;
     } finally {
       _setLoading(false);
     }
   }
 
-  /// Handle zone selection change
+ 
   Future<void> onZoneChanged(String eventId, String? zoneId) async {
     _selectedZoneId = zoneId;
     _selectedTrackId = null;
@@ -48,7 +48,7 @@ class SessionFilterState extends ChangeNotifier {
           _selectedTrackId = _tracks.first['id'];
         }
       } catch (e) {
-        // Handle error
+        
       }
     } else if (zoneId == 'default') {
       _selectedTrackId = 'default';
@@ -56,7 +56,7 @@ class SessionFilterState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Handle track selection change
+  
   void onTrackChanged(String? trackId) {
     _selectedTrackId = trackId;
     notifyListeners();

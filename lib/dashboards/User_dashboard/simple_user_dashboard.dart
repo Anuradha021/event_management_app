@@ -1,6 +1,8 @@
+import 'package:event_management_app1/dashboards/admin_dashbaord/event_deatils_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+
 
 /// Simple user dashboard to view published events
 class SimpleUserDashboard extends StatefulWidget {
@@ -23,11 +25,13 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('events')
-            .where('status', isEqualTo: 'published')
             .snapshots(),
         builder: (context, snapshot) {
+          print('DEBUG: Events query - Connection: ${snapshot.connectionState}, HasError: ${snapshot.hasError}, HasData: ${snapshot.hasData}');
+
           // Debug information
           if (snapshot.hasError) {
+            print('DEBUG: Events query error: ${snapshot.error}');
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -84,6 +88,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
           }
 
           final events = snapshot.data!.docs;
+          print('DEBUG: Found ${events.length} published events');
 
           return Column(
             children: [
@@ -93,7 +98,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
                 padding: const EdgeInsets.all(8),
                 color: Colors.green[100],
                 child: Text(
-                  'Found ${events.length} published events',
+                  'Found ${events.length} events',
                   style: const TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -273,33 +278,13 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
   }
 
   void _navigateToEventDetails(String eventId, Map<String, dynamic> event) {
-    // For now, just show a simple dialog with event details
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(event['eventTitle'] ?? 'Event Details'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (event['eventDate'] != null)
-              Text('Date: ${_formatDate(event['eventDate'])}'),
-            if (event['location'] != null)
-              Text('Location: ${event['location']}'),
-            if (event['organizerName'] != null)
-              Text('Organizer: ${event['organizerName']}'),
-            if (event['description'] != null && event['description'].isNotEmpty) ...[
-              const SizedBox(height: 8),
-              Text('Description: ${event['description']}'),
-            ],
-          ],
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EventDetailsScreen(
+          eventId: eventId,
+          eventData: event,
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Close'),
-          ),
-        ],
       ),
     );
   }

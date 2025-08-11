@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// A reusable action button widget
-/// Follows Single Responsibility Principle - only handles button display and interaction
 class ActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -50,7 +48,7 @@ class ActionButton extends StatelessWidget {
   }
 }
 
-/// A specialized update button
+
 class UpdateButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;
@@ -72,7 +70,7 @@ class UpdateButton extends StatelessWidget {
   }
 }
 
-/// A specialized delete button
+
 class DeleteButton extends StatelessWidget {
   final VoidCallback? onPressed;
   final bool isLoading;

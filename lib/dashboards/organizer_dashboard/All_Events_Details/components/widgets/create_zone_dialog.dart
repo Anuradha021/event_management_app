@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/widgets/modern_button.dart';
 
-/// Enhanced zone creation dialog with modern styling and better UX
 class CreateZoneDialog extends StatefulWidget {
   final Future<void> Function(String name, String description) onCreate;
 

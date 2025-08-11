@@ -1,13 +1,12 @@
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_panel.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_panel.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
-import 'package:event_management_app1/core/widgets/modern_card.dart';
+import 'package:event_management_app1/screens/ticket_management_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'zone_panel.dart';
 import 'track_panel.dart';
-import 'components/widgets/simple_ticket_widget.dart';
 
 
 class EventManagementScreen extends StatefulWidget {
@@ -276,14 +275,27 @@ String _formatDate(dynamic timestamp) {
     );
   }
 
-  Widget _buildTicketsPanel() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppTheme.spacingM),
-      child: SimpleTicketWidget(
+Widget _buildTicketsPanel() {
+  return FutureBuilder<DocumentSnapshot>(
+    future: FirebaseFirestore.instance
+        .collection('events')
+        .doc(widget.eventId)
+        .get(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      final eventData = snapshot.data?.data() as Map<String, dynamic>?;
+      final eventTitle = eventData?['eventTitle'] ?? 'Event';
+
+      return TicketManagementScreen(
         eventId: widget.eventId,
-      ),
-    );
-  }
+        eventTitle: eventTitle,
+      );
+    },
+  );
+}
 
   void _refreshAllData() {
     setState(() {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A reusable card widget for displaying detail information
-/// Follows Single Responsibility Principle - only handles info display
+
 class DetailInfoCard extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
@@ -28,7 +27,7 @@ class DetailInfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header with icon and title
+            
             Row(
               children: [
                 Container(
@@ -66,7 +65,7 @@ class DetailInfoCard extends StatelessWidget {
               ],
             ),
             
-            // Additional information if provided
+          
             if (additionalInfo != null) ...[
               const SizedBox(height: 16),
               const Divider(),

@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Single Responsibility: Handle all zone-related data operations
+
 class ZoneDataService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Fetch zone data from Firestore
+ 
   static Future<Map<String, dynamic>?> getZoneData(String eventId, String zoneId) async {
     try {
       final doc = await _firestore
@@ -20,7 +20,7 @@ class ZoneDataService {
     }
   }
 
-  /// Update zone data in Firestore
+
   static Future<void> updateZoneData(
     String eventId,
     String zoneId,

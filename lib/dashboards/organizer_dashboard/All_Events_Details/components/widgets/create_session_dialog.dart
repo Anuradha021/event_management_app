@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Handle session creation dialog UI and validation
 class CreateSessionDialog extends StatefulWidget {
   final Future<void> Function(String title, String description, String speaker, DateTime startTime, DateTime endTime) onCreate;
 
@@ -47,7 +46,7 @@ class _CreateSessionDialogState extends State<CreateSessionDialog> {
       if (time != null && mounted) {
         setState(() {
           _startTime = DateTime(date.year, date.month, date.day, time.hour, time.minute);
-          // Reset end time if it's before start time
+         
           if (_endTime != null && _endTime!.isBefore(_startTime!)) {
             _endTime = null;
           }

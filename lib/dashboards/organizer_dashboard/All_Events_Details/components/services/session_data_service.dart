@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Single Responsibility: Handle all session panel data operations
+
 class SessionPanelService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Load zones for an event
+ 
   static Future<List<Map<String, dynamic>>> loadZones(String eventId) async {
     try {
       final snapshot = await _firestore
@@ -25,7 +25,6 @@ class SessionPanelService {
     }
   }
 
-  /// Load tracks for a specific zone
   static Future<List<Map<String, dynamic>>> loadTracks(String eventId, String zoneId) async {
     try {
       final snapshot = await _firestore
@@ -48,7 +47,7 @@ class SessionPanelService {
     }
   }
 
-  /// Get sessions stream for default zone/track
+
   static Stream<QuerySnapshot> getDefaultSessionsStream(String eventId) {
     return _firestore
         .collection('events')
@@ -58,7 +57,6 @@ class SessionPanelService {
         .snapshots();
   }
 
-  /// Get sessions stream for specific zone/track
   static Stream<QuerySnapshot> getSessionsStream(String eventId, String zoneId, String trackId) {
     return _firestore
         .collection('events')
@@ -72,7 +70,6 @@ class SessionPanelService {
         .snapshots();
   }
 
-  /// Delete a session from default location
   static Future<void> deleteDefaultSession(String eventId, String sessionId) async {
     try {
       await _firestore
@@ -86,7 +83,7 @@ class SessionPanelService {
     }
   }
 
-  /// Delete a session from specific zone/track
+ 
   static Future<void> deleteSession(String eventId, String zoneId, String trackId, String sessionId) async {
     try {
       await _firestore
@@ -104,7 +101,7 @@ class SessionPanelService {
     }
   }
 
-  /// Create a new session in default location
+ 
   static Future<void> createDefaultSession(
     String eventId,
     String title,
@@ -131,7 +128,6 @@ class SessionPanelService {
     }
   }
 
-  /// Create a new session in specific zone/track
   static Future<void> createSession(
     String eventId,
     String zoneId,

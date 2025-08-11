@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// A reusable list item card widget
-/// Follows Single Responsibility Principle - only handles list item display
 class ListItemCard extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
@@ -77,7 +75,7 @@ class ListItemCard extends StatelessWidget {
   }
 }
 
-/// Specialized list item for zones
+
 class ZoneListItem extends StatelessWidget {
   final Map<String, dynamic> zoneData;
   final VoidCallback? onTap;
@@ -106,7 +104,6 @@ class ZoneListItem extends StatelessWidget {
   }
 }
 
-/// Specialized list item for tracks
 class TrackListItem extends StatelessWidget {
   final Map<String, dynamic> trackData;
   final VoidCallback? onTap;
@@ -135,7 +132,7 @@ class TrackListItem extends StatelessWidget {
   }
 }
 
-/// Specialized list item for sessions
+
 class SessionListItem extends StatelessWidget {
   final Map<String, dynamic> sessionData;
   final String timeText;
@@ -179,7 +176,7 @@ class SessionListItem extends StatelessWidget {
   }
 }
 
-/// Specialized list item for stalls
+
 class StallListItem extends StatelessWidget {
   final Map<String, dynamic> stallData;
   final VoidCallback? onTap;

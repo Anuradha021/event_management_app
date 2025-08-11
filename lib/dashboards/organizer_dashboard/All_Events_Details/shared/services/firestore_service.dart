@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Generic Firestore service for CRUD operations
-/// Follows Single Responsibility Principle - only handles data operations
+
 class FirestoreService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  /// Get a document by path
   static Future<Map<String, dynamic>?> getDocument(String path) async {
     try {
       final doc = await _firestore.doc(path).get();
@@ -15,7 +13,7 @@ class FirestoreService {
     }
   }
 
-  /// Update a document
+ 
   static Future<void> updateDocument(
     String path,
     Map<String, dynamic> data,
@@ -30,7 +28,7 @@ class FirestoreService {
     }
   }
 
-  /// Delete a document
+ 
   static Future<void> deleteDocument(String path) async {
     try {
       await _firestore.doc(path).delete();
@@ -39,7 +37,6 @@ class FirestoreService {
     }
   }
 
-  /// Get a collection
   static Future<List<Map<String, dynamic>>> getCollection(String path) async {
     try {
       final snapshot = await _firestore.collection(path).get();
@@ -53,7 +50,7 @@ class FirestoreService {
     }
   }
 
-  /// Stream a collection
+ 
   static Stream<List<Map<String, dynamic>>> streamCollection(String path) {
     return _firestore.collection(path).snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -65,7 +62,7 @@ class FirestoreService {
   }
 }
 
-/// Specialized service for event-related operations
+
 class EventDataService {
   static String _eventPath(String eventId) => 'events/$eventId';
   static String _zonePath(String eventId, String zoneId) => 
@@ -77,7 +74,7 @@ class EventDataService {
   static String _stallPath(String eventId, String zoneId, String trackId, String stallId) => 
       '${_trackPath(eventId, zoneId, trackId)}/stalls/$stallId';
 
-  // Zone operations
+ 
   static Future<Map<String, dynamic>?> getZone(String eventId, String zoneId) =>
       FirestoreService.getDocument(_zonePath(eventId, zoneId));
 
@@ -87,7 +84,7 @@ class EventDataService {
   static Future<List<Map<String, dynamic>>> getZones(String eventId) =>
       FirestoreService.getCollection('${_eventPath(eventId)}/zones');
 
-  // Track operations
+ 
   static Future<Map<String, dynamic>?> getTrack(String eventId, String zoneId, String trackId) =>
       FirestoreService.getDocument(_trackPath(eventId, zoneId, trackId));
 
@@ -97,14 +94,14 @@ class EventDataService {
   static Future<List<Map<String, dynamic>>> getTracks(String eventId, String zoneId) =>
       FirestoreService.getCollection('${_zonePath(eventId, zoneId)}/tracks');
 
-  // Session operations
+
   static Future<Map<String, dynamic>?> getSession(String eventId, String zoneId, String trackId, String sessionId) =>
       FirestoreService.getDocument(_sessionPath(eventId, zoneId, trackId, sessionId));
 
   static Future<void> updateSession(String eventId, String zoneId, String trackId, String sessionId, Map<String, dynamic> data) =>
       FirestoreService.updateDocument(_sessionPath(eventId, zoneId, trackId, sessionId), data);
 
-  // Stall operations
+
   static Future<Map<String, dynamic>?> getStall(String eventId, String zoneId, String trackId, String stallId) =>
       FirestoreService.getDocument(_stallPath(eventId, zoneId, trackId, stallId));
 

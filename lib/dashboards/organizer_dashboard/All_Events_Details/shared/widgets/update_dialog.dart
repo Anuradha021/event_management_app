@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// A reusable update dialog widget
-/// Follows Single Responsibility Principle - only handles dialog UI
+
 class UpdateDialog extends StatefulWidget {
   final String title;
   final List<UpdateDialogField> fields;
@@ -41,7 +40,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
   }
 
   Future<void> _handleUpdate() async {
-    // Validate required fields
+   
     for (final field in widget.fields) {
       if (field.isRequired && _controllers[field.key]!.text.trim().isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -119,7 +118,7 @@ class _UpdateDialogState extends State<UpdateDialog> {
   }
 }
 
-/// Configuration class for dialog fields
+
 class UpdateDialogField {
   final String key;
   final String label;
