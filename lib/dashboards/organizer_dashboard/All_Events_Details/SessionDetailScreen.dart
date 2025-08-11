@@ -54,7 +54,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
         });
       }
     } catch (e) {
-      // Handle error silently or show a message if needed
+     
     }
   }
 
@@ -157,7 +157,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             ),
             const SizedBox(height: 24),
             
-            // Update Button
+           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -249,7 +249,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                   'updatedAt': FieldValue.serverTimestamp(),
                 });
 
-                // Refresh the session data to show updated information
+               
                 await _refreshSessionData();
 
                 if (context.mounted) {

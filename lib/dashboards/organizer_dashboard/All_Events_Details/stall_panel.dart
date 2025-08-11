@@ -6,7 +6,7 @@ import 'components/widgets/zone_track_filter.dart';
 import 'components/widgets/stall_list_view.dart';
 import 'components/widgets/delete_confirmation_dialog.dart';
 
-/// Refactored Stall Panel - Single Responsibility: Coordinate stall management components
+
 class StallPanel extends StatefulWidget {
   final String eventId;
   
@@ -37,7 +37,7 @@ class _StallPanelState extends State<StallPanel> {
       if (mounted) {
         setState(() {
           _zones = zones;
-          // Set default zone (first zone)
+        
           if (_zones.isNotEmpty) {
             _selectedZoneId = _zones.first['id'];
             _loadTracks(_selectedZoneId!);
@@ -59,7 +59,7 @@ class _StallPanelState extends State<StallPanel> {
       if (mounted) {
         setState(() {
           _tracks = tracks;
-          // Set default track (first track)
+        
           if (_tracks.isNotEmpty) {
             _selectedTrackId = _tracks.first['id'];
           } else {
@@ -179,7 +179,7 @@ class _StallPanelState extends State<StallPanel> {
   }
 }
 
-/// Single Responsibility: Handle stall creation dialog
+
 class _CreateStallDialog extends StatefulWidget {
   final String eventId;
   final String zoneId;

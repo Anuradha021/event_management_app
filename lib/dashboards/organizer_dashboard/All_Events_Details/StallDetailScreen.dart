@@ -49,7 +49,7 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
         });
       }
     } catch (e) {
-      // Handle error silently or show a message if needed
+      
     }
   }
 
@@ -126,7 +126,7 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
             ),
             const SizedBox(height: 24),
             
-            // Update Button
+           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
@@ -208,7 +208,6 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
                   'updatedAt': FieldValue.serverTimestamp(),
                 });
 
-                // Refresh the stall data to show updated information
                 await _refreshStallData();
 
                 if (context.mounted) {

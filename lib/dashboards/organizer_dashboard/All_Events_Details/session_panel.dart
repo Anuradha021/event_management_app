@@ -9,7 +9,7 @@ import 'components/widgets/delete_confirmation_dialog.dart';
 import 'components/widgets/create_session_dialog.dart';
 import 'components/state/session_filter_state.dart';
 
-/// Refactored Session Panel - Single Responsibility: Coordinate session management components
+
 class SessionPanel extends StatefulWidget {
   final String eventId;
   
@@ -69,7 +69,7 @@ class _SessionPanelState extends State<SessionPanel> {
       builder: (context, child) {
         return Column(
           children: [
-            // Ultra-compact header section
+           
             Container(
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
               child: Column(
