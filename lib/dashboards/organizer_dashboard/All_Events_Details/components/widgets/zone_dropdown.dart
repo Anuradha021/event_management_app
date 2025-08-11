@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Handle zone selection dropdown
+
 class ZoneDropdown extends StatelessWidget {
   final String? selectedZoneId;
   final List<Map<String, dynamic>> zones;

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../core/widgets/empty_state.dart';
 import 'zone_list_item.dart';
 
-/// Single Responsibility: Handle zone list display with loading and error states
+
 class ZoneListView extends StatelessWidget {
   final Stream<QuerySnapshot> zonesStream;
   final Function(String zoneId, Map<String, dynamic> zoneData) onZoneTap;

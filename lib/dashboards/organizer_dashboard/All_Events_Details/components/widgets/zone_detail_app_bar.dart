@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Handle zone detail screen app bar
+
 class ZoneDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String zoneName;
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/widgets/modern_card.dart';
 import '../../../../../core/theme/app_theme.dart';
 
-/// Enhanced zone list item with modern styling
+
 class ZoneListItem extends StatelessWidget {
   final Map<String, dynamic> zoneData;
   final VoidCallback? onTap;

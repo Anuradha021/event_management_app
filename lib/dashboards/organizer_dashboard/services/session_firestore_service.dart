@@ -49,10 +49,10 @@ Future<List<Map<String, dynamic>>> fetchTracksForZone(String eventId, String zon
   return fetchedTracks;
 }
 
-// Function to get or create default zone
+
 Future<String> getOrCreateDefaultZone(String eventId) async {
   try {
-    // First, try to find an existing zone
+ 
     final zonesQuery = await FirebaseFirestore.instance
         .collection('events')
         .doc(eventId)
@@ -64,7 +64,7 @@ Future<String> getOrCreateDefaultZone(String eventId) async {
       return zonesQuery.docs.first.id;
     }
 
-    // If no zones exist, create a default zone
+    
     final defaultZoneRef = await FirebaseFirestore.instance
         .collection('events')
         .doc(eventId)
@@ -81,7 +81,7 @@ Future<String> getOrCreateDefaultZone(String eventId) async {
   }
 }
 
-// Function to get or create default track
+
 Future<String> getOrCreateDefaultTrack(String eventId, String zoneId) async {
   try {
     // First, try to find an existing track in the zone
@@ -129,13 +129,12 @@ Future<void> saveSession({
   required BuildContext context,
 }) async {
   try {
-    // If zoneId is not provided, get or create default zone
+
     String finalZoneId = zoneId ?? await getOrCreateDefaultZone(eventId);
     
-    // If trackId is not provided, get or create default track
+   
     String finalTrackId = trackId ?? await getOrCreateDefaultTrack(eventId, finalZoneId);
 
-    // Convert TimeOfDay to DateTime (using today's date as default)
     final now = DateTime.now();
     final startDateTime = DateTime(
       now.year,
@@ -153,7 +152,7 @@ Future<void> saveSession({
       endTime.minute,
     );
 
-    // Validate that end time is after start time
+    
     if (endDateTime.isBefore(startDateTime) || endDateTime.isAtSameMomentAs(startDateTime)) {
       throw Exception('End time must be after start time');
     }

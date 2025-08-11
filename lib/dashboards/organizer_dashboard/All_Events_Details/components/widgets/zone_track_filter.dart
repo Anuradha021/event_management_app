@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_theme.dart';
 
-/// Compact zone and track dropdown filtering with modern styling
+
 class ZoneTrackFilter extends StatelessWidget {
   final String? selectedZoneId;
   final String? selectedTrackId;

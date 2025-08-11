@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Display and handle update button interactions
+
 class ZoneUpdateButton extends StatelessWidget {
   final VoidCallback onPressed;
 

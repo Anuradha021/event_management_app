@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Handle zone update dialog UI and form validation
 class ZoneUpdateDialog extends StatefulWidget {
   final String currentName;
   final String currentDescription;

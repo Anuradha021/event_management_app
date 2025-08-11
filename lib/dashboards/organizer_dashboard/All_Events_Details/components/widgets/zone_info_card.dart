@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Display zone information in a card format
+
 class ZoneInfoCard extends StatelessWidget {
   final String zoneName;
   final String description;
