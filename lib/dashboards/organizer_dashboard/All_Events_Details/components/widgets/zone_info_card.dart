@@ -1,3 +1,4 @@
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 
@@ -29,7 +30,7 @@ class ZoneInfoCard extends StatelessWidget {
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: Colors.deepPurple.withValues(alpha: 0.1),
+                    color: AppTheme.primaryColor,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Icon(Icons.map, color: Colors.deepPurple),

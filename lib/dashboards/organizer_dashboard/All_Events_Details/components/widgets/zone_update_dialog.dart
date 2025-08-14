@@ -88,7 +88,7 @@ class _ZoneUpdateDialogState extends State<ZoneUpdateDialog> {
           TextField(
             controller: _descController,
             decoration: const InputDecoration(
-              labelText: 'Description (Optional)',
+              labelText: 'Description ',
               border: OutlineInputBorder(),
             ),
             maxLines: 3,

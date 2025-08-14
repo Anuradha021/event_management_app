@@ -75,7 +75,7 @@ class _CreateZoneDialogState extends State<CreateZoneDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Header
+            
             Container(
               padding: const EdgeInsets.all(AppTheme.spacingL),
               decoration: BoxDecoration(
@@ -115,10 +115,7 @@ class _CreateZoneDialogState extends State<CreateZoneDialog> {
                           'Create New Zone',
                           style: AppTheme.headingSmall,
                         ),
-                        Text(
-                          'Add a new zone to organize your event',
-                          style: AppTheme.bodyMedium,
-                        ),
+                        
                       ],
                     ),
                   ),
@@ -126,18 +123,18 @@ class _CreateZoneDialogState extends State<CreateZoneDialog> {
               ),
             ),
 
-            // Content
+            
             Padding(
               padding: const EdgeInsets.all(AppTheme.spacingL),
               child: Column(
                 children: [
-                  // Zone Name Field
+                  
                   TextField(
                     controller: _nameController,
                     decoration: InputDecoration(
                       labelText: 'Zone Name',
                       hintText: 'Enter zone name',
-                      prefixIcon: const Icon(Icons.label_outline),
+                     
                       suffixText: '*',
                       suffixStyle: const TextStyle(color: AppTheme.errorColor),
                     ),
@@ -146,13 +143,13 @@ class _CreateZoneDialogState extends State<CreateZoneDialog> {
 
                   const SizedBox(height: AppTheme.spacingL),
 
-                  // Description Field
+                  
                   TextField(
                     controller: _descController,
                     decoration: const InputDecoration(
                       labelText: 'Description',
-                      hintText: 'Enter zone description (optional)',
-                      prefixIcon: Icon(Icons.description_outlined),
+                      hintText: 'Enter zone description',
+                      
                       alignLabelWithHint: true,
                     ),
                     maxLines: 3,
@@ -162,7 +159,7 @@ class _CreateZoneDialogState extends State<CreateZoneDialog> {
               ),
             ),
 
-            // Actions
+           
             Container(
               padding: const EdgeInsets.all(AppTheme.spacingL),
               decoration: BoxDecoration(
@@ -184,7 +181,7 @@ class _CreateZoneDialogState extends State<CreateZoneDialog> {
                   const SizedBox(width: AppTheme.spacingM),
                   Expanded(
                     child: ModernButton.primary(
-                      text: 'Create Zone',
+                      text: 'Create ',
                       icon: Icons.add,
                       onPressed: _isLoading ? null : _handleCreate,
                       isLoading: _isLoading,

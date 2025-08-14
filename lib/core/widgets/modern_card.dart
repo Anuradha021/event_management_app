@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Modern card component with enhanced styling
 class ModernCard extends StatelessWidget {
   final Widget child;
   final EdgeInsets? padding;
@@ -127,7 +126,7 @@ class ModernListCard extends StatelessWidget {
           
           const SizedBox(width: AppTheme.spacingM),
           
-          // Content
+          
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

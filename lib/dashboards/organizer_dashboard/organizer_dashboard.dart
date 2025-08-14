@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/assigned_event_list_screen.dart';
-import 'package:event_management_app1/features/screens/contact_form.dart';
+import 'package:event_management_app1/EntryPointFilesScreens/contact_form.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
-import 'package:event_management_app1/core/widgets/modern_button.dart';
 import 'package:event_management_app1/core/widgets/modern_card.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -78,7 +77,7 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Header
+          
             _buildWelcomeHeader(),
 
             const SizedBox(height: AppTheme.spacingXL),
@@ -88,8 +87,8 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
 
             const SizedBox(height: AppTheme.spacingXL),
 
-            // Stats Cards
-            _buildStatsSection(),
+           
+           
           ],
         ),
       ),
@@ -125,7 +124,7 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  "Manage your events and create amazing experiences",
+                  "Manage your events",
                   style: AppTheme.bodyMedium,
                 ),
               ],
@@ -199,7 +198,7 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
 
         const SizedBox(height: AppTheme.spacingM),
 
-        // View Events Card
+       
         ModernCard(
           onTap: () {
             Navigator.push(
@@ -253,39 +252,7 @@ class _OrganizerDashboardScreenState extends State<OrganizerDashboardScreen> {
     );
   }
 
-  Widget _buildStatsSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Overview",
-          style: AppTheme.headingSmall,
-        ),
-        const SizedBox(height: AppTheme.spacingM),
-        Row(
-          children: [
-            Expanded(
-              child: _buildStatCard(
-                "Active Events",
-                "0",
-                Icons.event,
-                AppTheme.primaryColor,
-              ),
-            ),
-            const SizedBox(width: AppTheme.spacingM),
-            Expanded(
-              child: _buildStatCard(
-                "Total Zones",
-                "0",
-                Icons.map_outlined,
-                AppTheme.secondaryColor,
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+  
 
   Widget _buildStatCard(String title, String value, IconData icon, Color color) {
     return ModernCard(

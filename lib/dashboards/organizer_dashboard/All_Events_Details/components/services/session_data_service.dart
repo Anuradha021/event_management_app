@@ -1,10 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
 class SessionPanelService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
- 
   static Future<List<Map<String, dynamic>>> loadZones(String eventId) async {
     try {
       final snapshot = await _firestore
@@ -100,8 +96,6 @@ class SessionPanelService {
       throw Exception('Failed to delete session: $e');
     }
   }
-
- 
   static Future<void> createDefaultSession(
     String eventId,
     String title,

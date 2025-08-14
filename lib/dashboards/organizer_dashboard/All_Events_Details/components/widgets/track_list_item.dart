@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Display a single track item in the list
+
 class TrackListItem extends StatelessWidget {
   final Map<String, dynamic> trackData;
   final VoidCallback? onTap;
@@ -30,7 +30,7 @@ class TrackListItem extends StatelessWidget {
           child: const Icon(Icons.timeline, color: Colors.deepPurple),
         ),
         title: Text(
-          trackData['title']?.toString() ?? 'Unnamed Track',
+          trackData['name']?.toString() ?? 'Unnamed Track',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(

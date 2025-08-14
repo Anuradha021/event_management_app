@@ -93,7 +93,7 @@ class _CreateSessionDialogState extends State<CreateSessionDialog> {
   }
 
   Future<void> _handleCreate() async {
-    // Validation
+   
     if (_titleController.text.trim().isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Session title is required')),
@@ -184,7 +184,7 @@ class _CreateSessionDialogState extends State<CreateSessionDialog> {
             ),
             const SizedBox(height: 16),
             
-            // Start Time Selection
+            
             InkWell(
               onTap: _selectStartTime,
               child: Container(
@@ -212,7 +212,7 @@ class _CreateSessionDialogState extends State<CreateSessionDialog> {
             ),
             const SizedBox(height: 16),
             
-            // End Time Selection
+           
             InkWell(
               onTap: _selectEndTime,
               child: Container(

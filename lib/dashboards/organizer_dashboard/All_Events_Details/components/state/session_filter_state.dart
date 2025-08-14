@@ -27,14 +27,14 @@ class SessionFilterState extends ChangeNotifier {
       _tracks = [];
       notifyListeners();
     } catch (e) {
-    
+      
       rethrow;
     } finally {
       _setLoading(false);
     }
   }
 
- 
+
   Future<void> onZoneChanged(String eventId, String? zoneId) async {
     _selectedZoneId = zoneId;
     _selectedTrackId = null;
@@ -48,7 +48,7 @@ class SessionFilterState extends ChangeNotifier {
           _selectedTrackId = _tracks.first['id'];
         }
       } catch (e) {
-        
+       
       }
     } else if (zoneId == 'default') {
       _selectedTrackId = 'default';

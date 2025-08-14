@@ -9,12 +9,11 @@ import { validateZoneData, ZoneData } from "../utils/validators";
 
 const db = admin.firestore();
 
-// Interface for zone creation data
 interface CreateZoneData extends ZoneData {
   eventId: string;
 }
 
-// Interface for zone update data
+
 interface UpdateZoneData {
   eventId: string;
   zoneId: string;
@@ -27,10 +26,7 @@ interface DeleteZoneData {
   zoneId: string;
 }
 
-/**
- * Create a new zone within an event
- * Requires authentication and event ownership
- */
+
 export const createZone = onCall(
   async (
     request: CallableRequest<CreateZoneData>
@@ -54,9 +50,7 @@ export const createZone = onCall(
     }
 
     try {
-      // Temporarily skip ownership check for testing
-      // TODO: Re-enable after fixing user permissions
-      // await checkEventOwnership(context!.uid, eventId);
+      
 
       // Create zone document
       const zoneRef = await db
@@ -87,10 +81,7 @@ export const createZone = onCall(
   }
 );
 
-/**
- * Update an existing zone
- * Requires authentication and event ownership
- */
+
 export const updateZone = onCall(
   async (
     request: CallableRequest<UpdateZoneData>
@@ -106,7 +97,7 @@ export const updateZone = onCall(
     }
 
     try {
-      // Check event ownership
+    
       await checkEventOwnership(context!.uid, eventId);
 
       // Check if zone exists
@@ -148,10 +139,7 @@ export const updateZone = onCall(
   }
 );
 
-/**
- * Delete a zone
- * Requires authentication and event ownership
- */
+
 export const deleteZone = onCall(
   async (
     request: CallableRequest<DeleteZoneData>
@@ -223,10 +211,7 @@ export const deleteZone = onCall(
   }
 );
 
-/**
- * Get all zones for an event
- * Requires authentication and event access
- */
+
 export const getEventZones = onCall(
   async (
     request: CallableRequest<{ eventId: string }>
@@ -284,10 +269,7 @@ export const getEventZones = onCall(
   }
 );
 
-/**
- * Duplicate a zone within the same event
- * Requires authentication and event ownership
- */
+
 export const duplicateZone = onCall(
   async (
     request: CallableRequest<{ eventId: string; zoneId: string; newName?: string }>
@@ -303,7 +285,7 @@ export const duplicateZone = onCall(
     }
 
     try {
-      // Check event ownership
+  
       await checkEventOwnership(context!.uid, eventId);
 
       // Get original zone data

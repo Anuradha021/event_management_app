@@ -1,3 +1,4 @@
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 
@@ -18,7 +19,7 @@ class ZoneUpdateButton extends StatelessWidget {
         icon: const Icon(Icons.edit),
         label: const Text('Update Zone'),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.deepPurple,
+          backgroundColor: AppTheme.primaryColor,
           foregroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Handle delete confirmation dialog
+
 class DeleteConfirmationDialog extends StatelessWidget {
   final String itemType;
   final String itemName;
@@ -51,7 +51,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
     );
   }
 
-  /// Static method to show the dialog
+
   static Future<bool?> show(
     BuildContext context, {
     required String itemType,

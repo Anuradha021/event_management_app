@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Flexible empty state component that prevents overflow
+
 class EmptyState extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -87,7 +87,6 @@ class EmptyState extends StatelessWidget {
   }
 }
 
-/// Compact empty state for smaller spaces
 class CompactEmptyState extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -156,7 +155,7 @@ class CompactEmptyState extends StatelessWidget {
   }
 }
 
-/// Minimal empty state for very constrained spaces
+
 class MinimalEmptyState extends StatelessWidget {
   final IconData icon;
   final String title;

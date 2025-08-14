@@ -1,7 +1,9 @@
+import 'package:event_management_app1/dashboards/User_dashboard/user_screens/book_tickit_screen.dart';
+import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_home_screen.dart';
+import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'user_home_screen.dart';
-import 'user_book_ticket_screen.dart';
-import 'user_profile_screen.dart';
+
 
 class UserBottomNav extends StatefulWidget {
   const UserBottomNav({super.key});
@@ -12,12 +14,18 @@ class UserBottomNav extends StatefulWidget {
 
 class _UserBottomNavState extends State<UserBottomNav> {
   int _currentIndex = 0;
+  late final List<Widget> _pages;
+  final User? user = FirebaseAuth.instance.currentUser;
 
-  final List<Widget> _pages = [
-    UserHomeScreen(),        
-    UserBookTicketScreen(),  
-    UserProfileScreen(),     
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pages = [
+      UserHomeScreen(),
+      BookTickitScreen(),
+      UserProfileScreen(userId: user?.uid ?? 'default_id'), 
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +33,7 @@ class _UserBottomNavState extends State<UserBottomNav> {
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        selectedItemColor: Color(0xFF5E35B1),
+        selectedItemColor: const Color(0xFF5E35B1),
         onTap: (index) {
           setState(() {
             _currentIndex = index;

@@ -75,7 +75,7 @@ abstract class BaseDetailScreenState<T extends BaseDetailScreen> extends State<T
       context: context,
       builder: (context) => AlertDialog(
         title: Text('Delete $screenTitle'),
-        content: Text('Are you sure you want to delete this $screenTitle? This action cannot be undone.'),
+        content: Text('Are you sure you want to delete this .'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),

@@ -1,3 +1,4 @@
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -67,7 +68,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: AppTheme.primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         centerTitle: true,
@@ -165,7 +166,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
                 icon: const Icon(Icons.edit),
                 label: const Text('Update Session'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor: AppTheme.primaryColor,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -211,7 +212,7 @@ class _SessionDetailScreenState extends State<SessionDetailScreen> {
             TextField(
               controller: descController,
               decoration: const InputDecoration(
-                labelText: 'Description (Optional)',
+                labelText: 'Description ',
                 border: OutlineInputBorder(),
               ),
               maxLines: 3,

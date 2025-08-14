@@ -1,36 +1,35 @@
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class StallDetailScreen extends StatefulWidget {
+class TrackDetailScreen extends StatefulWidget {
   final String eventId;
   final String zoneId;
   final String trackId;
-  final String stallId;
-  final Map<String, dynamic> stallData;
+  final Map<String, dynamic> trackData;
 
-  const StallDetailScreen({
+  const TrackDetailScreen({
     super.key,
     required this.eventId,
     required this.zoneId,
     required this.trackId,
-    required this.stallId,
-    required this.stallData,
+    required this.trackData,
   });
 
   @override
-  State<StallDetailScreen> createState() => _StallDetailScreenState();
+  State<TrackDetailScreen> createState() => _TrackDetailScreenState();
 }
 
-class _StallDetailScreenState extends State<StallDetailScreen> {
-  Map<String, dynamic> _currentStallData = {};
+class _TrackDetailScreenState extends State<TrackDetailScreen> {
+  Map<String, dynamic> _currentTrackData = {};
 
   @override
   void initState() {
     super.initState();
-    _currentStallData = Map<String, dynamic>.from(widget.stallData);
+    _currentTrackData = Map<String, dynamic>.from(widget.trackData);
   }
 
-  Future<void> _refreshStallData() async {
+  Future<void> _refreshTrackData() async {
     try {
       final doc = await FirebaseFirestore.instance
           .collection('events')
@@ -39,51 +38,41 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
           .doc(widget.zoneId)
           .collection('tracks')
           .doc(widget.trackId)
-          .collection('stalls')
-          .doc(widget.stallId)
           .get();
 
       if (doc.exists && mounted) {
         setState(() {
-          _currentStallData = doc.data() ?? {};
+          _currentTrackData = doc.data() ?? {};
         });
       }
     } catch (e) {
-      
+
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final name = _currentStallData['name'] ?? 'No Name';
-    final description = _currentStallData['description'] ?? 'No Description';
+    final title = _currentTrackData['title'] ?? 'No Title';
+    final description = _currentTrackData['description'] ?? 'No Description';
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0,
-        centerTitle: true,
         title: const Text(
-          'Stall Details',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-          ),
+          'Track Details',
+          style: TextStyle(color: Colors.white),
         ),
+        backgroundColor: AppTheme.primaryColor,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
-              elevation: 3,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              elevation: 2,
               child: Padding(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -96,7 +85,7 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
                             color: Colors.deepPurple.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Icon(Icons.storefront, color: Colors.deepPurple),
+                          child: const Icon(Icons.timeline, color: Colors.deepPurple),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -104,9 +93,9 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                name,
+                                title,
                                 style: const TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -124,17 +113,17 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             
            
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
-                onPressed: () => _showUpdateDialog(context, name, description),
+                onPressed: () => _showUpdateDialog(context, title, description),
                 icon: const Icon(Icons.edit),
-                label: const Text('Update Stall'),
+                label: const Text('Update Track'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.deepPurple,
+                  backgroundColor:AppTheme.primaryColor,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -149,21 +138,21 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
     );
   }
 
-  void _showUpdateDialog(BuildContext context, String currentName, String currentDescription) {
-    final nameController = TextEditingController(text: currentName);
+  void _showUpdateDialog(BuildContext context, String currentTitle, String currentDescription) {
+    final titleController = TextEditingController(text: currentTitle);
     final descController = TextEditingController(text: currentDescription);
 
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Update Stall'),
+        title: const Text('Update Track'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              controller: nameController,
+              controller: titleController,
               decoration: const InputDecoration(
-                labelText: 'Stall Name',
+                labelText: 'Track Name',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -171,7 +160,7 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
             TextField(
               controller: descController,
               decoration: const InputDecoration(
-                labelText: 'Description (Optional)',
+                labelText: 'Description ',
                 border: OutlineInputBorder(),
               ),
               maxLines: 3,
@@ -185,9 +174,9 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
           ),
           ElevatedButton(
             onPressed: () async {
-              if (nameController.text.trim().isEmpty) {
+              if (titleController.text.trim().isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Stall name cannot be empty')),
+                  const SnackBar(content: Text('Track title cannot be empty')),
                 );
                 return;
               }
@@ -200,26 +189,24 @@ class _StallDetailScreenState extends State<StallDetailScreen> {
                     .doc(widget.zoneId)
                     .collection('tracks')
                     .doc(widget.trackId)
-                    .collection('stalls')
-                    .doc(widget.stallId)
                     .update({
-                  'name': nameController.text.trim(),
+                  'title': titleController.text.trim(),
                   'description': descController.text.trim(),
                   'updatedAt': FieldValue.serverTimestamp(),
                 });
 
-                await _refreshStallData();
+                await _refreshTrackData();
 
                 if (context.mounted) {
                   Navigator.pop(context);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Stall updated successfully')),
+                    const SnackBar(content: Text('Track updated successfully')),
                   );
                 }
               } catch (e) {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Error updating stall: ${e.toString()}')),
+                    SnackBar(content: Text('Error updating track: ${e.toString()}')),
                   );
                 }
               }

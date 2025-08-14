@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
-/// Modern design system for the organizer dashboard
 class AppTheme {
   // Color Palette
-  static const Color primaryColor = Color(0xFF6366F1); // Modern indigo
+  static const Color primaryColor = Color(0xFF6366F1); 
   static const Color primaryLight = Color(0xFF818CF8);
   static const Color primaryDark = Color(0xFF4F46E5);
   
-  static const Color secondaryColor = Color(0xFF10B981); // Emerald green
+  static const Color secondaryColor = Color(0xFF10B981); 
   static const Color secondaryLight = Color(0xFF34D399);
   static const Color secondaryDark = Color(0xFF059669);
   
-  static const Color accentColor = Color(0xFFF59E0B); // Amber
+  static const Color accentColor = Color(0xFFF59E0B); 
   static const Color errorColor = Color(0xFFEF4444);
   static const Color warningColor = Color(0xFFF97316);
   static const Color successColor = Color(0xFF10B981);
@@ -26,7 +25,7 @@ class AppTheme {
   static const Color textSecondary = Color(0xFF6B7280);
   static const Color textTertiary = Color(0xFF9CA3AF);
   
-  // Gradients
+
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [primaryColor, primaryLight],
     begin: Alignment.topLeft,
@@ -39,7 +38,7 @@ class AppTheme {
     end: Alignment.bottomCenter,
   );
 
-  // Spacing
+
   static const double spacingXS = 4.0;
   static const double spacingS = 8.0;
   static const double spacingM = 16.0;
@@ -47,13 +46,12 @@ class AppTheme {
   static const double spacingXL = 32.0;
   static const double spacingXXL = 48.0;
 
-  // Border Radius
+
   static const double radiusS = 8.0;
   static const double radiusM = 12.0;
   static const double radiusL = 16.0;
   static const double radiusXL = 24.0;
 
-  // Shadows
   static List<BoxShadow> get cardShadow => [
     BoxShadow(
       color: Colors.black.withOpacity(0.04),
@@ -80,7 +78,7 @@ class AppTheme {
     ),
   ];
 
-  // Text Styles
+
   static const TextStyle headingLarge = TextStyle(
     fontSize: 28,
     fontWeight: FontWeight.bold,
@@ -137,7 +135,7 @@ class AppTheme {
     height: 1.4,
   );
 
-  // Theme Data
+
   static ThemeData get lightTheme => ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(

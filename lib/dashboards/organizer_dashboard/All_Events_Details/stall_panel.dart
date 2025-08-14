@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'StallDetailScreen.dart';
+import 'stall_detail_screen.dart';
 import 'components/services/stall_panel_service.dart';
 import 'components/widgets/panel_header.dart';
 import 'components/widgets/zone_track_filter.dart';
@@ -263,7 +263,7 @@ class _CreateStallDialogState extends State<_CreateStallDialog> {
           TextField(
             controller: _descController,
             decoration: const InputDecoration(
-              labelText: 'Description (Optional)',
+              labelText: 'Description ',
               border: OutlineInputBorder(),
             ),
             maxLines: 3,

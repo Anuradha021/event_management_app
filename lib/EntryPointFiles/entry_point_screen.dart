@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/User_dashboard/user_screens/UserBottomNav.dart';
 import 'package:event_management_app1/dashboards/admin_dashbaord/admin_dashboard.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/organizer_dashboard.dart';
-import 'package:event_management_app1/features/screens/contact_form.dart';
+import 'package:event_management_app1/EntryPointFilesScreens/contact_form.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

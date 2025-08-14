@@ -1,4 +1,5 @@
 import 'package:event_management_app1/dashboards/admin_dashbaord/event_deatils_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
@@ -131,7 +132,17 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
         borderRadius: BorderRadius.circular(12),
       ),
       child: InkWell(
-        onTap: () => _navigateToEventDetails(eventId, event),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => EventDetailsScreen(
+                 docId: eventId,  
+                eventData: event,
+              ),
+            ),
+          );
+        },
         borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -277,15 +288,5 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
     }
   }
 
-  void _navigateToEventDetails(String eventId, Map<String, dynamic> event) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => EventDetailsScreen(
-          eventId: eventId,
-          eventData: event,
-        ),
-      ),
-    );
-  }
+  
 }

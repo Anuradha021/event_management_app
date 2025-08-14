@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/event_management_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class AssignedEventListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-  backgroundColor: Colors.deepPurple,
+   backgroundColor: AppTheme.primaryColor,
   iconTheme: const IconThemeData(color: Colors.white),
   elevation: 0,
   centerTitle: true,

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../core/widgets/empty_state.dart';
 import 'stall_list_item.dart';
 
-/// Single Responsibility: Handle stall list display with loading and error states
+
 class StallListView extends StatelessWidget {
   final Stream<QuerySnapshot> stallsStream;
   final Function(String stallId, Map<String, dynamic> stallData) onStallTap;

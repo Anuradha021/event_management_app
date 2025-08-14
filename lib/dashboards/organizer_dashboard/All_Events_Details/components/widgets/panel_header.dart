@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/widgets/modern_button.dart';
 
-/// Enhanced panel header with modern styling and better UX
+
 class PanelHeader extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -47,7 +47,7 @@ class PanelHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Title section with optional icon
+        
           Expanded(
             child: Row(
               children: [

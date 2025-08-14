@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class ZoneDropdown extends StatelessWidget {
   final String? selectedZoneId;
   final List<Map<String, dynamic>> zones;
@@ -18,15 +17,24 @@ class ZoneDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: selectedZoneId,
+      value: selectedZoneId?.isEmpty == true ? null : selectedZoneId,
       hint: Text(hintText),
       isExpanded: true,
-      items: zones.map((zone) {
-        return DropdownMenuItem<String>(
-          value: zone['id'],
-          child: Text(zone['title']),
-        );
-      }).toList(),
+      items: [
+        const DropdownMenuItem<String>(
+          value: 'default',
+          child: Text('Select Zone'),
+        ),
+        ...zones.map((zone) {
+          final id = zone['id']?.toString() ?? '';
+          final name = zone['title']?.toString() ?? zone['name']?.toString() ?? 'Unnamed Zone';
+
+          return DropdownMenuItem<String>(
+            value: id.isEmpty ? null : id,
+            child: Text(name),
+          );
+        }).toList(),
+      ],
       onChanged: onChanged,
     );
   }

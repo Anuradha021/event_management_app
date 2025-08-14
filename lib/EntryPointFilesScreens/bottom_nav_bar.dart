@@ -1,6 +1,6 @@
 import 'package:event_management_app1/EntryPointFiles/entry_point_screen.dart';
-import 'package:event_management_app1/features/screens/home.dart';
-import 'package:event_management_app1/features/screens/profile_screen.dart';
+import 'package:event_management_app1/EntryPointFilesScreens/home.dart';
+import 'package:event_management_app1/EntryPointFilesScreens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 

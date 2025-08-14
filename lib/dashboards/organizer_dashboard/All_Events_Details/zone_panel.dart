@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ZoneDetailScreen.dart';
+import 'zone_detail_screen.dart';
 import 'components/services/zone_panel_service.dart';
 import 'components/widgets/panel_header.dart';
 import 'components/widgets/zone_list_view.dart';
@@ -14,6 +14,7 @@ class ZonePanel extends StatelessWidget {
     required this.eventId,
   });
 
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -26,6 +27,7 @@ class ZonePanel extends StatelessWidget {
             createTooltip: 'Create Zone',
           ),
         ),
+  
         Expanded(
           child: ZoneListView(
             zonesStream: ZonePanelService.getZonesStream(eventId),

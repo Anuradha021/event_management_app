@@ -9,26 +9,23 @@ import { validateEventData, EventData } from "../utils/validators";
 
 const db = admin.firestore();
 
-// Interface for event creation data
+
 interface CreateEventData extends EventData {
   organizerId: string;
 }
 
-// Interface for event update data
+
 interface UpdateEventData {
   eventId: string;
   data: Partial<EventData>;
 }
 
-// Interface for event deletion data
+
 interface DeleteEventData {
   eventId: string;
 }
 
-/**
- * Create a new event
- * Requires authentication and organizer role
- */
+
 export const createEvent = onCall(
   async (
     request: CallableRequest<CreateEventData>
@@ -46,7 +43,7 @@ export const createEvent = onCall(
     }
 
     try {
-      // Check if user is authorized to create events
+      
       await checkAuthorization(context!.uid, ['organizer', 'admin']);
 
       // Create event document
@@ -72,10 +69,7 @@ export const createEvent = onCall(
   }
 );
 
-/**
- * Update an existing event
- * Requires authentication and ownership or admin role
- */
+
 export const updateEvent = onCall(
   async (
     request: CallableRequest<UpdateEventData>
@@ -91,7 +85,7 @@ export const updateEvent = onCall(
     }
 
     try {
-      // Get event document to check ownership
+  
       const eventDoc = await db.collection("events").doc(eventId).get();
       
       if (!eventDoc.exists) {
@@ -127,10 +121,6 @@ export const updateEvent = onCall(
   }
 );
 
-/**
- * Delete an event
- * Requires authentication and ownership or admin role
- */
 export const deleteEvent = onCall(
   async (
     request: CallableRequest<DeleteEventData>
@@ -146,7 +136,7 @@ export const deleteEvent = onCall(
     }
 
     try {
-      // Get event document to check ownership
+     
       const eventDoc = await db.collection("events").doc(eventId).get();
       
       if (!eventDoc.exists) {
@@ -155,12 +145,12 @@ export const deleteEvent = onCall(
 
       const eventData = eventDoc.data();
       
-      // Check if user owns the event or is admin
+    
       if (eventData?.createdBy !== context!.uid) {
         await checkAuthorization(context!.uid, ['admin']);
       }
 
-      // Soft delete the event
+   
       await db.collection("events").doc(eventId).update({
         isDeleted: true,
         deletedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -183,10 +173,7 @@ export const deleteEvent = onCall(
   }
 );
 
-/**
- * Get events for a specific organizer
- * Requires authentication
- */
+
 export const getOrganizerEvents = onCall(
   async (
     request: CallableRequest<{ organizerId?: string }>
@@ -233,10 +220,7 @@ export const getOrganizerEvents = onCall(
   }
 );
 
-/**
- * Publish an event (change status from draft to published)
- * Requires authentication and ownership or admin role
- */
+
 export const publishEvent = onCall(
   async (
     request: CallableRequest<{ eventId: string }>
@@ -252,7 +236,7 @@ export const publishEvent = onCall(
     }
 
     try {
-      // Get event document to check ownership and status
+
       const eventDoc = await db.collection("events").doc(eventId).get();
       
       if (!eventDoc.exists) {
@@ -261,17 +245,17 @@ export const publishEvent = onCall(
 
       const eventData = eventDoc.data();
       
-      // Check if user owns the event or is admin
+    
       if (eventData?.createdBy !== context!.uid) {
         await checkAuthorization(context!.uid, ['admin']);
       }
 
-      // Check if event is in draft status
+    
       if (eventData?.status !== 'draft') {
         throw new HttpsError("failed-precondition", "Event is not in draft status");
       }
 
-      // Update event status to published
+      
       await db.collection("events").doc(eventId).update({
         status: 'published',
         publishedAt: admin.firestore.FieldValue.serverTimestamp(),

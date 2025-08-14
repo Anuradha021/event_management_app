@@ -1,3 +1,4 @@
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 
@@ -12,7 +13,7 @@ class ZoneDetailAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor:AppTheme.primaryColor,
       iconTheme: const IconThemeData(color: Colors.white),
       elevation: 0,
       centerTitle: true,

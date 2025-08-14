@@ -1,13 +1,12 @@
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_panel.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_panel.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
-import 'package:event_management_app1/screens/ticket_management_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'zone_panel.dart';
 import 'track_panel.dart';
-
 
 class EventManagementScreen extends StatefulWidget {
   final String eventId;
@@ -57,13 +56,8 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
       ),
       body: Column(
         children: [
-          // Event Summary Card
           _buildEventSummaryCard(),
-          
-          // Tab Navigation
           _buildTabNavigation(),
-          
-          // Content Area
           Expanded(
             child: PageView(
               key: _refreshKey,
@@ -74,7 +68,6 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
                 TrackPanel(eventId: widget.eventId),
                 SessionPanel(eventId: widget.eventId),
                 StallPanel(eventId: widget.eventId),
-                _buildTicketsPanel(),
               ],
             ),
           ),
@@ -83,121 +76,114 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
     );
   }
 
- Widget _buildEventSummaryCard() {
-  return FutureBuilder<DocumentSnapshot>(
-    future: FirebaseFirestore.instance
-        .collection('events')
-        .doc(widget.eventId)
-        .get(),
-    builder: (context, snapshot) {
-      // Handle loading state
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Card(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: LinearProgressIndicator(),
-          ),
-        );
-      }
+  Widget _buildEventSummaryCard() {
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('events')
+          .doc(widget.eventId)
+          .get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Card(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: LinearProgressIndicator(),
+            ),
+          );
+        }
 
-      // Handle error state
-      if (snapshot.hasError) {
+        if (snapshot.hasError) {
+          return Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Text('Error: ${snapshot.error}'),
+            ),
+          );
+        }
+
+        if (!snapshot.hasData || !snapshot.data!.exists) {
+          return const Card(
+            child: Padding(
+              padding: EdgeInsets.all(16),
+              child: Text('Event not found'),
+            ),
+          );
+        }
+
+        final event = snapshot.data!.data() as Map<String, dynamic>;
+        
         return Card(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Text('Error: ${snapshot.error}'),
-          ),
-        );
-      }
-
-      // Handle no data state
-      if (!snapshot.hasData || !snapshot.data!.exists) {
-        return const Card(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Text('Event not found'),
-          ),
-        );
-      }
-
-      final event = snapshot.data!.data() as Map<String, dynamic>;
-      
-      return Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Title Row with Status Chip
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      event['eventTitle'] ?? 'Untitled Event',
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                  ),
-                  Chip(
-                    label: Text(
-                      (event['status'] ?? 'draft').toString().toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 12,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        event['eventTitle'] ?? 'Untitled Event',
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
-                    backgroundColor: event['status'] == 'published'
-                        ? Colors.green
-                        : Colors.orange,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              // Description
-              Text(
-                event['eventDescription'] ?? 'No description provided',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-              const SizedBox(height: 8),
-              // Location and Date
-              Wrap(
-                spacing: 16,
-                children: [
-                  if (event['location'] != null)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.location_on, size: 16),
-                        const SizedBox(width: 4),
-                        Text(event['location']!),
-                      ],
-                    ),
-                  if (event['eventDate'] != null)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.calendar_today, size: 16),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatDate(event['eventDate']),
+                    Chip(
+                      label: Text(
+                        (event['status'] ?? 'draft').toString().toUpperCase(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
                         ),
-                      ],
+                      ),
+                      backgroundColor: event['status'] == 'published'
+                          ? Colors.green
+                          : Colors.orange,
                     ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  event['eventDescription'] ?? 'No description provided',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 8),
+                Wrap(
+                  spacing: 16,
+                  children: [
+                    if (event['location'] != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.location_on, size: 16),
+                          const SizedBox(width: 4),
+                          Text(event['location']!),
+                        ],
+                      ),
+                    if (event['eventDate'] != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.calendar_today, size: 16),
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatDate(event['eventDate']),
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
-// Add this helper method to your class
-String _formatDate(dynamic timestamp) {
-  if (timestamp == null) return 'N/A';
-  final date = (timestamp as Timestamp).toDate();
-  return DateFormat('MMM d, yyyy').format(date);
-}
+  String _formatDate(dynamic timestamp) {
+    if (timestamp == null) return 'N/A';
+    final date = (timestamp as Timestamp).toDate();
+    return DateFormat('MMM d, yyyy').format(date);
+  }
 
   Widget _buildTabNavigation() {
     return Container(
@@ -214,7 +200,6 @@ String _formatDate(dynamic timestamp) {
           _buildTabButton(1, Icons.timeline_outlined, 'Tracks'),
           _buildTabButton(2, Icons.schedule_outlined, 'Sessions'),
           _buildTabButton(3, Icons.store_outlined, 'Stalls'),
-          _buildTabButton(4, Icons.confirmation_number, 'Tickets'),
         ],
       ),
     );
@@ -242,13 +227,15 @@ String _formatDate(dynamic timestamp) {
                 : null,
             color: isActive ? null : Colors.transparent,
             borderRadius: BorderRadius.circular(AppTheme.radiusM),
-            boxShadow: isActive ? [
-              BoxShadow(
-                color: AppTheme.primaryColor.withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ] : null,
+            boxShadow: isActive
+                ? [
+                    BoxShadow(
+                      color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ]
+                : null,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -274,28 +261,6 @@ String _formatDate(dynamic timestamp) {
       ),
     );
   }
-
-Widget _buildTicketsPanel() {
-  return FutureBuilder<DocumentSnapshot>(
-    future: FirebaseFirestore.instance
-        .collection('events')
-        .doc(widget.eventId)
-        .get(),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      final eventData = snapshot.data?.data() as Map<String, dynamic>?;
-      final eventTitle = eventData?['eventTitle'] ?? 'Event';
-
-      return TicketManagementScreen(
-        eventId: widget.eventId,
-        eventTitle: eventTitle,
-      );
-    },
-  );
-}
 
   void _refreshAllData() {
     setState(() {

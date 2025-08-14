@@ -1,4 +1,5 @@
 import 'package:event_management_app1/EntryPointFiles/login_screen.dart';
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -43,14 +44,14 @@ class WelcomeScreen extends StatelessWidget {
                 const SizedBox(height: 40),
                 ElevatedButton(
                   onPressed: () {
-                    // Add navigation logic here
+                    
                      Navigator.push(
                     context,
                   MaterialPageRoute(builder: (context) => LoginPage()),
                 );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
+                    backgroundColor: AppTheme.primaryColor,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 40,
                       vertical: 16,

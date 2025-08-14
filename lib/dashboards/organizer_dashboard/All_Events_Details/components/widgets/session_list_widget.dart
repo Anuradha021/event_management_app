@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../core/widgets/empty_state.dart';
 import 'session_list_item.dart';
 
-/// Single Responsibility: Handle session list display with loading and error states
+
 class SessionListWidget extends StatelessWidget {
   final Stream<QuerySnapshot> sessionsStream;
   final Function(String sessionId, Map<String, dynamic> sessionData, DateTime startTime, DateTime endTime) onSessionTap;

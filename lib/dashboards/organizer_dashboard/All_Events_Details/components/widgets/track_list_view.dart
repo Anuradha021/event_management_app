@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../../core/widgets/empty_state.dart';
 import 'track_list_item.dart';
 
-/// Single Responsibility: Handle track list display with loading and error states
+
 class TrackListView extends StatelessWidget {
   final Stream<QuerySnapshot> tracksStream;
   final Function(String trackId, Map<String, dynamic> trackData) onTrackTap;
@@ -44,7 +44,7 @@ class TrackListView extends StatelessWidget {
           return const CompactEmptyState(
             icon: Icons.timeline_outlined,
             title: 'No tracks yet',
-            subtitle: 'Tap + to create your first track',
+            subtitle: 'Tap + to create ',
           );
         }
 

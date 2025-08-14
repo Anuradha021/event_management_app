@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Single Responsibility: Display a single stall item in the list
+
 class StallListItem extends StatelessWidget {
   final Map<String, dynamic> stallData;
   final VoidCallback? onTap;

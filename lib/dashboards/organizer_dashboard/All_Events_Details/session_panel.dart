@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'SessionDetailScreen.dart';
+import 'session_detail_screen.dart';
 import 'components/services/session_data_service.dart';
 import 'components/widgets/panel_header.dart';
 import 'components/widgets/zone_track_filter.dart';

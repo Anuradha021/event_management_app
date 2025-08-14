@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-/// Modern button component with various styles
 class ModernButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
@@ -79,20 +78,36 @@ class ModernButton extends StatelessWidget {
               ),
             ),
           )
-        : Row(
-            mainAxisSize: isFullWidth ? MainAxisSize.max : MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (icon != null) ...[
-                Icon(icon, size: _getIconSize()),
-                const SizedBox(width: 8),
+        : ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: isFullWidth ? double.infinity : 0,
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: _getIconSize()),
+                  const SizedBox(width: 8),
+                ],
+                Flexible(
+                  child: Text(
+                    text,
+                    style: textStyle,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                  ),
+                ),
               ],
-              Text(text, style: textStyle),
-            ],
+            ),
           );
 
-    return SizedBox(
-      width: isFullWidth ? double.infinity : null,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: isFullWidth ? double.infinity : 0,
+        minHeight: _getMinHeight(),
+      ),
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: buttonStyle,
@@ -102,6 +117,17 @@ class ModernButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double _getMinHeight() {
+    switch (size) {
+      case ModernButtonSize.small:
+        return 36;
+      case ModernButtonSize.medium:
+        return 44;
+      case ModernButtonSize.large:
+        return 52;
+    }
   }
 
   ButtonStyle _getButtonStyle() {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-/// Single Responsibility: Display a single session item in the list
 class SessionListItem extends StatelessWidget {
   final Map<String, dynamic> sessionData;
   final DateTime startTime;

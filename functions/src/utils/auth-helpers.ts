@@ -1,35 +1,34 @@
-import { AuthData } from "firebase-functions/v2/https";
-import { HttpsError } from "firebase-functions/v2/https";
+import { CallableRequest } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
+import { HttpsError } from "firebase-functions/v2/https";
 
 const db = admin.firestore();
 
-/**
- * Check if user is authenticated
- * Throws HttpsError if not authenticated
- */
-export function checkAuthentication(context: AuthData | undefined): asserts context is AuthData {
+// Use CallableRequest['auth'] for the context type
+export function checkAuthentication(context: CallableRequest['auth'] | undefined): asserts context is CallableRequest['auth'] {
   if (!context) {
     throw new HttpsError("unauthenticated", "User not authenticated");
   }
 }
 
-/**
- * Check if user has required authorization roles
- * Throws HttpsError if not authorized
- */
+// Alternative version if you need the full context:
+export function checkFullAuthentication(context: { auth?: CallableRequest['auth'] } | undefined): asserts context is { auth: CallableRequest['auth'] } {
+  if (!context?.auth) {
+    throw new HttpsError("unauthenticated", "User not authenticated");
+  }
+}
+
+// The rest of your functions remain exactly the same...
 export async function checkAuthorization(uid: string, requiredRoles: string[]): Promise<void> {
   try {
     const user = await admin.auth().getUser(uid);
     const userRoles = user.customClaims?.roles || [];
     const isAdmin = user.customClaims?.admin === true;
 
-    // Admin has access to everything
     if (isAdmin) {
       return;
     }
 
-    // Check if user has any of the required roles
     const hasRequiredRole = requiredRoles.some(role => 
       userRoles.includes(role) || (role === 'admin' && isAdmin)
     );
@@ -48,10 +47,6 @@ export async function checkAuthorization(uid: string, requiredRoles: string[]): 
   }
 }
 
-/**
- * Check if user is an admin
- * Throws HttpsError if not admin
- */
 export async function checkAdmin(uid: string): Promise<void> {
   try {
     const user = await admin.auth().getUser(uid);
@@ -69,10 +64,8 @@ export async function checkAdmin(uid: string): Promise<void> {
   }
 }
 
-/**
- * Check if user owns the specified event
- * Throws HttpsError if not owner or event doesn't exist
- */
+
+
 export async function checkEventOwnership(uid: string, eventId: string): Promise<void> {
   try {
     const eventDoc = await db.collection("events").doc(eventId).get();
@@ -95,10 +88,7 @@ export async function checkEventOwnership(uid: string, eventId: string): Promise
   }
 }
 
-/**
- * Check if user has access to the specified event (owner or published event)
- * Throws HttpsError if no access
- */
+
 export async function checkEventAccess(uid: string, eventId: string): Promise<void> {
   try {
     const eventDoc = await db.collection("events").doc(eventId).get();
@@ -121,9 +111,7 @@ export async function checkEventAccess(uid: string, eventId: string): Promise<vo
   }
 }
 
-/**
- * Get user roles from custom claims
- */
+
 export async function getUserRoles(uid: string): Promise<string[]> {
   try {
     const user = await admin.auth().getUser(uid);
@@ -140,20 +128,16 @@ export async function getUserRoles(uid: string): Promise<string[]> {
   }
 }
 
-/**
- * Set user roles in custom claims
- * Requires admin privileges
- */
+
 export async function setUserRoles(adminUid: string, targetUid: string, roles: string[]): Promise<void> {
   try {
     // Check if the requesting user is admin
     await checkAdmin(adminUid);
 
-    // Get current custom claims
     const user = await admin.auth().getUser(targetUid);
     const currentClaims = user.customClaims || {};
 
-    // Update roles while preserving other claims
+  
     await admin.auth().setCustomUserClaims(targetUid, {
       ...currentClaims,
       roles: roles,
@@ -166,10 +150,7 @@ export async function setUserRoles(adminUid: string, targetUid: string, roles: s
   }
 }
 
-/**
- * Check if user can perform action on resource
- * Generic permission checker
- */
+
 export async function checkResourcePermission(
   uid: string,
   resourceType: 'event' | 'zone' | 'track' | 'session' | 'stall',
@@ -187,18 +168,17 @@ export async function checkResourcePermission(
 
     // For now, organizers can manage their own events and all sub-resources
     if (roles.includes('organizer')) {
-      // For events, check direct ownership
+   
       if (resourceType === 'event') {
         const eventDoc = await db.collection("events").doc(resourceId).get();
         return eventDoc.exists && eventDoc.data()?.createdBy === uid;
       }
       
-      // For sub-resources, check event ownership
-      // This would need to be implemented based on your data structure
-      return true; // Simplified for now
+     
+      return true;
     }
 
-    // Default deny
+   
     return false;
   } catch (error) {
     console.error("Error checking resource permission:", error);

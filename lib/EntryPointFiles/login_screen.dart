@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:event_management_app1/dashboards/User_dashboard/user_screens/UserBottomNav.dart';
 import 'package:event_management_app1/dashboards/admin_dashbaord/admin_dashboard.dart';
-import 'package:event_management_app1/features/screens/bottom_nav_bar.dart';
+import 'package:event_management_app1/EntryPointFilesScreens/bottom_nav_bar.dart';
 import 'package:event_management_app1/EntryPointFiles/sign_up_screen.dart';
-import 'package:event_management_app1/widgets/form_container_widget.dart';
+import 'package:event_management_app1/core/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart'; 
 
@@ -91,6 +92,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text("Login"),
+         backgroundColor: AppTheme.primaryColor,
       ),
       body: Center(
         child: Padding(
@@ -121,7 +123,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color:  AppTheme.primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(

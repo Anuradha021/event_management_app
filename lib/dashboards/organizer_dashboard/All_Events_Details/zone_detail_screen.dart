@@ -45,7 +45,7 @@ class _ZoneDetailScreenState extends State<ZoneDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final zoneName = _currentZoneData['title'] ?? 'Untitled Zone';
+    final zoneName = _currentZoneData['title'] ??_currentZoneData['name'] ??'Untitled Zone';
     final description = _currentZoneData['description'] ?? 'No description provided';
 
     return Scaffold(
