@@ -1,5 +1,6 @@
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'stall_detail_screen.dart';
+
 import 'components/services/stall_panel_service.dart';
 import 'components/widgets/panel_header.dart';
 import 'components/widgets/zone_track_filter.dart';

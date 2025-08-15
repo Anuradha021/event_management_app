@@ -1,10 +1,10 @@
-
+// Validation result interface
 export interface ValidationResult {
   isValid: boolean;
   errors: string[];
 }
 
-
+// Event data interface
 export interface EventData {
   title: string;
   description?: string;
@@ -16,7 +16,7 @@ export interface EventData {
   tags?: string[];
 }
 
-
+// Zone data interface
 export interface ZoneData {
   title: string;
   description?: string;
@@ -24,7 +24,7 @@ export interface ZoneData {
   location?: string;
 }
 
-
+// Track data interface
 export interface TrackData {
   title: string;
   description?: string;
@@ -32,12 +32,13 @@ export interface TrackData {
   maxSessions?: number;
 }
 
+// Session data interface
 export interface SessionData {
   title: string;
   description?: string;
   speaker?: string;
-  startTime: string; 
-  endTime: string;   
+  startTime: string; // ISO date string
+  endTime: string;   // ISO date string
   maxAttendees?: number;
 }
 
@@ -52,10 +53,13 @@ export interface StallData {
   };
 }
 
+/**
+ * Validate event data
+ */
 export function validateEventData(data: any): ValidationResult {
   const errors: string[] = [];
 
-
+  // Required fields
   if (!data.title || typeof data.title !== 'string' || data.title.trim().length === 0) {
     errors.push("Title is required and must be a non-empty string");
   }
@@ -113,7 +117,9 @@ export function validateEventData(data: any): ValidationResult {
   };
 }
 
-
+/**
+ * Validate zone data
+ */
 export function validateZoneData(data: any): ValidationResult {
   const errors: string[] = [];
 
@@ -122,7 +128,7 @@ export function validateZoneData(data: any): ValidationResult {
     errors.push("Title is required and must be a non-empty string");
   }
 
-
+  // Optional field validations
   if (data.description && typeof data.description !== 'string') {
     errors.push("Description must be a string");
   }
@@ -141,7 +147,9 @@ export function validateZoneData(data: any): ValidationResult {
   };
 }
 
-
+/**
+ * Validate track data
+ */
 export function validateTrackData(data: any): ValidationResult {
   const errors: string[] = [];
 
@@ -150,7 +158,7 @@ export function validateTrackData(data: any): ValidationResult {
     errors.push("Title is required and must be a non-empty string");
   }
 
-
+  // Optional field validations
   if (data.description && typeof data.description !== 'string') {
     errors.push("Description must be a string");
   }
@@ -169,7 +177,9 @@ export function validateTrackData(data: any): ValidationResult {
   };
 }
 
-
+/**
+ * Validate session data
+ */
 export function validateSessionData(data: any): ValidationResult {
   const errors: string[] = [];
 
@@ -204,7 +214,7 @@ export function validateSessionData(data: any): ValidationResult {
     }
   }
 
- 
+  // Optional field validations
   if (data.description && typeof data.description !== 'string') {
     errors.push("Description must be a string");
   }
@@ -232,6 +242,7 @@ export function validateStallData(data: any): ValidationResult {
     errors.push("Name is required and must be a non-empty string");
   }
 
+  // Optional field validations
   if (data.description && typeof data.description !== 'string') {
     errors.push("Description must be a string");
   }
@@ -260,12 +271,17 @@ export function validateStallData(data: any): ValidationResult {
   };
 }
 
-
+/**
+ * Validate email format
+ */
 function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
 
+/**
+ * Sanitize string input
+ */
 export function sanitizeString(input: string): string {
   return input.trim().replace(/[<>]/g, '');
 }

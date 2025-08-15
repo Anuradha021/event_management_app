@@ -9,6 +9,7 @@ import { validateZoneData, ZoneData } from "../utils/validators";
 
 const db = admin.firestore();
 
+// Interface for zone creation data
 interface CreateZoneData extends ZoneData {
   eventId: string;
 }
@@ -97,7 +98,7 @@ export const updateZone = onCall(
     }
 
     try {
-    
+      // Check event ownership
       await checkEventOwnership(context!.uid, eventId);
 
       // Check if zone exists
@@ -211,7 +212,10 @@ export const deleteZone = onCall(
   }
 );
 
-
+/**
+ * Get all zones for an event
+ * Requires authentication and event access
+ */
 export const getEventZones = onCall(
   async (
     request: CallableRequest<{ eventId: string }>
@@ -269,7 +273,10 @@ export const getEventZones = onCall(
   }
 );
 
-
+/**
+ * Duplicate a zone within the same event
+ * Requires authentication and event ownership
+ */
 export const duplicateZone = onCall(
   async (
     request: CallableRequest<{ eventId: string; zoneId: string; newName?: string }>
@@ -285,7 +292,7 @@ export const duplicateZone = onCall(
     }
 
     try {
-  
+      // Check event ownership
       await checkEventOwnership(context!.uid, eventId);
 
       // Get original zone data

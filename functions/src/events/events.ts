@@ -9,18 +9,18 @@ import { validateEventData, EventData } from "../utils/validators";
 
 const db = admin.firestore();
 
-
+// Interface for event creation data
 interface CreateEventData extends EventData {
   organizerId: string;
 }
 
-
+// Interface for event update data
 interface UpdateEventData {
   eventId: string;
   data: Partial<EventData>;
 }
 
-
+// Interface for event deletion data
 interface DeleteEventData {
   eventId: string;
 }

@@ -25,7 +25,7 @@ class AppTheme {
   static const Color textSecondary = Color(0xFF6B7280);
   static const Color textTertiary = Color(0xFF9CA3AF);
   
-
+  // Gradients
   static const LinearGradient primaryGradient = LinearGradient(
     colors: [primaryColor, primaryLight],
     begin: Alignment.topLeft,
@@ -38,7 +38,7 @@ class AppTheme {
     end: Alignment.bottomCenter,
   );
 
-
+  // Spacing
   static const double spacingXS = 4.0;
   static const double spacingS = 8.0;
   static const double spacingM = 16.0;
@@ -46,12 +46,13 @@ class AppTheme {
   static const double spacingXL = 32.0;
   static const double spacingXXL = 48.0;
 
-
+  // Border Radius
   static const double radiusS = 8.0;
   static const double radiusM = 12.0;
   static const double radiusL = 16.0;
   static const double radiusXL = 24.0;
 
+  // Shadows
   static List<BoxShadow> get cardShadow => [
     BoxShadow(
       color: Colors.black.withOpacity(0.04),
@@ -78,7 +79,7 @@ class AppTheme {
     ),
   ];
 
-
+  // Text Styles
   static const TextStyle headingLarge = TextStyle(
     fontSize: 28,
     fontWeight: FontWeight.bold,
@@ -135,7 +136,7 @@ class AppTheme {
     height: 1.4,
   );
 
-
+  // Theme Data
   static ThemeData get lightTheme => ThemeData(
     useMaterial3: true,
     colorScheme: ColorScheme.fromSeed(

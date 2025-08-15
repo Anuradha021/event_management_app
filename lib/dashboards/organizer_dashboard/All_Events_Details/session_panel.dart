@@ -1,6 +1,7 @@
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'session_detail_screen.dart';
+
 import 'components/services/session_data_service.dart';
 import 'components/widgets/panel_header.dart';
 import 'components/widgets/zone_track_filter.dart';

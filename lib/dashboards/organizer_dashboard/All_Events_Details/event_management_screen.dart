@@ -1,6 +1,7 @@
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_panel.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_panel.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
+import 'package:event_management_app1/screens/organizer_tickets_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -68,6 +69,10 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
                 TrackPanel(eventId: widget.eventId),
                 SessionPanel(eventId: widget.eventId),
                 StallPanel(eventId: widget.eventId),
+                OrganizerTicketsScreen(
+                  eventId: widget.eventId,
+                  eventTitle: 'Event Tickets',
+                ),
               ],
             ),
           ),
@@ -200,6 +205,7 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
           _buildTabButton(1, Icons.timeline_outlined, 'Tracks'),
           _buildTabButton(2, Icons.schedule_outlined, 'Sessions'),
           _buildTabButton(3, Icons.store_outlined, 'Stalls'),
+          _buildTabButton(4, Icons.confirmation_number_outlined, 'Tickets'),
         ],
       ),
     );

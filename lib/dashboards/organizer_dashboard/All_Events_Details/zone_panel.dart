@@ -1,5 +1,6 @@
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/zone_detail_screen.dart';
 import 'package:flutter/material.dart';
-import 'zone_detail_screen.dart';
+// import 'ZoneDetailScreen.dart';
 import 'components/services/zone_panel_service.dart';
 import 'components/widgets/panel_header.dart';
 import 'components/widgets/zone_list_view.dart';

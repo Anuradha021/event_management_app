@@ -1,0 +1,80 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             request.auth.token.admin == true;
+    }
+    
+    function isOrganizer() {
+      return isAuthenticated() && 
+             (request.auth.token.organizer == true || isAdmin());
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // TICKET TYPES COLLECTION
+    match /ticketTypes/{ticketTypeId} {
+      // Read: Anyone authenticated can read
+      allow read: if isAuthenticated();
+      
+      // Create: Only organizers can create
+      allow create: if isOrganizer();
+      
+      // Update: Only organizers can update
+      allow update: if isOrganizer();
+      
+      // Delete: Only organizers can delete
+      allow delete: if isOrganizer();
+    }
+    
+    // TICKETS COLLECTION
+    match /tickets/{ticketId} {
+      // Read: Ticket owner or organizer
+      allow read: if isAuthenticated() && 
+                     (resource.data.userId == request.auth.uid || isOrganizer());
+      
+      // Create: Users can purchase tickets
+      allow create: if isAuthenticated() && 
+                       request.resource.data.userId == request.auth.uid;
+      
+      // Update: Only organizers (for validation)
+      allow update: if isOrganizer() &&
+                       // Only allow status updates
+                       request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(['status', 'usedAt']);
+      
+      // Delete: Only admin
+      allow delete: if isAdmin();
+    }
+    
+    // EVENTS COLLECTION
+    match /events/{eventId} {
+      // Read: Anyone can read published events
+      allow read: if resource.data.status == 'published' || isOrganizer();
+      
+      // Create/Update/Delete: Only organizers
+      allow create, update, delete: if isOrganizer();
+    }
+    
+    // USERS COLLECTION
+    match /users/{userId} {
+      // Read: Own profile or admin
+      allow read: if isOwner(userId) || isAdmin();
+      
+      // Update: Own profile only
+      allow update: if isOwner(userId);
+      
+      // Create: Anyone can create their own profile
+      allow create: if isOwner(userId);
+    }
+  }
+}
