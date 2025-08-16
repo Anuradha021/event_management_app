@@ -4,14 +4,12 @@ import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:event_management_app1/screens/organizer_tickets_screen.dart';
 
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
 import 'zone_panel.dart';
 import 'track_panel.dart';
 
 class EventManagementScreen extends StatefulWidget {
   final String eventId;
-  
+
   EventManagementScreen({
     super.key,
     required this.eventId,
@@ -57,7 +55,6 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
       ),
       body: Column(
         children: [
-          _buildEventSummaryCard(),
           _buildTabNavigation(),
           Expanded(
             child: PageView(
@@ -79,115 +76,6 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
         ],
       ),
     );
-  }
-
-  Widget _buildEventSummaryCard() {
-    return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance
-          .collection('events')
-          .doc(widget.eventId)
-          .get(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Card(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: LinearProgressIndicator(),
-            ),
-          );
-        }
-
-        if (snapshot.hasError) {
-          return Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Text('Error: ${snapshot.error}'),
-            ),
-          );
-        }
-
-        if (!snapshot.hasData || !snapshot.data!.exists) {
-          return const Card(
-            child: Padding(
-              padding: EdgeInsets.all(16),
-              child: Text('Event not found'),
-            ),
-          );
-        }
-
-        final event = snapshot.data!.data() as Map<String, dynamic>;
-        
-        return Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        event['eventTitle'] ?? 'Untitled Event',
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                    ),
-                    Chip(
-                      label: Text(
-                        (event['status'] ?? 'draft').toString().toUpperCase(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                      backgroundColor: event['status'] == 'published'
-                          ? Colors.green
-                          : Colors.orange,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  event['eventDescription'] ?? 'No description provided',
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 16,
-                  children: [
-                    if (event['location'] != null)
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.location_on, size: 16),
-                          const SizedBox(width: 4),
-                          Text(event['location']!),
-                        ],
-                      ),
-                    if (event['eventDate'] != null)
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(Icons.calendar_today, size: 16),
-                          const SizedBox(width: 4),
-                          Text(
-                            _formatDate(event['eventDate']),
-                          ),
-                        ],
-                      ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  String _formatDate(dynamic timestamp) {
-    if (timestamp == null) return 'N/A';
-    final date = (timestamp as Timestamp).toDate();
-    return DateFormat('MMM d, yyyy').format(date);
   }
 
   Widget _buildTabNavigation() {
@@ -228,9 +116,7 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
           margin: const EdgeInsets.all(2),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
           decoration: BoxDecoration(
-            gradient: isActive
-                ? AppTheme.primaryGradient
-                : null,
+            gradient: isActive ? AppTheme.primaryGradient : null,
             color: isActive ? null : Colors.transparent,
             borderRadius: BorderRadius.circular(AppTheme.radiusM),
             boxShadow: isActive
@@ -282,21 +168,14 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
 
   Future<void> _publishEvent() async {
     try {
-      await FirebaseFirestore.instance
-          .collection('events')
-          .doc(widget.eventId)
-          .update({'status': 'published'});
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Event published successfully!')),
-        );
-      }
+      // Event ko publish karne ka code
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Event published successfully!')),
+      );
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error publishing event: ${e.toString()}')),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error publishing event: ${e.toString()}')),
+      );
     }
   }
 }

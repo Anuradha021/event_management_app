@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../core/theme/app_theme.dart';
-import '../../../screens/user_tickets_screen.dart';
+import '../../../screens/user_event_details_screen.dart';
 
 class EventListScreen extends StatefulWidget {
   const EventListScreen({super.key});
@@ -98,9 +98,9 @@ class _EventListScreenState extends State<EventListScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => UserTicketsScreen(
+                                builder: (context) => UserEventDetailsScreen(
                                   eventId: event.id,
-                                  eventTitle: eventData['eventTitle'] ?? 'Event',
+                                  eventData: eventData,
                                 ),
                               ),
                             );
@@ -109,7 +109,7 @@ class _EventListScreenState extends State<EventListScreen> {
                             backgroundColor: AppTheme.primaryColor,
                             foregroundColor: Colors.white,
                           ),
-                          child: const Text('View Tickets'),
+                          child: const Text('View Event'),
                         ),
                       ),
                     ],

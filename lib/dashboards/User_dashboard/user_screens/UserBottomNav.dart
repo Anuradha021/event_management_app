@@ -1,6 +1,7 @@
 import 'package:event_management_app1/dashboards/User_dashboard/user_screens/book_tickit_screen.dart';
 import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_home_screen.dart';
 import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_profile_screen.dart';
+import 'package:event_management_app1/screens/user_tickets_overview_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,8 @@ class _UserBottomNavState extends State<UserBottomNav> {
     _pages = [
       UserHomeScreen(),
       BookTickitScreen(),
-      UserProfileScreen(userId: user?.uid ?? 'default_id'), 
+      const UserTicketsOverviewScreen(),
+      UserProfileScreen(userId: user?.uid ?? 'default_id'),
     ];
   }
 
@@ -32,6 +34,7 @@ class _UserBottomNavState extends State<UserBottomNav> {
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         currentIndex: _currentIndex,
         selectedItemColor: const Color(0xFF5E35B1),
         onTap: (index) {
@@ -41,7 +44,8 @@ class _UserBottomNavState extends State<UserBottomNav> {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Tickets'),
+          BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Events'),
+          BottomNavigationBarItem(icon: Icon(Icons.confirmation_number), label: 'My Tickets'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

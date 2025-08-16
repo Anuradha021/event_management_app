@@ -181,7 +181,8 @@ class _OrganizerTicketsScreenState extends State<OrganizerTicketsScreen>
           return const Center(child: CircularProgressIndicator());
         }
 
-        final tickets = snapshot.data ?? [];
+           final tickets = (snapshot.data ?? []);
+         
 
         if (tickets.isEmpty) {
           return const Center(

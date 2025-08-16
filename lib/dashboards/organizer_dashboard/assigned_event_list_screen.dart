@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/event_management_screen.dart';
+import 'package:event_management_app1/screens/organizer_event_details_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -70,11 +70,14 @@ class AssignedEventListScreen extends StatelessWidget {
                   subtitle: Text("Date: ${_formatDate(event['eventDate'])}"),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
-                    if (event['docId'] != null) { 
+                    if (event['docId'] != null) {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (_) => EventManagementScreen(eventId: event['docId']),
+          builder: (_) => OrganizerEventDetailsScreen(
+            eventId: event['docId'],
+            eventData: event,
+          ),
         ),
       );
     } else {
