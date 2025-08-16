@@ -76,38 +76,23 @@ class TicketService {
 
   /// Delete ticket type
   static Future<void> deleteTicketType(String ticketTypeId) async {
-    print("DEBUG: Deleting ticketTypeId: $ticketTypeId");
     await _firestore.collection('ticketTypes').doc(ticketTypeId).delete();
   }
 
   /// Get sold tickets for event
   static Stream<List<Ticket>> getTicketsForEvent(String eventId) {
-    print("DEBUG: Fetching tickets for eventId: $eventId");
-
     return _firestore
         .collection('tickets')
         .where('eventId', isEqualTo: eventId)
-        .orderBy('purchaseDate', descending: true)
         .snapshots()
         .map((snapshot) {
-      print("DEBUG: Raw Firestore docs for eventId $eventId:");
-      for (var doc in snapshot.docs) {
-        print("  🔹 ${doc.id} => ${doc.data()}");
-      }
-
-      print(
-          "DEBUG: Found ${snapshot.docs.length} tickets for eventId: $eventId");
-
-      final tickets =
-          snapshot.docs.map((doc) => Ticket.fromFirestore(doc)).toList();
-
-      for (var ticket in tickets) {
-        print(
-            "DEBUG Ticket: ID=${ticket.id}, status=${ticket.status}, user=${ticket.userName}");
-      }
-
-      return tickets;
-    });
+          final tickets = snapshot.docs
+              .map((doc) => Ticket.fromFirestore(doc))
+              .toList();
+          // Sort by purchase date in memory
+          tickets.sort((a, b) => b.purchaseDate.compareTo(a.purchaseDate));
+          return tickets;
+        });
   }
 
   /// Validate ticket
@@ -120,7 +105,6 @@ class TicketService {
           .get();
 
       if (ticketQuery.docs.isEmpty) {
-        print("DEBUG: Ticket not found for QR: $qrCode");
         return ValidationResult.invalid('Ticket not found');
       }
 
@@ -128,7 +112,6 @@ class TicketService {
       final ticket = Ticket.fromFirestore(ticketDoc);
 
       if (ticket.status != 'active') {
-        print("DEBUG: Ticket not active for QR: $qrCode");
         return ValidationResult.invalid('Ticket already used or cancelled');
       }
 
@@ -137,10 +120,8 @@ class TicketService {
         'usedAt': FieldValue.serverTimestamp(),
       });
 
-      print("DEBUG: Ticket validated successfully for QR: $qrCode");
       return ValidationResult.valid(ticket);
     } catch (e) {
-      print("DEBUG ERROR in validateTicket: $e");
       return ValidationResult.invalid('Validation failed: ${e.toString()}');
     }
   }
@@ -149,7 +130,6 @@ class TicketService {
 
   /// Get available tickets for users
   static Stream<List<TicketType>> getAvailableTicketTypes(String eventId) {
-    print("DEBUG: Getting available tickets for eventId: $eventId");
     return _firestore
         .collection('ticketTypes')
         .where('eventId', isEqualTo: eventId)
@@ -161,9 +141,6 @@ class TicketService {
           .where((ticketType) => !ticketType.isSoldOut)
           .toList();
       ticketTypes.sort((a, b) => a.price.compareTo(b.price));
-
-      print(
-          "DEBUG: Found ${ticketTypes.length} available ticket types for eventId: $eventId");
       return ticketTypes;
     });
   }
@@ -176,12 +153,10 @@ class TicketService {
   }) async {
     final user = _auth.currentUser;
     if (user == null) {
-      print("DEBUG: Purchase failed - User not authenticated");
       return PurchaseResult.failure('User not authenticated');
     }
 
-    print(
-        "DEBUG: Starting ticket purchase for eventId: $eventId, ticketTypeId: $ticketTypeId");
+
 
     try {
       return await _firestore
@@ -219,8 +194,7 @@ class TicketService {
           'purchaseDate': FieldValue.serverTimestamp(),
         });
 
-        print(
-            "DEBUG: Created ticket with ID=${ticketRef.id}, eventId=$eventId, qrCode=$qrCode");
+
 
         // Properly increment soldQuantity using transaction-safe approach
         final newSoldQuantity = ticketType.soldQuantity + 1;
@@ -228,13 +202,9 @@ class TicketService {
           'soldQuantity': newSoldQuantity,
         });
 
-        print(
-            "DEBUG: Incremented soldQuantity to $newSoldQuantity for ticketTypeId: $ticketTypeId");
-
         return PurchaseResult.success(ticketRef.id, qrCode);
       });
     } catch (e) {
-      print("DEBUG ERROR in purchaseTicket: $e");
       return PurchaseResult.failure(e.toString());
     }
   }
@@ -243,8 +213,6 @@ class TicketService {
   static Stream<List<Ticket>> getUserTicketsForEvent(String eventId) {
     final user = _auth.currentUser;
     if (user == null) return Stream.value([]);
-
-    print("DEBUG: Getting user tickets for eventId: $eventId");
 
     return _firestore
         .collection('tickets')
@@ -255,9 +223,6 @@ class TicketService {
       final tickets =
           snapshot.docs.map((doc) => Ticket.fromFirestore(doc)).toList();
       tickets.sort((a, b) => b.purchaseDate.compareTo(a.purchaseDate));
-
-      print(
-          "DEBUG: Found ${tickets.length} user tickets for eventId: $eventId");
       return tickets;
     });
   }
@@ -266,8 +231,6 @@ class TicketService {
   static Stream<List<Ticket>> getUserTickets() {
     final user = _auth.currentUser;
     if (user == null) return Stream.value([]);
-
-    print("DEBUG: Getting all tickets for current user");
 
     return _firestore
         .collection('tickets')
@@ -289,8 +252,6 @@ class TicketService {
 
   /// Get event statistics
   static Future<Map<String, dynamic>> getEventStats(String eventId) async {
-    print("DEBUG: Getting stats for eventId: $eventId");
-
     final ticketTypesSnapshot = await _firestore
         .collection('ticketTypes')
         .where('eventId', isEqualTo: eventId)
@@ -317,9 +278,6 @@ class TicketService {
       totalRevenue += ticket.price;
       if (ticket.isUsed) totalUsed++;
     }
-
-    print(
-        "DEBUG: Stats - Capacity=$totalCapacity, Sold=$totalSold, Revenue=$totalRevenue, Used=$totalUsed");
 
     return {
       'totalCapacity': totalCapacity,
