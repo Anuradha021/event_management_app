@@ -21,7 +21,7 @@ class CustomerTicketPurchaseScreen extends StatefulWidget {
 }
 
 class _CustomerTicketPurchaseScreenState extends State<CustomerTicketPurchaseScreen> {
-  bool _isLoading = false;
+  final Set<String> _loadingTickets = {};
 
   @override
   Widget build(BuildContext context) {
@@ -211,8 +211,8 @@ class _CustomerTicketPurchaseScreenState extends State<CustomerTicketPurchaseScr
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: ticketType.isSoldOut || _isLoading 
-                    ? null 
+                onPressed: ticketType.isSoldOut || _loadingTickets.contains(ticketType.id)
+                    ? null
                     : () => _purchaseTicket(ticketType),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: ticketType.isSoldOut 
@@ -221,7 +221,7 @@ class _CustomerTicketPurchaseScreenState extends State<CustomerTicketPurchaseScr
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
-                child: _isLoading
+                child: _loadingTickets.contains(ticketType.id)
                     ? const SizedBox(
                         height: 20,
                         width: 20,
@@ -246,7 +246,7 @@ class _CustomerTicketPurchaseScreenState extends State<CustomerTicketPurchaseScr
   }
 
   void _purchaseTicket(TicketType ticketType) async {
-    setState(() => _isLoading = true);
+    setState(() => _loadingTickets.add(ticketType.id));
 
     try {
       final result = await TicketService.purchaseTicket(
@@ -299,7 +299,7 @@ class _CustomerTicketPurchaseScreenState extends State<CustomerTicketPurchaseScr
       }
     } finally {
       if (mounted) {
-        setState(() => _isLoading = false);
+        setState(() => _loadingTickets.remove(ticketType.id));
       }
     }
   }

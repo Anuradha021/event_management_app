@@ -529,15 +529,22 @@ class _OrganizerTicketsScreenState extends State<OrganizerTicketsScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('✅ Ticket Validated'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Ticket: ${ticket.ticketTypeName}'),
-            Text('Holder: ${ticket.userName}'),
-            Text('Email: ${ticket.userEmail}'),
-            Text('Price: \$${ticket.price.toStringAsFixed(2)}'),
-          ],
+        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+        content: SizedBox(
+          width: 280,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Ticket: ${ticket.ticketTypeName}'),
+              const SizedBox(height: 8),
+              Text('Holder: ${ticket.userName}'),
+              const SizedBox(height: 8),
+              Text('Email: ${ticket.userEmail}'),
+              const SizedBox(height: 8),
+              Text('Price: \$${ticket.price.toStringAsFixed(2)}'),
+            ],
+          ),
         ),
         actions: [
           ElevatedButton(

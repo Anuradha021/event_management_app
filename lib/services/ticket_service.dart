@@ -178,7 +178,7 @@ class TicketService {
         final qrCode = _generateQRCode();
 
         final ticketRef = _firestore.collection('tickets').doc();
-        transaction.set(ticketRef, {
+        final ticketData = {
           'eventId': eventId,
           'eventTitle': eventTitle,
           'ticketTypeId': ticketTypeId,
@@ -192,7 +192,8 @@ class TicketService {
           'qrCode': qrCode,
           'status': 'active',
           'purchaseDate': FieldValue.serverTimestamp(),
-        });
+        };
+        transaction.set(ticketRef, ticketData);
 
 
 
@@ -235,10 +236,13 @@ class TicketService {
     return _firestore
         .collection('tickets')
         .where('userId', isEqualTo: user.uid)
-        .orderBy('purchaseDate', descending: true)
         .snapshots()
-        .map((snapshot) =>
-            snapshot.docs.map((doc) => Ticket.fromFirestore(doc)).toList());
+        .map((snapshot) {
+          final tickets = snapshot.docs.map((doc) => Ticket.fromFirestore(doc)).toList();
+          // Sort by purchase date in memory to avoid composite index requirement
+          tickets.sort((a, b) => b.purchaseDate.compareTo(a.purchaseDate));
+          return tickets;
+        });
   }
 
   //  HELPER FUNCTIONS 

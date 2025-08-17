@@ -1,4 +1,4 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/refactored/zone_panel.dart' as refactored;
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/zone_all_data/zone_panel.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_all_data/session_panel.dart';
 import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_all_data/stall_panel.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
@@ -61,7 +61,7 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
               controller: _pageController,
               onPageChanged: (index) => setState(() => _activeTabIndex = index),
               children: [
-                refactored.ZonePanel(eventId: widget.eventId),
+                ZonePanel(eventId: widget.eventId),
                 TrackPanel(eventId: widget.eventId),
                 SessionPanel(eventId: widget.eventId),
                 StallPanel(eventId: widget.eventId),

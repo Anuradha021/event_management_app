@@ -316,38 +316,43 @@ class _UserTicketsScreenState extends State<UserTicketsScreen>
       context: context,
       builder: (context) => AlertDialog(
         title: Text(ticket.ticketTypeName),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey[300]!),
+        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+        content: SizedBox(
+          width: 300,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey[300]!),
+                ),
+                child: QrImageView(
+                  data: ticket.qrCode,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                  backgroundColor: Colors.white,
+                ),
               ),
-              child: QrImageView(
-                data: ticket.qrCode,
-                version: QrVersions.auto,
-                size: 200.0,
-                backgroundColor: Colors.white,
+              const SizedBox(height: 16),
+              Text(
+                'QR Code: ${ticket.qrCode}',
+                style: const TextStyle(
+                  fontFamily: 'monospace',
+                  fontSize: 12,
+                ),
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'QR Code: ${ticket.qrCode}',
-              style: const TextStyle(
-                fontFamily: 'monospace',
-                fontSize: 12,
+              const SizedBox(height: 8),
+              const Text(
+                'Show this QR code at the event entrance',
+                style: TextStyle(fontSize: 12),
+                textAlign: TextAlign.center,
               ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Show this QR code at the event entrance',
-              style: TextStyle(fontSize: 12),
-              textAlign: TextAlign.center,
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
           ElevatedButton(

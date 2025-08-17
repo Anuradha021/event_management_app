@@ -98,7 +98,7 @@ class PanelHeader extends StatelessWidget {
               text: 'Create',
               icon: Icons.add,
               onPressed: canCreate ? onCreatePressed : null,
-              size: ModernButtonSize.small,
+              size: ModernButtonSize.medium,
               style: canCreate ? ModernButtonStyle.primary : ModernButtonStyle.outline,
             ),
         ],

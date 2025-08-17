@@ -95,7 +95,7 @@ class ZoneListItem extends StatelessWidget {
     return ListItemCard(
       icon: Icons.map,
       iconColor: Colors.deepPurple,
-      title: zoneData['title'] ?? 'Unnamed Zone',
+      title: zoneData['title'] ?? zoneData['name'] ?? 'Unnamed Zone',
       subtitle: zoneData['description'] ?? 'No description',
       onTap: onTap,
       onEdit: onEdit,
