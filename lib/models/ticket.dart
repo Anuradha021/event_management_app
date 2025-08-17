@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-// ==================== TICKET TYPE MODEL ====================
 class TicketType {
   final String id;
   final String eventId;
@@ -61,7 +60,7 @@ class TicketType {
   }
 }
 
-// ==================== TICKET MODEL ====================
+// TICKET MODEL
 class Ticket {
   final String id;
   final String eventId;
@@ -75,10 +74,10 @@ class Ticket {
   final String userPhone;
   final double price;
   final String qrCode;
-  final String status; // 'active', 'used', 'cancelled'
+  final String status; 
   final DateTime purchaseDate;
   final DateTime? usedAt;
-  final String? validatedBy; // Organizer who validated the ticket
+  final String? validatedBy;
 
   const Ticket({
     required this.id,
@@ -146,7 +145,7 @@ class Ticket {
   }
 }
 
-// ==================== RESULT MODELS ====================
+//  RESULT MODELS 
 class PurchaseResult {
   final bool success;
   final String? ticketId;

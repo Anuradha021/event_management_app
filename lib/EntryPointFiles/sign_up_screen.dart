@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_management_app1/EntryPointFilesScreens/bottom_nav_bar.dart';
-import 'package:event_management_app1/EntryPointFilesScreens/home.dart';
+import 'package:event_management_app1/core/theme/app_theme.dart';
+import 'package:event_management_app1/screens/unified_dashboard.dart';
 import 'package:event_management_app1/EntryPointFiles/login_screen.dart';
 import 'package:event_management_app1/core/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,10 +41,12 @@ class _SignUpPageState extends State<SignUpPage> {
       'role': 'user', 
     });
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const BottomNav()),
-    );
+    if (context.mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const UnifiedDashboard()),
+      );
+    }
   } on FirebaseAuthException catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(e.message ?? "Signup failed")),
@@ -114,7 +116,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   width: double.infinity,
                   height: 45,
                   decoration: BoxDecoration(
-                    color: Colors.blue,
+                    color: AppTheme.primaryColor,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Center(

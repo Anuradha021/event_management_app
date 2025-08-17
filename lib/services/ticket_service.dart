@@ -7,9 +7,9 @@ class TicketService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // ==================== ORGANIZER FUNCTIONS ====================
+  // ORGANIZER FUNCTIONS 
 
-  /// Create a new ticket type
+  // Create a new ticket type
   static Future<String> createTicketType({
     required String eventId,
     required String name,
@@ -41,7 +41,7 @@ class TicketService {
     }
   }
 
-  /// Get ticket types for organizer
+  // Get ticket types for organizer
   static Stream<List<TicketType>> getTicketTypesForOrganizer(String eventId) {
     print("DEBUG: Getting ticket types for organizer, eventId: $eventId");
     return _firestore
@@ -59,7 +59,7 @@ class TicketService {
     });
   }
 
-  /// Update ticket type
+  // Update ticket type
   static Future<void> updateTicketType({
     required String ticketTypeId,
     required String name,
@@ -74,12 +74,12 @@ class TicketService {
     });
   }
 
-  /// Delete ticket type
+  // Delete ticket type
   static Future<void> deleteTicketType(String ticketTypeId) async {
     await _firestore.collection('ticketTypes').doc(ticketTypeId).delete();
   }
 
-  /// Get sold tickets for event
+  // Get sold tickets for event
   static Stream<List<Ticket>> getTicketsForEvent(String eventId) {
     return _firestore
         .collection('tickets')
@@ -95,7 +95,7 @@ class TicketService {
         });
   }
 
-  /// Validate ticket
+  // Validate ticket
   static Future<ValidationResult> validateTicket(String qrCode) async {
     try {
       final ticketQuery = await _firestore
@@ -126,9 +126,9 @@ class TicketService {
     }
   }
 
-  // ==================== USER FUNCTIONS ====================
+  //  USER FUNCTIONS 
 
-  /// Get available tickets for users
+  // Get available tickets for users
   static Stream<List<TicketType>> getAvailableTicketTypes(String eventId) {
     return _firestore
         .collection('ticketTypes')
@@ -145,7 +145,7 @@ class TicketService {
     });
   }
 
-  /// Purchase ticket (fixed soldQuantity update)
+  // Purchase ticket (fixed soldQuantity update)
   static Future<PurchaseResult> purchaseTicket({
     required String ticketTypeId,
     required String eventId,
@@ -209,7 +209,7 @@ class TicketService {
     }
   }
 
-  /// Get user's tickets for event
+  // Get user's tickets for event
   static Stream<List<Ticket>> getUserTicketsForEvent(String eventId) {
     final user = _auth.currentUser;
     if (user == null) return Stream.value([]);
@@ -227,7 +227,7 @@ class TicketService {
     });
   }
 
-  /// Get all user's tickets
+  // Get all user's tickets
   static Stream<List<Ticket>> getUserTickets() {
     final user = _auth.currentUser;
     if (user == null) return Stream.value([]);
@@ -241,16 +241,16 @@ class TicketService {
             snapshot.docs.map((doc) => Ticket.fromFirestore(doc)).toList());
   }
 
-  // ==================== HELPER FUNCTIONS ====================
+  //  HELPER FUNCTIONS 
 
-  /// Generate QR code
+  // Generate QR code
   static String _generateQRCode() {
     final timestamp = DateTime.now().millisecondsSinceEpoch;
     final random = Random().nextInt(999999);
     return 'TKT_${timestamp}_$random';
   }
 
-  /// Get event statistics
+  // Get event statistics
   static Future<Map<String, dynamic>> getEventStats(String eventId) async {
     final ticketTypesSnapshot = await _firestore
         .collection('ticketTypes')

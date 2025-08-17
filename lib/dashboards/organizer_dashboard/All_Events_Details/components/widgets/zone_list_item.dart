@@ -22,7 +22,7 @@ class ZoneListItem extends StatelessWidget {
     return ModernListCard(
       icon: Icons.map_outlined,
       iconColor: AppTheme.primaryColor,
-      title: zoneData['name']?.toString() ?? 'Unnamed Zone',
+      title: zoneData['title']?.toString() ?? zoneData['name']?.toString() ?? 'Unnamed Zone',
       subtitle: zoneData['description']?.toString() ?? 'No description',
       onTap: onTap,
       onEdit: onEdit,

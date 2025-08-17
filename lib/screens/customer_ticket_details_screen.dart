@@ -288,7 +288,7 @@ class _CustomerTicketDetailsScreenState extends State<CustomerTicketDetailsScree
   }
 
   void _downloadTicketPDF(Ticket ticket) {
-    // For now, show a snackbar. In a real app, you would generate and download a PDF
+    // For now, show a snackbar. 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('PDF download feature coming soon!'),
@@ -296,10 +296,6 @@ class _CustomerTicketDetailsScreenState extends State<CustomerTicketDetailsScree
       ),
     );
 
-    // TODO: Implement PDF generation and download
-    // This would typically involve:
-    // 1. Using a package like 'pdf' to generate the PDF
-    // 2. Including ticket details, QR code, event info
-    // 3. Saving to device storage or sharing
+  
   }
 }

@@ -1,14 +1,14 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_detail_screen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_all_data/session_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'components/services/session_data_service.dart';
-import 'components/widgets/panel_header.dart';
-import 'components/widgets/zone_track_filter.dart';
-import 'components/widgets/session_list_widget.dart';
-import 'components/widgets/delete_confirmation_dialog.dart';
-import 'components/widgets/create_session_dialog.dart';
-import 'components/state/session_filter_state.dart';
+import '../components/services/session_data_service.dart';
+import '../components/widgets/panel_header.dart';
+import '../components/widgets/zone_track_filter.dart';
+import '../components/widgets/session_list_widget.dart';
+import '../components/widgets/delete_confirmation_dialog.dart';
+import '../components/widgets/create_session_dialog.dart';
+import '../components/state/session_filter_state.dart';
 
 
 class SessionPanel extends StatefulWidget {

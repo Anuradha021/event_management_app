@@ -1,11 +1,11 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_detail_screen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_all_data/stall_detail_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'components/services/stall_panel_service.dart';
-import 'components/widgets/panel_header.dart';
-import 'components/widgets/zone_track_filter.dart';
-import 'components/widgets/stall_list_view.dart';
-import 'components/widgets/delete_confirmation_dialog.dart';
+import '../components/services/stall_panel_service.dart';
+import '../components/widgets/panel_header.dart';
+import '../components/widgets/zone_track_filter.dart';
+import '../components/widgets/stall_list_view.dart';
+import '../components/widgets/delete_confirmation_dialog.dart';
 
 
 class StallPanel extends StatefulWidget {

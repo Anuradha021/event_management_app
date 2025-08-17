@@ -62,7 +62,7 @@ class _DebugTicketScreenState extends State<DebugTicketScreen> {
             
             const SizedBox(height: 24),
             
-            // Create Ticket Type
+            //  Ticket Type
             const Text('2. Create Ticket Type:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             TextField(

@@ -1,11 +1,10 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_panel.dart';
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_panel.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/refactored/zone_panel.dart' as refactored;
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/session_all_data/session_panel.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/stall_all_data/stall_panel.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:event_management_app1/screens/organizer_tickets_screen.dart';
-
 import 'package:flutter/material.dart';
-import 'zone_panel.dart';
-import 'track_panel.dart';
+import 'track_all_data/track_panel.dart';
 
 class EventManagementScreen extends StatefulWidget {
   final String eventId;
@@ -62,7 +61,7 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
               controller: _pageController,
               onPageChanged: (index) => setState(() => _activeTabIndex = index),
               children: [
-                ZonePanel(eventId: widget.eventId),
+                refactored.ZonePanel(eventId: widget.eventId),
                 TrackPanel(eventId: widget.eventId),
                 SessionPanel(eventId: widget.eventId),
                 StallPanel(eventId: widget.eventId),
@@ -168,7 +167,7 @@ class _EventManagementScreenState extends State<EventManagementScreen> {
 
   Future<void> _publishEvent() async {
     try {
-      // Event ko publish karne ka code
+    
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Event published successfully!')),
       );

@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 
-/// Simple user dashboard to view published events
 class SimpleUserDashboard extends StatefulWidget {
   const SimpleUserDashboard({super.key});
 
@@ -30,9 +29,9 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
         builder: (context, snapshot) {
           print('DEBUG: Events query - Connection: ${snapshot.connectionState}, HasError: ${snapshot.hasError}, HasData: ${snapshot.hasData}');
 
-          // Debug information
+         
           if (snapshot.hasError) {
-            print('DEBUG: Events query error: ${snapshot.error}');
+            // print('DEBUG: Events query error: ${snapshot.error}');
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +92,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
 
           return Column(
             children: [
-              // Debug info
+            
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(8),
@@ -149,7 +148,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Event title
+           
               Text(
                 event['eventTitle'] ?? 'Untitled Event',
                 style: const TextStyle(
@@ -161,7 +160,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
               
               const SizedBox(height: 12),
               
-              // Event date
+          
               if (event['eventDate'] != null)
                 Row(
                   children: [
@@ -182,8 +181,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
                 ),
               
               const SizedBox(height: 8),
-              
-              // Event location
+            
               if (event['location'] != null)
                 Row(
                   children: [
@@ -207,7 +205,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
               
               const SizedBox(height: 8),
               
-              // Organizer
+           
               if (event['organizerName'] != null)
                 Row(
                   children: [
@@ -227,7 +225,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
                   ],
                 ),
               
-              // Description (if available)
+          
               if (event['description'] != null && event['description'].isNotEmpty) ...[
                 const SizedBox(height: 12),
                 Text(
@@ -243,7 +241,7 @@ class _SimpleUserDashboardState extends State<SimpleUserDashboard> {
               
               const SizedBox(height: 12),
               
-              // Status badge
+           
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 decoration: BoxDecoration(

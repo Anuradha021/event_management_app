@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'components/services/zone_data_service.dart';
-import 'components/widgets/zone_detail_app_bar.dart';
-import 'components/widgets/zone_info_card.dart';
-import 'components/widgets/zone_update_button.dart';
-import 'components/widgets/zone_update_dialog.dart';
+import '../components/services/zone_data_service.dart';
+import '../components/widgets/zone_detail_app_bar.dart';
+import '../components/widgets/zone_info_card.dart';
+import '../components/widgets/zone_update_button.dart';
+import '../components/widgets/zone_update_dialog.dart';
 
 class ZoneDetailScreen extends StatefulWidget {
   final String eventId;

@@ -2,6 +2,7 @@ import 'package:event_management_app1/dashboards/admin_dashbaord/admin_setup.dar
 import 'package:event_management_app1/EntryPointFiles/login_screen.dart';
 import 'package:event_management_app1/EntryPointFiles/sign_up_screen.dart';
 import 'package:event_management_app1/EntryPointFiles/welcome_screen.dart';
+import 'package:event_management_app1/screens/unified_dashboard.dart';
 import 'package:event_management_app1/firebase_options.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         '/welcome': (context) => WelcomeScreen(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignUpPage(),
+        '/dashboard': (context) => const UnifiedDashboard(),
       },
     );
   }

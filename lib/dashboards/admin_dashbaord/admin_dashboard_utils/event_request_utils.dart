@@ -1,9 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/dashboards/admin_dashbaord/create_event_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 
 void updateFilter(Function(String) setFilter, String filterValue) {
   setFilter(filterValue);
@@ -22,56 +19,96 @@ void navigateToCreateEvent(BuildContext context, Map<String, dynamic> requestDat
   );
 }
 
-Future<void> updateRequestStatus(BuildContext context,String docId,String status) async {
-  final url = Uri.parse('http://localhost:3000/reject-event');
-
+///  Reject Event Request 
+Future<void> updateRequestStatus(
+    BuildContext context, String docId, String status) async {
   try {
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'docId': docId}),
-    );
+    await FirebaseFirestore.instance
+        .collection('event_requests')
+        .doc(docId)
+        .update({
+          'status': status,
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
 
-    if (response.statusCode == 200) {
+    if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Event rejected successfully.")),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Failed to reject event: ${response.body}")),
+        SnackBar(content: Text("Event request $status successfully.")),
       );
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text("Error rejecting event: $e")),
-    );
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error updating status: $e")),
+      );
+    }
   }
 }
 
 
 Future<void> assignOrganizerAndApprove(BuildContext context, String docId) async {
-  final url = Uri.parse('http://localhost:3000/approve-event');
-
   try {
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'docId': docId}),
-    );
+    // First, get the event request data
+    final requestDoc = await FirebaseFirestore.instance
+        .collection('event_requests')
+        .doc(docId)
+        .get();
 
-    if (response.statusCode == 200) {
+    if (!requestDoc.exists) {
+      throw Exception('Event request not found');
+    }
+
+    final requestData = requestDoc.data() as Map<String, dynamic>;
+    final organizerEmail = requestData['organizerEmail'] as String;
+    final organizerUid = requestData['organizerUid'] as String;
+
+    // Step 1: Update user to be organizer
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(organizerUid)
+        .update({
+          'isOrganizer': true,
+        });
+
+    // Step 2: Create approved event in events collection
+    final eventRef = await FirebaseFirestore.instance
+        .collection('events')
+        .add({
+          'eventTitle': requestData['eventTitle'],
+          'eventDescription': requestData['eventDescription'],
+          'eventDate': requestData['eventDate'],
+          'location': requestData['location'],
+          'organizerUid': organizerUid,
+          'organizerEmail': organizerEmail,
+          'organizerName': requestData['organizerName'] ?? 'Organizer',
+          'assignedOrganizerUid': organizerUid,
+          'assignedOrganizerEmail': organizerEmail,
+          'status': 'approved',
+          'createdAt': FieldValue.serverTimestamp(),
+          'approvedAt': FieldValue.serverTimestamp(),
+        });
+
+    // Step 3: Update the original request status
+    await FirebaseFirestore.instance
+        .collection('event_requests')
+        .doc(docId)
+        .update({
+          'status': 'approved',
+          'eventId': eventRef.id,
+          'approvedAt': FieldValue.serverTimestamp(),
+        });
+
+    if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Approved via backend')),
+        const SnackBar(content: Text('Event approved and organizer assigned successfully!')),
       );
       Navigator.of(context).pop();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: ${response.body}')),
-      );
     }
   } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Server error: $e')),
-    );
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error approving event: $e")),
+      );
+    }
   }
 }

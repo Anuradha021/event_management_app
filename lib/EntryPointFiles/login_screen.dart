@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_management_app1/core/theme/app_theme.dart';
-import 'package:event_management_app1/dashboards/User_dashboard/user_screens/UserBottomNav.dart';
+import 'package:event_management_app1/screens/unified_dashboard.dart';
 import 'package:event_management_app1/dashboards/admin_dashbaord/admin_dashboard.dart';
-import 'package:event_management_app1/EntryPointFilesScreens/bottom_nav_bar.dart';
 import 'package:event_management_app1/EntryPointFiles/sign_up_screen.dart';
 import 'package:event_management_app1/core/widgets/form_container_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -40,28 +39,22 @@ class _LoginPageState extends State<LoginPage> {
       final role = userDoc.data()!['role'];
 
       if (role == 'admin') {
-      
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const AdminDashboard()),
-          (route) => false,
-        );
-      } 
-      else if(role == 'user'){
-        Navigator.pushAndRemoveUntil(
-  context,
-  MaterialPageRoute(builder: (context) => const UserBottomNav()),
-  (route) => false,
-);
-
-      }
-      else {
-       
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const BottomNav()),
-          (route) => false,
-        );
+        if (context.mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const AdminDashboard()),
+            (route) => false,
+          );
+        }
+      } else {
+        // All non-admin users go to unified dashboard
+        if (context.mounted) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const UnifiedDashboard()),
+            (route) => false,
+          );
+        }
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

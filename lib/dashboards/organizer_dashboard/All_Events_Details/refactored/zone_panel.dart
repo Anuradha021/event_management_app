@@ -5,8 +5,7 @@ import '../shared/base/base_panel.dart';
 import '../shared/widgets/list_item_card.dart';
 import 'zone_detail_screen.dart';
 
-/// Refactored Zone Panel
-/// Follows Single Responsibility Principle - only handles zone list display
+
 class ZonePanel extends BasePanel {
   const ZonePanel({
     super.key,

@@ -1,11 +1,11 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/track_detail_screen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/track_all_data/track_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'components/widgets/panel_header.dart';
-import 'components/widgets/zone_dropdown.dart';
-import 'components/widgets/track_list_view.dart';
-import 'components/widgets/delete_confirmation_dialog.dart';
+import '../components/widgets/panel_header.dart';
+import '../components/widgets/zone_dropdown.dart';
+import '../components/widgets/track_list_view.dart';
+import '../components/widgets/delete_confirmation_dialog.dart';
 
 class TrackPanelService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;

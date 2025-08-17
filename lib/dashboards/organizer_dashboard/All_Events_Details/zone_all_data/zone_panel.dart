@@ -1,11 +1,11 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/zone_detail_screen.dart';
+import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/zone_all_data/zone_detail_screen.dart';
 import 'package:flutter/material.dart';
 // import 'ZoneDetailScreen.dart';
-import 'components/services/zone_panel_service.dart';
-import 'components/widgets/panel_header.dart';
-import 'components/widgets/zone_list_view.dart';
-import 'components/widgets/create_zone_dialog.dart';
-import 'components/widgets/delete_confirmation_dialog.dart';
+import '../components/services/zone_panel_service.dart';
+import '../components/widgets/panel_header.dart';
+import '../components/widgets/zone_list_view.dart';
+import '../components/widgets/create_zone_dialog.dart';
+import '../components/widgets/delete_confirmation_dialog.dart';
 
 class ZonePanel extends StatelessWidget {
   final String eventId;

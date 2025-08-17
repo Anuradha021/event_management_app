@@ -30,7 +30,7 @@ class TrackListItem extends StatelessWidget {
           child: const Icon(Icons.timeline, color: Colors.deepPurple),
         ),
         title: Text(
-          trackData['name']?.toString() ?? 'Unnamed Track',
+          trackData['title']?.toString() ?? trackData['name']?.toString() ?? 'Unnamed Track',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         subtitle: Text(
