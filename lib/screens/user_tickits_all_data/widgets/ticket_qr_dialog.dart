@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../../../models/ticket.dart';
+import '../../../core/theme/app_theme.dart';
 
 class TicketQrDialog {
   static void show(BuildContext context, Ticket ticket) {
@@ -33,12 +35,24 @@ class TicketQrDialog {
                 ),
               ),
               const SizedBox(height: 16),
-              Text("QR Code: ${ticket.qrCode}",
-                  style: const TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                      color: Colors.grey),
-                  textAlign: TextAlign.center),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Text("QR Code: ${ticket.qrCode}",
+                        style: const TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 12,
+                            color: Colors.grey),
+                        textAlign: TextAlign.center),
+                  ),
+                  IconButton(
+                    onPressed: () => _copyQRCode(context, ticket.qrCode),
+                    icon: const Icon(Icons.copy, size: 16),
+                    tooltip: 'Copy QR Code',
+                  ),
+                ],
+              ),
               const SizedBox(height: 8),
               const Text("Present this QR code at the event entrance",
                   style: TextStyle(fontSize: 12, color: Colors.grey),
@@ -47,11 +61,26 @@ class TicketQrDialog {
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () => _copyQRCode(context, ticket.qrCode),
+            child: const Text('Copy QR Code'),
+          ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context),
             child: const Text('Close'),
           )
         ],
+      ),
+    );
+  }
+
+  static void _copyQRCode(BuildContext context, String qrCode) {
+    Clipboard.setData(ClipboardData(text: qrCode));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('QR Code copied: $qrCode'),
+        duration: const Duration(seconds: 2),
+        backgroundColor: AppTheme.successColor,
       ),
     );
   }

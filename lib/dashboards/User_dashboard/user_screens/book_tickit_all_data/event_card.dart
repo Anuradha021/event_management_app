@@ -2,6 +2,7 @@ import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:event_management_app1/screens/tickit_details_all_data/customer_ticket_details_screen.dart';
 import 'package:event_management_app1/screens/tickit_purchase_all_data/customer_ticket_purchase_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 
 class EventCard extends StatelessWidget {
@@ -128,10 +129,18 @@ class EventCard extends StatelessWidget {
     try {
       DateTime date;
       if (eventDate is String) {
-        return eventDate;
+        
+        try {
+          date = DateTime.parse(eventDate);
+          return DateFormat('EEEE, MMMM dd, yyyy').format(date);
+        } catch (_) {
+          return eventDate; 
+        }
       } else if (eventDate.runtimeType.toString().contains('Timestamp')) {
         date = eventDate.toDate();
-        return '${date.day}/${date.month}/${date.year}';
+        return DateFormat('EEEE, MMMM dd, yyyy').format(date);
+      } else if (eventDate is DateTime) {
+        return DateFormat('EEEE, MMMM dd, yyyy').format(eventDate);
       } else {
         return eventDate.toString();
       }

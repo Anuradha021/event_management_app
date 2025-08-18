@@ -33,17 +33,17 @@ class TicketService {
         'organizerId': user.uid,
       });
 
-      print("DEBUG: Created ticket type '$name' for eventId: $eventId");
+     // print("DEBUG: Created ticket type '$name' for eventId: $eventId");
       return docRef.id;
     } catch (e) {
-      print("DEBUG ERROR in createTicketType: $e");
+      //print("DEBUG ERROR in createTicketType: $e");
       rethrow;
     }
   }
 
   // Get ticket types for organizer
   static Stream<List<TicketType>> getTicketTypesForOrganizer(String eventId) {
-    print("DEBUG: Getting ticket types for organizer, eventId: $eventId");
+   // print("DEBUG: Getting ticket types for organizer, eventId: $eventId");
     return _firestore
         .collection('ticketTypes')
         .where('eventId', isEqualTo: eventId)
@@ -53,20 +53,20 @@ class TicketService {
           snapshot.docs.map((doc) => TicketType.fromFirestore(doc)).toList();
       ticketTypes.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-      print(
-          "DEBUG: Found ${ticketTypes.length} ticket types for eventId: $eventId");
+      // print(
+      //     "DEBUG: Found ${ticketTypes.length} ticket types for eventId: $eventId");
       return ticketTypes;
     });
   }
 
-  // Update ticket type
+
   static Future<void> updateTicketType({
     required String ticketTypeId,
     required String name,
     required double price,
     required int totalQuantity,
   }) async {
-    print("DEBUG: Updating ticketTypeId: $ticketTypeId");
+ 
     await _firestore.collection('ticketTypes').doc(ticketTypeId).update({
       'name': name,
       'price': price,
@@ -74,7 +74,7 @@ class TicketService {
     });
   }
 
-  // Delete ticket type
+  
   static Future<void> deleteTicketType(String ticketTypeId) async {
     await _firestore.collection('ticketTypes').doc(ticketTypeId).delete();
   }
@@ -95,7 +95,7 @@ class TicketService {
         });
   }
 
-  // Validate ticket
+
   static Future<ValidationResult> validateTicket(String qrCode) async {
     try {
       final ticketQuery = await _firestore
@@ -145,7 +145,7 @@ class TicketService {
     });
   }
 
-  // Purchase ticket (fixed soldQuantity update)
+  // Purchase ticket 
   static Future<PurchaseResult> purchaseTicket({
     required String ticketTypeId,
     required String eventId,

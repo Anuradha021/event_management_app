@@ -17,7 +17,7 @@ class ZonePanelService {
         .doc(eventId)
         .collection('zones')
         .add({
-          'title': name,  // Changed from 'name' to 'title' for consistency
+          'title': name,  
           'description': description,
           'createdAt': FieldValue.serverTimestamp(),
         });

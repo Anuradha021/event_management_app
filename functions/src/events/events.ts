@@ -9,12 +9,12 @@ import { validateEventData, EventData } from "../utils/validators";
 
 const db = admin.firestore();
 
-// Interface for event creation data
+
 interface CreateEventData extends EventData {
   organizerId: string;
 }
 
-// Interface for event update data
+
 interface UpdateEventData {
   eventId: string;
   data: Partial<EventData>;
@@ -33,10 +33,9 @@ export const createEvent = onCall(
     const context = request.auth;
     const data = request.data;
 
-    // Check authentication
+  
     checkAuthentication(context);
 
-    // Validate input data
     const validationResult = validateEventData(data);
     if (!validationResult.isValid) {
       throw new HttpsError("invalid-argument", validationResult.errors.join(", "));

@@ -9,7 +9,6 @@ import { validateZoneData, ZoneData } from "../utils/validators";
 
 const db = admin.firestore();
 
-// Interface for zone creation data
 interface CreateZoneData extends ZoneData {
   eventId: string;
 }
@@ -21,7 +20,7 @@ interface UpdateZoneData {
   data: Partial<ZoneData>;
 }
 
-// Interface for zone deletion data
+
 interface DeleteZoneData {
   eventId: string;
   zoneId: string;
@@ -35,7 +34,6 @@ export const createZone = onCall(
     const context = request.auth;
     const data = request.data;
 
-    // Check authentication
     checkAuthentication(context);
 
     const { eventId, ...zoneData } = data;
@@ -44,7 +42,7 @@ export const createZone = onCall(
       throw new HttpsError("invalid-argument", "Event ID is required");
     }
 
-    // Validate zone data
+  
     const validationResult = validateZoneData(zoneData);
     if (!validationResult.isValid) {
       throw new HttpsError("invalid-argument", validationResult.errors.join(", "));
@@ -52,8 +50,6 @@ export const createZone = onCall(
 
     try {
       
-
-      // Create zone document
       const zoneRef = await db
         .collection("events")
         .doc(eventId)
@@ -90,7 +86,6 @@ export const updateZone = onCall(
     const context = request.auth;
     const { eventId, zoneId, data } = request.data;
 
-    // Check authentication
     checkAuthentication(context);
 
     if (!eventId || !zoneId) {
@@ -98,10 +93,9 @@ export const updateZone = onCall(
     }
 
     try {
-      // Check event ownership
+     
       await checkEventOwnership(context!.uid, eventId);
 
-      // Check if zone exists
       const zoneDoc = await db
         .collection("events")
         .doc(eventId)
@@ -113,7 +107,7 @@ export const updateZone = onCall(
         throw new HttpsError("not-found", "Zone not found");
       }
 
-      // Update zone document
+    
       await db
         .collection("events")
         .doc(eventId)
@@ -148,7 +142,7 @@ export const deleteZone = onCall(
     const context = request.auth;
     const { eventId, zoneId } = request.data;
 
-    // Check authentication
+    
     checkAuthentication(context);
 
     if (!eventId || !zoneId) {
@@ -171,7 +165,7 @@ export const deleteZone = onCall(
         throw new HttpsError("not-found", "Zone not found");
       }
 
-      // Check if zone has tracks (prevent deletion if it has dependencies)
+      // Check if zone has tracks 
       const tracksSnapshot = await db
         .collection("events")
         .doc(eventId)
@@ -223,7 +217,7 @@ export const getEventZones = onCall(
     const context = request.auth;
     const { eventId } = request.data;
 
-    // Check authentication
+   
     checkAuthentication(context);
 
     if (!eventId) {
@@ -231,7 +225,7 @@ export const getEventZones = onCall(
     }
 
     try {
-      // Check event access (ownership or public event)
+      // Check event access 
       const eventDoc = await db.collection("events").doc(eventId).get();
       
       if (!eventDoc.exists) {
@@ -273,10 +267,7 @@ export const getEventZones = onCall(
   }
 );
 
-/**
- * Duplicate a zone within the same event
- * Requires authentication and event ownership
- */
+
 export const duplicateZone = onCall(
   async (
     request: CallableRequest<{ eventId: string; zoneId: string; newName?: string }>

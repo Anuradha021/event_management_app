@@ -37,6 +37,12 @@ class _UnifiedHomeScreenState extends State<UnifiedHomeScreen> {
       final location = (data['location'] ?? '').toString().toLowerCase();
       final category = data['eventType'] ?? 'Other';
 
+    
+      final isTestEvent = title.contains('test') ||
+                         title.contains('dynamic ticketing') ||
+                         description.contains('test') ||
+                         description.contains('dynamic ticketing');
+
       final matchesSearch = _searchQuery.isEmpty ||
           title.contains(_searchQuery) ||
           description.contains(_searchQuery) ||
@@ -44,7 +50,7 @@ class _UnifiedHomeScreenState extends State<UnifiedHomeScreen> {
 
       final matchesCategory = _selectedCategory == 'All' || category == _selectedCategory;
 
-      return matchesSearch && matchesCategory;
+      return !isTestEvent && matchesSearch && matchesCategory;
     }).toList();
   }
 

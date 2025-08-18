@@ -118,7 +118,7 @@ class ModeratorPermissions {
       case validateTickets:
         return 'Validate Tickets';
       case viewAnalytics:
-        return 'View Analytics';
+        return 'View event statistics and analytics';
       default:
         return permission;
     }

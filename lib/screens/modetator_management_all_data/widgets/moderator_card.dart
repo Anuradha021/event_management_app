@@ -1,4 +1,4 @@
-import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_Details/orgnizer_dashboard_all_data/moderator.dart';
+import 'package:event_management_app1/screens/modetator_management_all_data/moderator.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/theme/app_theme.dart';
 

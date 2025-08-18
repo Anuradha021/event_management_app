@@ -2,14 +2,14 @@ import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 
 /// Service to test Cloud Functions connectivity and verify data source
-/// Single Responsibility: Test and verify Cloud Functions are working
+
 class CloudFunctionsTestService {
   static final FirebaseFunctions _functions = FirebaseFunctions.instance;
 
   /// Test basic Cloud Functions connectivity
   static Future<Map<String, dynamic>> testConnection({String? message}) async {
     try {
-      debugPrint("🧪 Testing Cloud Functions connection...");
+      debugPrint(" Testing Cloud Functions connection...");
       
       final callable = _functions.httpsCallable('testCloudFunction');
       final result = await callable.call({
@@ -18,8 +18,8 @@ class CloudFunctionsTestService {
 
       final data = result.data as Map<String, dynamic>;
       
-      debugPrint("✅ Cloud Functions test successful!");
-      debugPrint("📦 Response: ${data.toString()}");
+      debugPrint(" Cloud Functions test successful!");
+      debugPrint(" Response: ${data.toString()}");
       
       return {
         'success': true,
@@ -28,7 +28,7 @@ class CloudFunctionsTestService {
         'timestamp': DateTime.now().toIso8601String(),
       };
     } catch (e) {
-      debugPrint("❌ Cloud Functions test failed: $e");
+      debugPrint(" Cloud Functions test failed: $e");
       return {
         'success': false,
         'source': 'Error',
@@ -41,7 +41,7 @@ class CloudFunctionsTestService {
   /// Test event creation through Cloud Functions
   static Future<Map<String, dynamic>> testEventCreation() async {
     try {
-      debugPrint("🎪 Testing event creation through Cloud Functions...");
+      debugPrint(" Testing event creation through Cloud Functions...");
       
       final callable = _functions.httpsCallable('events-createEvent');
       final result = await callable.call({
@@ -56,8 +56,8 @@ class CloudFunctionsTestService {
 
       final data = result.data as Map<String, dynamic>;
       
-      debugPrint("✅ Event creation through Cloud Functions successful!");
-      debugPrint("📦 Response: ${data.toString()}");
+      debugPrint(" Event creation through Cloud Functions successful!");
+      debugPrint(" Response: ${data.toString()}");
       
       return {
         'success': true,
@@ -66,7 +66,7 @@ class CloudFunctionsTestService {
         'timestamp': DateTime.now().toIso8601String(),
       };
     } catch (e) {
-      debugPrint("❌ Event creation through Cloud Functions failed: $e");
+      debugPrint(" Event creation through Cloud Functions failed: $e");
       return {
         'success': false,
         'source': 'Cloud Functions - Event Creation Error',
@@ -79,7 +79,7 @@ class CloudFunctionsTestService {
   /// Test zone creation through Cloud Functions
   static Future<Map<String, dynamic>> testZoneCreation(String eventId) async {
     try {
-      debugPrint("🏢 Testing zone creation through Cloud Functions...");
+      debugPrint(" Testing zone creation through Cloud Functions...");
       
       final callable = _functions.httpsCallable('zones-createZone');
       final result = await callable.call({
@@ -92,8 +92,8 @@ class CloudFunctionsTestService {
 
       final data = result.data as Map<String, dynamic>;
       
-      debugPrint("✅ Zone creation through Cloud Functions successful!");
-      debugPrint("📦 Response: ${data.toString()}");
+      debugPrint(" Zone creation through Cloud Functions successful!");
+      debugPrint(" Response: ${data.toString()}");
       
       return {
         'success': true,
@@ -102,7 +102,7 @@ class CloudFunctionsTestService {
         'timestamp': DateTime.now().toIso8601String(),
       };
     } catch (e) {
-      debugPrint("❌ Zone creation through Cloud Functions failed: $e");
+      debugPrint(" Zone creation through Cloud Functions failed: $e");
       return {
         'success': false,
         'source': 'Cloud Functions - Zone Creation Error',
@@ -115,7 +115,7 @@ class CloudFunctionsTestService {
   /// Compare data sources - Cloud Functions vs Direct Firestore
   static Future<Map<String, dynamic>> compareDataSources(String eventId) async {
     try {
-      debugPrint("🔍 Comparing Cloud Functions vs Direct Firestore access...");
+      debugPrint(" Comparing Cloud Functions vs Direct Firestore access...");
       
       // Test Cloud Functions approach
       final cloudFunctionsResult = await _testGetEventViaCloudFunctions(eventId);
@@ -133,7 +133,7 @@ class CloudFunctionsTestService {
         'timestamp': DateTime.now().toIso8601String(),
       };
     } catch (e) {
-      debugPrint("❌ Data source comparison failed: $e");
+      debugPrint(" Data source comparison failed: $e");
       return {
         'success': false,
         'error': e.toString(),
@@ -178,9 +178,9 @@ class CloudFunctionsTestService {
     }
   }
 
-  /// Get comprehensive test report
+ 
   static Future<Map<String, dynamic>> getTestReport() async {
-    debugPrint("📊 Generating Cloud Functions test report...");
+    debugPrint("Generating Cloud Functions test report...");
     
     final results = <String, dynamic>{};
     
@@ -201,8 +201,8 @@ class CloudFunctionsTestService {
       'totalTests': results.length,
       'passedTests': results.values.where((test) => test['success'] == true).length,
       'recommendation': allSuccessful 
-          ? '✅ Cloud Functions are working correctly - use them for all backend operations'
-          : '⚠️ Some Cloud Functions tests failed - check Firebase console logs',
+          ? ' Cloud Functions are working correctly - use them for all backend operations'
+          : ' Some Cloud Functions tests failed - check Firebase console logs',
       'timestamp': DateTime.now().toIso8601String(),
     };
     
@@ -211,7 +211,7 @@ class CloudFunctionsTestService {
 
   static Future<Map<String, dynamic>> _testHealthCheck() async {
     try {
-      // Note: Health check is an HTTP function, not callable
+      //  Health check is an HTTP function, not callable
       return {
         'success': true,
         'source': 'Health Check',

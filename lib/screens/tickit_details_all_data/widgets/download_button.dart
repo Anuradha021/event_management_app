@@ -14,7 +14,7 @@ class DownloadButton extends StatelessWidget {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("PDF download feature coming soon!"),
-            backgroundColor: Colors.blue,
+            backgroundColor:AppTheme.primaryColor,
           ),
         );
       },

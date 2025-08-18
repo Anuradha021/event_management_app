@@ -1,4 +1,4 @@
-// functions/src/admin/admin.service.ts
+
 import * as admin from "firebase-admin";
 import { HttpsError } from "firebase-functions/v1/https";
 
@@ -12,7 +12,7 @@ interface OrganizerApprovalData {
 }
 
 export const approveOrganizerRequest = async (data: OrganizerApprovalData, context: any) => {
-  // Validate input
+
   if (!context.auth) {
     throw new HttpsError("unauthenticated", "Authentication required");
   }
@@ -22,10 +22,10 @@ export const approveOrganizerRequest = async (data: OrganizerApprovalData, conte
     throw new HttpsError("invalid-argument", "Missing required fields");
   }
 
-  // Verify admin privileges
+  
   await verifyAdmin(context.auth.uid);
 
-  // Get the request document
+ 
   const requestRef = db.collection("event_requests").doc(requestId);
   const requestDoc = await requestRef.get();
 
@@ -39,7 +39,7 @@ export const approveOrganizerRequest = async (data: OrganizerApprovalData, conte
     organizerForEvent: eventId
   });
 
-  // Update request status and create event document
+  // 
   const batch = db.batch();
 
   batch.update(requestRef, {
@@ -50,7 +50,7 @@ export const approveOrganizerRequest = async (data: OrganizerApprovalData, conte
     assignedOrganizerEmail: organizerEmail
   });
 
-  // Create the event document with initial structure
+
   const eventRef = db.collection("events").doc(eventId);
   batch.set(eventRef, {
     title: requestDoc.data()?.eventTitle,

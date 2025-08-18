@@ -1,4 +1,4 @@
-// functions/src/events/event.service.ts
+
 import * as admin from "firebase-admin";
 import { HttpsError } from "firebase-functions/v1/https";
 
@@ -9,7 +9,7 @@ interface PublishEventData {
 }
 
 export const publishEvent = async (data: PublishEventData, context: any) => {
-  // Authentication check
+  
   if (!context.auth) {
     throw new HttpsError("unauthenticated", "Authentication required");
   }
@@ -19,10 +19,10 @@ export const publishEvent = async (data: PublishEventData, context: any) => {
     throw new HttpsError("invalid-argument", "eventId is required");
   }
 
-  // Permission check
+  
   await verifyOrganizerOrAdmin(context.auth.uid, eventId);
 
-  // Validate event structure before publishing
+ 
   await validateEventStructure(eventId);
 
   // Update event status

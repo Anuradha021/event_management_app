@@ -32,10 +32,10 @@ class TicketTypesTab extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.confirmation_number, size: 64, color: Colors.grey),
+                // Icon(Icons.confirmation_number, size: 64, color: Colors.grey),
                 SizedBox(height: 16),
                 Text('No ticket types created'),
-                Text('Tap + to create your first ticket type'),
+                Text('Tap + to create'),
               ],
             ),
           );

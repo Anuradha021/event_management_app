@@ -53,7 +53,7 @@ class SessionFilterState extends ChangeNotifier {
     } else if (zoneId == 'default') {
       _selectedTrackId = 'default';
     }
-    notifyListeners();
+    notifyListeners();//UI Update
   }
 
   

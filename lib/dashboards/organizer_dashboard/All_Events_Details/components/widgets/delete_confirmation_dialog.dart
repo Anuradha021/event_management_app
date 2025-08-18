@@ -18,7 +18,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
     return AlertDialog(
       title: Text('Delete $itemType'),
       content: Text(
-        'Are you sure you want to delete "$itemName"?\n\nThis action cannot be undone.',
+        'Are you sure you want to delete .',
       ),
       actions: [
         TextButton(

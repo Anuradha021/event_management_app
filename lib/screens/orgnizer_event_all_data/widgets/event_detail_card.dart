@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 import 'detail_row.dart';
 
@@ -54,26 +56,72 @@ class EventDetailCard extends StatelessWidget {
             DetailRow(
               icon: Icons.calendar_today,
               label: "Date",
-              value: eventData['eventDate']?.toString() ?? 'Date TBD',
+              value: _formatEventDate(eventData['eventDate']),
             ),
             const SizedBox(height: 12),
             DetailRow(
               icon: Icons.access_time,
               label: "Time",
-              value: eventData['eventTime']?.toString() ?? 'Time TBD',
+              value: _formatEventTime(eventData['eventTime']),
             ),
-            if (eventData['eventType'] != null) ...[
-              const SizedBox(height: 12),
-              DetailRow(
-                icon: Icons.category,
-                label: "Category",
-                value: eventData['eventType'],
-              ),
-            ]
+            // if (eventData['eventType'] != null) ...[
+            //   const SizedBox(height: 12),
+            //   // DetailRow(
+            //   //   icon: Icons.category,
+            //   //   label: "Category",
+            //   //   value: eventData['eventType'],
+            //   // ),
+            // ]
           ],
         ),
       ),
     );
+  }
+
+  String _formatEventDate(dynamic eventDate) {
+    if (eventDate == null) return 'Date TBD';
+
+    try {
+      DateTime date;
+      if (eventDate is String) {
+        // Try to parse string date
+        date = DateTime.parse(eventDate);
+      } else if (eventDate.runtimeType.toString().contains('Timestamp')) {
+        // Handle Firestore Timestamp
+        date = (eventDate as Timestamp).toDate();
+      } else if (eventDate is DateTime) {
+        date = eventDate;
+      } else {
+        return 'Date TBD';
+      }
+
+      return DateFormat('EEEE, MMMM dd, yyyy').format(date);
+    } catch (e) {
+      return 'Date TBD';
+    }
+  }
+
+  String _formatEventTime(dynamic eventTime) {
+    if (eventTime == null) return 'Time TBD';
+
+    try {
+      DateTime time;
+      if (eventTime is String) {
+        // Try to parse string time
+        time = DateTime.parse(eventTime);
+      } else if (eventTime.runtimeType.toString().contains('Timestamp')) {
+        // Handle Firestore Timestamp
+        time = (eventTime as Timestamp).toDate();
+      } else if (eventTime is DateTime) {
+        time = eventTime;
+      } else {
+        return 'Time TBD';
+      }
+
+      return DateFormat('h:mm a').format(time);
+    } catch (e) {
+      return 'Time TBD';
+    }
   }
 
   Color _getStatusColor(String? status) {

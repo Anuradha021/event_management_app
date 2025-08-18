@@ -19,7 +19,7 @@ class TrackPanelService {
         final data = doc.data();
         return {
           'id': doc.id,
-          'title': data['title'] ?? data['name'] ?? 'Unnamed Zone',  // Support both 'title' and 'name' fields
+          'title': data['title'] ?? data['name'] ?? 'Unnamed Zone',  
         };
       }).toList();
     } catch (e) {

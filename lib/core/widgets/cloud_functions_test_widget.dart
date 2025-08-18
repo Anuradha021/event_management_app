@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../services/cloud_functions_test_service.dart';
 
 /// Widget to test and verify Cloud Functions connectivity
-/// Single Responsibility: Provide UI for testing backend connectivity
+
 class CloudFunctionsTestWidget extends StatefulWidget {
   const CloudFunctionsTestWidget({super.key});
 
@@ -48,7 +48,7 @@ class _CloudFunctionsTestWidgetState extends State<CloudFunctionsTestWidget> {
             ),
             const SizedBox(height: 16),
             
-            // Test Buttons
+           
             ElevatedButton.icon(
               onPressed: _isLoading ? null : _runBasicTest,
               icon: const Icon(Icons.wifi_tethering),
@@ -85,7 +85,7 @@ class _CloudFunctionsTestWidgetState extends State<CloudFunctionsTestWidget> {
             ),
             const SizedBox(height: 16),
             
-            // Loading indicator
+            
             if (_isLoading)
               const Center(
                 child: Column(
@@ -97,7 +97,7 @@ class _CloudFunctionsTestWidgetState extends State<CloudFunctionsTestWidget> {
                 ),
               ),
             
-            // Results
+          
             if (_testResults != null && !_isLoading)
               Expanded(
                 child: Card(

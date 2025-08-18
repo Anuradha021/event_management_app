@@ -158,7 +158,7 @@ class _OrganizerTicketsScreenState extends State<OrganizerTicketsScreen>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('✅ Ticket Validated'),
+        title: const Text(' Ticket Validated'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

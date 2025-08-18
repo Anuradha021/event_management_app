@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../core/theme/app_theme.dart';
 import 'tickit_purchase_all_data/customer_ticket_purchase_screen.dart';
 

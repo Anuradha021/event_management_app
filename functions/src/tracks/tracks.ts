@@ -9,13 +9,12 @@ import { validateTrackData, TrackData } from "../utils/validators";
 
 const db = admin.firestore();
 
-// Interface for track creation data
 interface CreateTrackData extends TrackData {
   eventId: string;
   zoneId: string;
 }
 
-// Interface for track update data
+
 interface UpdateTrackData {
   eventId: string;
   zoneId: string;
@@ -23,7 +22,7 @@ interface UpdateTrackData {
   data: Partial<TrackData>;
 }
 
-// Interface for track deletion data
+
 interface DeleteTrackData {
   eventId: string;
   zoneId: string;
@@ -166,7 +165,7 @@ export const deleteTrack = onCall(
     const context = request.auth;
     const { eventId, zoneId, trackId } = request.data;
 
-    // Check authentication
+    
     checkAuthentication(context);
 
     if (!eventId || !zoneId || !trackId) {
@@ -262,7 +261,7 @@ export const getZoneTracks = onCall(
     const context = request.auth;
     const { eventId, zoneId } = request.data;
 
-    // Check authentication
+ 
     checkAuthentication(context);
 
     if (!eventId || !zoneId) {
@@ -337,7 +336,7 @@ export const reorderTracks = onCall(
     const context = request.auth;
     const { eventId, zoneId, trackIds } = request.data;
 
-    // Check authentication
+    
     checkAuthentication(context);
 
     if (!eventId || !zoneId || !Array.isArray(trackIds)) {

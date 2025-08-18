@@ -2,21 +2,40 @@ import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:event_management_app1/models/ticket.dart';
 import 'package:event_management_app1/services/ticket_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
-class SoldTicketsTab extends StatelessWidget {
+class SoldTicketsTab extends StatefulWidget {
   final String eventId;
 
   const SoldTicketsTab({super.key, required this.eventId});
 
+  @override
+  State<SoldTicketsTab> createState() => _SoldTicketsTabState();
+}
+
+class _SoldTicketsTabState extends State<SoldTicketsTab> {
   String _formatDate(DateTime date) {
     return '${date.day}/${date.month}/${date.year} ${date.hour}:${date.minute.toString().padLeft(2, '0')}';
+  }
+
+  void _copyQRCode(String qrCode) {
+    Clipboard.setData(ClipboardData(text: qrCode));
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('QR Code copied: $qrCode'),
+          duration: const Duration(seconds: 2),
+          backgroundColor: AppTheme.successColor,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Ticket>>(
-      stream: TicketService.getTicketsForEvent(eventId),
+      stream: TicketService.getTicketsForEvent(widget.eventId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -99,7 +118,29 @@ class SoldTicketsTab extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text('QR: ${ticket.qrCode}'),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'QR: ${ticket.qrCode}',
+                            style: const TextStyle(
+                              fontFamily: 'monospace',
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => _copyQRCode(ticket.qrCode),
+                          icon: const Icon(Icons.copy, size: 16),
+                          tooltip: 'Copy QR Code',
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(
+                            minWidth: 32,
+                            minHeight: 32,
+                          ),
+                        ),
+                      ],
+                    ),
                     Text('Purchased: ${_formatDate(ticket.purchaseDate)}'),
                     if (ticket.usedAt != null)
                       Text('Used: ${_formatDate(ticket.usedAt!)}'),

@@ -146,10 +146,7 @@ export async function setUserRoles(adminUid: string, targetUid: string, roles: s
   }
 }
 
-/**
- * Check if user can perform action on resource
- * Generic permission checker
- */
+
 export async function checkResourcePermission(
   uid: string,
   resourceType: 'event' | 'zone' | 'track' | 'session' | 'stall',
@@ -167,14 +164,14 @@ export async function checkResourcePermission(
 
     // For now, organizers can manage their own events and all sub-resources
     if (roles.includes('organizer')) {
-      // For events, check direct ownership
+    
       if (resourceType === 'event') {
         const eventDoc = await db.collection("events").doc(resourceId).get();
         return eventDoc.exists && eventDoc.data()?.createdBy === uid;
       }
       
      
-      return true; // Simplified for now
+      return true; 
     }
 
     // Default deny

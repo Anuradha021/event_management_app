@@ -56,7 +56,7 @@ class EventCard extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            /// Description
+          
             if (eventData['eventDescription'] != null) ...[
               Text(
                 eventData['eventDescription'],
@@ -67,7 +67,7 @@ class EventCard extends StatelessWidget {
               const SizedBox(height: 8),
             ],
 
-            /// Location
+            
             Row(
               children: [
                 Icon(Icons.location_on, size: 16, color: Colors.grey[600]),
@@ -83,7 +83,7 @@ class EventCard extends StatelessWidget {
 
             const SizedBox(height: 4),
 
-            /// Date
+          
             Row(
               children: [
                 Icon(Icons.calendar_today, size: 16, color: Colors.grey[600]),
@@ -97,7 +97,7 @@ class EventCard extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            /// Manage Button
+            
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -126,7 +126,7 @@ class EventCard extends StatelessWidget {
     );
   }
 
-  /// Helpers
+  
   Color _getStatusColor(String? status) {
     switch (status?.toLowerCase()) {
       case 'published':

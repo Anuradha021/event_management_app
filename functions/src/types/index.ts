@@ -1,6 +1,6 @@
 import { Timestamp } from 'firebase-admin/firestore';
 
-// ==================== USER ROLES ====================
+// USER ROLES 
 export enum UserRole {
   ADMIN = 'admin',
   ORGANIZER = 'organizer',
@@ -13,7 +13,7 @@ export interface UserClaims {
   roles?: UserRole[];
 }
 
-// ==================== EVENT TYPES ====================
+//  EVENT TYPES 
 export enum EventStatus {
   DRAFT = 'draft',
   PENDING_APPROVAL = 'pending_approval',
@@ -27,7 +27,7 @@ export interface EventRequest {
   id?: string;
   eventTitle: string;
   eventDescription: string;
-  eventDate: string; // ISO date string
+  eventDate: string; 
   location: string;
   organizerName: string;
   organizerEmail: string;
@@ -67,7 +67,7 @@ export interface Event {
   imageUrl?: string;
 }
 
-// ==================== ZONE TYPES ====================
+//  ZONE TYPES 
 export interface Zone {
   id?: string;
   eventId: string;
@@ -82,7 +82,7 @@ export interface Zone {
   order?: number;
 }
 
-// ==================== TRACK TYPES ====================
+//  TRACK TYPES 
 export interface Track {
   id?: string;
   eventId: string;
@@ -98,7 +98,7 @@ export interface Track {
   order?: number;
 }
 
-// ==================== SESSION TYPES ====================
+//  SESSION TYPES 
 export interface Session {
   id?: string;
   eventId: string;
@@ -108,8 +108,8 @@ export interface Session {
   description?: string;
   speakerName?: string;
   speakerBio?: string;
-  startTime: string; // ISO datetime string
-  endTime: string; // ISO datetime string
+  startTime: string; 
+  endTime: string; 
   capacity?: number;
   sessionType?: string;
   isActive: boolean;
@@ -119,7 +119,7 @@ export interface Session {
   tags?: string[];
 }
 
-// ==================== STALL TYPES ====================
+//  STALL TYPES 
 export interface Stall {
   id?: string;
   eventId: string;
@@ -142,7 +142,7 @@ export interface Stall {
   bookedAt?: Timestamp;
 }
 
-// ==================== REQUEST/RESPONSE TYPES ====================
+// REQUEST/RESPONSE TYPES 
 export interface CreateEventRequestData {
   eventTitle: string;
   eventDescription: string;
@@ -215,7 +215,7 @@ export interface CreateStallData {
   price?: number;
 }
 
-// ==================== RESPONSE TYPES ====================
+//  RESPONSE TYPES 
 export interface ApiResponse<T = any> {
   success: boolean;
   data?: T;
@@ -232,7 +232,7 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   };
 }
 
-// ==================== VALIDATION TYPES ====================
+//  VALIDATION TYPES 
 export interface ValidationError {
   field: string;
   message: string;
@@ -243,7 +243,7 @@ export interface ValidationResult {
   errors: ValidationError[];
 }
 
-// ==================== AUDIT TYPES ====================
+//  AUDIT TYPES 
 export interface AuditLog {
   id?: string;
   userId: string;
@@ -257,7 +257,7 @@ export interface AuditLog {
   userAgent?: string;
 }
 
-// ==================== NOTIFICATION TYPES ====================
+//  NOTIFICATION TYPES 
 export interface Notification {
   id?: string;
   userId: string;

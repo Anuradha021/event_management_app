@@ -42,7 +42,7 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
-    final isMyEvent = user != null && eventData['organizerUid'] == user.uid;
+    final isMyEvent = user != null && eventData['organizerUid'] == user.uid;//checking event current user ka h ki nhi 
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
