@@ -83,6 +83,7 @@ class Moderator {
   }
 }
 
+
 // Available permissions
 class ModeratorPermissions {
   static const String manageZones = 'manage_zones';

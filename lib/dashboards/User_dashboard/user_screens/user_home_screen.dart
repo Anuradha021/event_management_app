@@ -1,4 +1,4 @@
-import 'package:event_management_app1/dashboards/User_dashboard/user_dashboard_screen.dart';
+import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_dashboard_screen.dart';
 import 'package:flutter/material.dart';
 
 class UserHomeScreen extends StatelessWidget {

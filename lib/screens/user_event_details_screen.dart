@@ -112,7 +112,7 @@ class _UserEventDetailsScreenState extends State<UserEventDetailsScreen> {
               const SizedBox(height: 20),
             ],
             
-            // Buy Ticket Button
+           
             SizedBox(
               width: double.infinity,
               child: ElevatedButton.icon(
