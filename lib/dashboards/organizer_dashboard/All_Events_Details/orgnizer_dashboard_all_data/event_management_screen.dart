@@ -4,7 +4,7 @@ import 'package:event_management_app1/dashboards/organizer_dashboard/All_Events_
 import 'package:event_management_app1/core/theme/app_theme.dart';
 import 'package:event_management_app1/screens/orgnizer_tickit_all_data/organizer_tickets_screen.dart';
 import 'package:flutter/material.dart';
-import 'track_all_data/track_panel.dart';
+import '../track_all_data/track_panel.dart';
 
 class EventManagementScreen extends StatefulWidget {
   final String eventId;

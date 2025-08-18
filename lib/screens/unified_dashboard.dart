@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../core/theme/app_theme.dart';
-import '../screens/unified_home_screen.dart';
-import '../screens/user_events_tab_screen.dart';
-import '../screens/user_tickets_overview_screen.dart';
-import '../dashboards/User_dashboard/user_screens/user_profile_screen.dart';
+import 'home_all_data/unified_home_screen.dart';
+import 'user_event_tab_all_data/user_events_tab_screen.dart';
+import 'user_tickits_all_data/user_tickets_overview_screen.dart';
+import '../dashboards/User_dashboard/user_screens/user_profile_all_data/user_profile_screen.dart';
 
 class UnifiedDashboard extends StatefulWidget {
   const UnifiedDashboard({super.key});

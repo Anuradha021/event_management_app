@@ -1,7 +1,7 @@
-import 'package:event_management_app1/dashboards/User_dashboard/user_screens/book_tickit_screen.dart';
+import 'package:event_management_app1/dashboards/User_dashboard/user_screens/book_tickit_all_data/book_tickit_screen.dart';
 import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_home_screen.dart';
-import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_profile_screen.dart';
-import 'package:event_management_app1/screens/user_tickets_overview_screen.dart';
+import 'package:event_management_app1/dashboards/User_dashboard/user_screens/user_profile_all_data/user_profile_screen.dart';
+import 'package:event_management_app1/screens/user_tickits_all_data/user_tickets_overview_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class _UserBottomNavState extends State<UserBottomNav> {
     super.initState();
     _pages = [
       UserHomeScreen(),
-      BookTickitScreen(),
+       BookTicketScreen(),
       const UserTicketsOverviewScreen(),
       UserProfileScreen(userId: user?.uid ?? 'default_id'),
     ];

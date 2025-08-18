@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../models/moderator.dart';
+import '../dashboards/organizer_dashboard/All_Events_Details/orgnizer_dashboard_all_data/moderator.dart';
 
 class ModeratorService {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
